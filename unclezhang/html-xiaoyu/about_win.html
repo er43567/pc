@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+    <style type="text/css">
+		header {
+            margin-bottom: 15px;
+            padding-top: 20px;
+            position: fixed;
+        }
+        .aui-btn {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header class="aui-bar aui-bar-nav" id="header" >
+        <div class="aui-pull-left">
+            <i class="aui-iconfont aui-icon-left" onclick="closeWin();"></i>
+        </div>
+        <div class="aui-title">关于我们</div>
+        <div class="aui-pull-right">
+            <a class="aui-btn aui-iconfont aui-icon-refresh" href=""></a>
+        </div>
+    </header>
+    <div id="header-bottom"></div>
+    <div class="aui-text-center" id="header-logo">
+        <img src="../image/login_logo.png" />
+    </div>
+    <section class="aui-content-padded">
+        <div class="aui-card-list">
+            <div class="aui-card-list-header">
+                小歆记账AUI客户端
+            </div>
+            <div class="aui-card-list-content-padded">
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;本客户端为小歆记账的一个开源子项目，采用APICloud + AUI构建完成的，同时兼容iOS和Android设备。小歆记账AUI的数据部分存储在云端，与小歆记账WebApp数据共用，通过Ajax与小歆记账WebApp后台通信。其中AUI为前端框架，APICloud负责逻辑处理和云编译。</p>
+                
+            </div>
+            <div class="aui-card-list-footer aui-text-center">
+                小歆工作室 www.xxgzs.org
+            </div>
+        </div>
+    </section>
+    <div class="aui-content-padded aui-margin-b-15">
+        <p><div class="aui-btn aui-btn-default aui-btn-block aui-btn-sm" onclick="closeWin();">返回</div></p>
+    </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/aui-toast.js" ></script>
+<script type="text/javascript">
+    var toast = new auiToast();
+    apiready = function(){
+        api.parseTapmode();
+        //不支持沉浸式效果
+        if (!api.statusBarAppearance) {
+            $api.byId('header').style.paddingTop = 0;
+        }
+        //顶部导航栏高度抵消
+        $api.byId('header-bottom').style.marginTop = $api.offset($api.byId('header')).h + 'px';
+
+        //顶部Logo高度
+        var logoHeight = (api.frameHeight / 6) + 'px';
+        $api.byId('header-logo').style.height = logoHeight;
+        $api.byId('header-logo').firstElementChild.style.height = logoHeight;
+        
+    }
+    
+    /** 关闭窗体 */
+    function closeWin(){
+        api.closeWin({
+        });
+    }
+
+</script>
+</html>

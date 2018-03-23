@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+    <header class="aui-bar aui-bar-nav" id="header" style="padding-top:20px;">
+<!--         <a class="aui-pull-left aui-btn">
+            <span class="aui-iconfont aui-icon-left"></span>返回
+        </a> -->
+        <div class="aui-title">小歆记账AUI</div>
+        <div class="aui-pull-right">
+            <a class="aui-btn aui-iconfont aui-icon-refresh" href=""></a>
+        </div>
+    </header>
+    <div id="main">
+        
+    </div>
+    <footer class="aui-bar aui-bar-tab" id="footer">
+        <div class="aui-bar-tab-item aui-active" tapmode>
+            <i class="aui-iconfont aui-icon-home"></i>
+            <div class="aui-bar-tab-label">首页</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode>
+            <i class="aui-iconfont aui-icon-plus"></i>
+            <div class="aui-bar-tab-label">记账</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode>
+            <i class="aui-iconfont aui-icon-search"></i>
+            <div class="aui-bar-tab-label">查询</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode>
+            <i class="aui-iconfont aui-icon-my"></i>
+            <div class="aui-bar-tab-label">我的</div>
+        </div>
+    </footer>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/aui-tab.js"></script>
+<script type="text/javascript" src="../script/aui-toast.js" ></script>
+<script type="text/javascript">
+    var toast = new auiToast();
+    apiready = function(){
+        api.parseTapmode();
+        openFrame('index_frm');
+        //api.closeFrame({name: 'login_frm'});
+
+        //主窗体页面跳转监听
+        api.addEventListener({
+            name: 'indexFrame'
+        }, function(ret, err){
+            if( ret ){
+                //alert( JSON.stringify( ret ) );
+                closeToWin();
+                openFrame(ret.value.name,ret.value.reload);
+                if (ret.value.index) {
+                    tab.setActive(ret.value.index);
+                }
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+
+        //编辑页跳转监听
+        api.addEventListener({
+            name: 'editWin'
+        }, function(ret, err) {
+            if (ret) {
+                //alert(JSON.stringify(ret));
+                openWin(ret.value);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+        //返回按键监听(安卓)
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            openFrame('index_frm');
+            tab.setActive(1);
+        });
+
+        //更新分类监听
+        api.addEventListener({
+            name: 'updataClass'
+        }, function(ret, err) {
+            getClassData(function(data){
+                if (data) {
+                    $api.setStorage('inClass', data.in);
+                    $api.setStorage('outClass', data.out);
+                    $api.setStorage('allClass', data.all);
+                    api.sendEvent({
+                        name: 'retClassData',
+                        extra: {
+                            data: data
+                        }
+                    });
+                    if (!data.all) {
+                        api.confirm({
+                            title: '欢迎使用',
+                            msg: '请先添加收支分类！',
+                            buttons: ['添加分类', '稍后提醒']
+                        }, function(ret, err) {
+                            var index = ret.buttonIndex;
+                            if (index === 1) {
+                                openWin({
+                                    name: 'class_win',
+                                    type: 'out'
+                                });
+                            }
+                        });
+                    }
+                } else {
+                    setTimeout(function(){
+                        api.sendEvent({
+                            name: 'updataClass'
+                        });
+                    }, 5000);
+                }
+            });
+        });
+
+        //获取用户信息
+        api.sendEvent({
+            name: 'updataClass'
+        });
+
+    };
+
+    var tab = new auiTab({
+        element:document.getElementById("footer")
+    },function(ret){
+        if(ret){
+            if (ret.index == 4) {
+                openFrame('user_frm');
+            } else if (ret.index == 3) {
+                openFrame('find_frm');
+            } else if (ret.index == 2) {
+                openFrame('add_frm');
+            } else {
+                openFrame('index_frm');
+            }
+        }
+    });
+
+
+    /** 获取常用数据保存到本地 */
+    function getClassData(callback) {
+        //获取分类列表
+        api.ajax({
+            url: 'http://qxu1192050221.my3w.com/xxjzApp/index.php/Home/Api/aclass',
+            method: 'get',
+            cache: true,
+            data: {
+                values: { 
+                    type: 'get'
+                }
+            }
+        },function(ret, err){
+            if (ret.uid) {
+                callback(ret.data);
+            } else {
+                //alert( JSON.stringify( err ) );
+                callback();
+            }
+        });
+    }
+
+    function goLogout() {
+        api.sendEvent({
+            name: 'xxjzLogout',
+            extra: {
+                value: 'xxjzLogout'
+            }
+        });
+    }
+
+    function openFrame(name,reload) {
+        var header_h = 0;//$api.offset($api.byId('header')).h;
+        var footer_h = $api.offset($api.byId('footer')).h;
+        var frame_h = api.winHeight - header_h - footer_h;
+        if (!reload) {
+            reload = false;
+        }
+        api.openFrame({
+            name: ''+name+'',
+            url: ''+name+'.html',
+            bounces: false,
+            reload: reload,
+            rect: {
+                x: 0,
+                y: header_h,
+                w: 'auto',
+                h: frame_h
+            },
+            delay: 100,
+            softInputMode: 'pan',
+            animation: {
+                type:"ripple",              //动画类型（详见动画类型常量）
+                duration:500                //动画过渡时间，默认300毫秒
+            }
+        })
+    }
+
+    function openWin(pageParam){
+        api.openWin({
+            name: ''+pageParam.name+'',
+            url: ''+pageParam.name+'.html',
+            pageParam: pageParam,
+            slidBackEnabled: true,
+            slidBackType: 'edge',
+            animation: {
+                type: 'movein',
+                subtype: 'from_right'
+            },
+            softInputMode: 'pan',
+            delay: 100
+        });
+    }
+
+    function closeToWin() {
+        api.closeToWin({
+            name: 'index_win'
+        });
+    }
+
+    function closeWin(){
+        api.closeWin({
+        });
+    }
+</script>
+</html>

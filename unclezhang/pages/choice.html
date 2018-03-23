@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>AUI快速完成布局</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+</head>
+<body>
+	
+    <div class="aui-content aui-margin-b-15">
+        <ul id="items" class="aui-list aui-list-in">
+            <li class="aui-list-header">
+                <h2><b style="color: white;">请选择</b></h2>
+                <div class="aui-btn aui-btn-info aui-text-white" onclick="finished()">确定</div>
+            </li>
+            <!--<li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-title">checkbox</div>
+                    <div class="aui-list-item-right">
+                        <input type="checkbox" class="aui-checkbox" checked>
+                    </div>
+                </div>
+            </li>-->
+        </ul>
+    </div>
+    
+</body>
+
+<script>
+	loadItems();
+	function loadItems() {
+		for(var i=1;i<100;i++) {
+			var htm = 
+				 '<li class="aui-list-item">'
+                +'<div class="aui-list-item-inner">'
+                +    '<div class="aui-list-item-title">第'+i+'条目</div>'
+                +    '<div class="aui-list-item-right">'
+                +        '<input id="ckbox'+i+'" type="checkbox" class="aui-checkbox" onclick="clicked('+i+')">'
+                +    '</div>'
+                +'</div>'
+            	+'</li>';
+            items.innerHTML += htm;
+		}
+	}
+	
+	fillItems([4,5,6]);
+	function fillItems(arys) {
+		for(var i=0;i<arys.length;i++) {
+			eval('ckbox'+arys[i]).click();
+			clicked(arys[i]);
+		}
+	} 
+	
+	var choices = [];
+	function clicked(n) {
+		if(!choices.contains(n)) {
+			choices.push(n);
+		} else {
+			choices.pop(n);
+		}
+	}
+	
+	function finished() {
+		alert(choices);
+	}
+	
+	Array.prototype.contains = function (obj) {  
+    var i = this.length;  
+    while (i--) {  
+        if (this[i] === obj) {  
+            return true;  
+        }  
+    }  
+    return false;  
+}  
+</script>
+</html>
