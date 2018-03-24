@@ -5,7 +5,6 @@ import java.util.Date;
 
 public class Tool {
 	public static void main(String[] args) {
-		
 	}
 	public static String time() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
