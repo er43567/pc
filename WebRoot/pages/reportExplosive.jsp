@@ -28,8 +28,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item1"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item1" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -40,8 +40,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item2"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item2" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -52,8 +52,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item3"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item3" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -64,8 +64,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item4"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item4" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -77,8 +77,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
                 <!--	<input class="aui-text-center" type="text" name="text1" style="border:1px solid gray; width: 40px; height: 25px; float:left; margin-left:190px ;" /></label>-->
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item5"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item5" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -90,8 +90,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio" name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio" name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio" name="item6"> 是</label>
+               		<input class="aui-radio" type="radio" name="item6" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -103,8 +103,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item7"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item7" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -116,8 +116,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item8"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item8" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -129,8 +129,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item9"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item9" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -142,8 +142,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="aui-text-right">
                 	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+                	<input class="aui-radio" type="radio"  name="item10"> 是</label>
+               		<input class="aui-radio" type="radio"  name="item10" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -153,7 +153,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                       	<div class="aui-list-item-text">
                       	备注
                 		</div>
-                    	<textarea placeholder="这里输入备注信息" class="aui-border-gray padding-5px" ></textarea>
+                    	<textarea placeholder="这里输入备注信息" name="rem" class="aui-border-gray padding-5px" ></textarea>
                		</div>
              	</div>
           	</li>
