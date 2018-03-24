@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+ 	
+  <!--======================================== 1. 配置sessionFactory========================================  -->
+ 	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+ 		<property name="configLocation">
+ 			<value>classpath:hibernate.cfg.xml</value>
+ 		</property>
+ 	</bean>
+ 	
+  <!-- ======================================== 配置hibernateTemplate对象========================================-->
+	 <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+	 
+	 <!-- UserAction -->
+	 <bean id="DaoImplBean" class="cn.unclezhang.dao.impl.DaoImpl">
+	 	<property name="hibernateTemplate" ref="hibernateTemplate"></property>
+	 </bean>
+	 <bean id="ServiceImplBean" class="cn.unclezhang.service.impl.ServiceImpl">
+	 	<property name="dao" ref="DaoImplBean"></property>
+	 </bean>
+	 <bean id="UserBean" class="cn.unclezhang.bean.User"></bean>
+	 <bean id="UserActionBean" class="cn.unclezhang.action.UserAction" scope="prototype">
+	 	<property name="user" ref="UserBean"></property>
+	 	<property name="service" ref="ServiceImplBean"></property>
+	 </bean>
+	 <!-- PageActionBean -->
+	 <bean id="PageActionBean" class="cn.unclezhang.action.PageAction" scope="prototype">
+	 	<property name="user" ref="UserBean"></property>
+	 	<property name="service" ref="ServiceImplBean"></property>
+	 </bean>
+	 
+	 <!-- AjaxActionBean -->
+	 <bean id="AjaxActionBean" class="cn.unclezhang.action.AjaxAction" scope="prototype">
+	 	<property name="user" ref="UserBean"></property>
+	 	<property name="service" ref="ServiceImplBean"></property>
+	 </bean>
+	 
+	 
+	 <!--======================================== 配置事务======================================== -->
+	 <!-- (1) 创建事务对象 -->
+	 <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 </bean>
+	 
+	 <aop:config>
+	 	<aop:pointcut id="txService" expression="execution(* cn.unclezhang.dao..*.*(..))"/>
+	 	<aop:advisor pointcut-ref="txService" advice-ref="txAdvisor"/>
+	 </aop:config>
+	 
+	 <tx:advice id="txAdvisor" transaction-manager="transactionManager">
+	 	<tx:attributes>
+	 		<tx:method name="save*"/>
+	 		<tx:method name="delete*"/>
+	 		<tx:method name="update*"/>
+	 		<tx:method name="query*" read-only="true"/>
+	 		<tx:method name="up*"/>
+	 		<tx:method name="down*"/>
+	 		<tx:method name="check*"/>
+	 		<tx:method name="get*" read-only="true"/>
+	 		<tx:method name="read*"/>
+	 	</tx:attributes>
+	 </tx:advice>
+	 
+	 <!-- (3) 配置事务的属性-->
+	 
+</beans>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>AUI快速完成布局</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    
+    <script type="text/javascript" src="js/ext.js" ></script>
+</head>
+<body>
+	
+    <div class="aui-content aui-margin-b-1-5">
+        <ul id="items" class="aui-list aui-list-in">
+            <li class="aui-list-header">
+            	<h4 class="aui-text-white"><input type="checkbox" class="aui-checkbox" onclick="reverseAll(this)"> 反选</h4>
+            	<div class="aui-btn aui-btn-info aui-text-white" onclick="finished()">确定</div>
+            </li>
+            <!--<li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-title">checkbox</div>
+                    <div class="aui-list-item-right">
+                        <input type="checkbox" class="aui-checkbox" checked>
+                    </div>
+                </div>
+            </li>-->
+        </ul>
+    </div>
+    
+</body>
+
+<script>
+	var titles = [
+		"a1",
+		"a2",
+		"a3",
+		"a4",
+		"a5"
+	];
+	var choices = ['a3','a1'];
+	
+	loadItems();
+	function loadItems() {
+		for(var i=0;i<titles.length;i++) {
+			var checked = choices.contains(titles[i])?'checked':'';
+			var htm = 
+				 '<li id="item'+i+'" class="aui-list-item" onclick="ckbox'+i+'.click()">'
+                +'<div class="aui-list-item-inner">'
+                +    '<div class="aui-list-item-title">'+titles[i]+'</div>'
+                +    '<div class="aui-list-item-right">'
+                +        '<input id="ckbox'+i+'" type="checkbox" class="aui-checkbox ckbox" onclick="clicked('+i+')" '+checked+' >'
+                +    '</div>'
+                +'</div>'
+            	+'</li>';
+            items.innerHTML += htm; 
+		}
+	}
+	
+	function clicked(n) {
+		if(!choices.contains(titles[n])) {
+			choices.push(titles[n]);
+		} else {
+			choices.remove(titles[n]);
+		}
+	}
+	
+	function finished() {
+		alert(choices);
+	}
+	
+	function reverseAll(obj) {
+		var ckboxes = document.getElementsByClassName("ckbox");
+		for (var i=0;i<ckboxes.length;i++) {
+			ckboxes[i].checked = !ckboxes[i].checked;
+			clicked(i);
+		}
+	}
+	
+</script>
+</html>

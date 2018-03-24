@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.i18n.encoding" value="UTF-8"/>
+ 	<!-- struts2 是否允许url 动态访问方法 ,默认值是true -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	
+	<!-- struts2的action对象 也来源于spring的IoC容器 -->
+	<constant name="struts.objectFactory" value="spring"></constant>
+	
+	<package name="user" namespace="/pages" extends ="struts-default">
+		<action name="UserAction" class="UserActionBean">
+			<result name="main">/pages/main.jsp</result>
+			<result name="login">/pages/login.jsp</result>
+		</action>
+		
+		<action name="PageAction" class="PageActionBean">
+			<result name="choose">/pages/choose.jsp</result>
+		</action>
+	</package>
+	
+	<package name="json" namespace="/pages" extends="json-default">
+		<action name="AjaxAction" class="AjaxActionBean">
+			<result name="*" type="json"> <!-- class="org.apache.struts2.json.JSONResult" -->
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>
+		</action>
+	</package>
+	
+</struts>

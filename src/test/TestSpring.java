@@ -1,0 +1,106 @@
+package test;
+
+import java.util.List;
+
+import junit.framework.TestCase;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+
+import cn.lrxzl.lib.java.tool.Tool;
+import cn.unclezhang.bean.Push;
+import cn.unclezhang.bean.Reply;
+import cn.unclezhang.bean.Report;
+import cn.unclezhang.bean.User;
+import cn.unclezhang.dao.IDao;
+import cn.unclezhang.dao.impl.DaoImpl;
+import cn.unclezhang.service.impl.ServiceImpl;
+
+public class TestSpring extends TestCase {
+	
+	public void getDaoInstance() {
+		// 1. 实例化IoC容器
+		BeanFactory bf = new ClassPathXmlApplicationContext("applicationContext.xml");
+		// 2. 获得HibernateTemplate对象.
+		
+		// bf.getBean("hibernateTemplate");
+		
+		HibernateTemplate hibernateTemplate =  (HibernateTemplate) bf.getBean("hibernateTemplate");
+		
+		ServiceImpl asi = new ServiceImpl();
+		
+		DaoImpl adi = new DaoImpl();
+		adi.setHibernateTemplate(hibernateTemplate);
+		
+		asi.setDao(adi);
+		
+		//adi.updateByHql("update User set user_name=? where user_id=?" ,new Object[]{"管理员","admin"});
+		//adi.deletePostById(493);
+		
+		//Post user = adi.findPostById(493);
+		
+		//System.out.println(user);
+	}
+	
+	BeanFactory bf;
+	HibernateTemplate hibernateTemplate;
+	ServiceImpl service;
+	DaoImpl dao;
+	
+	public TestSpring () {
+		bf = new ClassPathXmlApplicationContext("applicationContext.xml");
+		hibernateTemplate =  (HibernateTemplate) bf.getBean("hibernateTemplate");
+		
+		dao = new DaoImpl();
+		dao.setHibernateTemplate(hibernateTemplate);
+		System.out.println("======");
+		service = new ServiceImpl(); 
+		service.setDao((IDao) dao);
+	}
+	
+	public void testSave() {
+		//di.updateField("user_tb", "", "");
+		System.out.println("test");
+		User user = new User();
+		user.setName("unclezhang");
+		user.setUserId("admin");
+		user.setPsw("psw");
+		user.setTime(Tool.time());
+		try {
+			dao.saveEntity(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void testFind() throws Exception {
+		User user = dao.findOneByHql("from User where userId=?", new Object[]{"admin"});
+		System.out.println(user);
+	}
+	
+	public void testPush() throws Exception {
+		/*Push push = new Push();
+		push.setContent("sdfasd");
+		dao.saveEntity(push);
+		Report r = new Report();
+		r.setType("sdfasdf");
+		dao.saveEntity(r);
+		User u = new User();
+		u.setUserId("sdfs");
+		dao.saveEntity(u);*/
+		Reply re = new Reply();
+		re.setContent("sdfs");
+		dao.saveEntity(re);/**/
+	}
+	
+	public void testTemp() {
+		//service.updateUserFiled("admin", "psw", "12321321");
+		try {
+			List<User> users = dao.findByHql("from User");
+			System.out.println(users.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping  >
+	<class name="cn.unclezhang.bean.Report" table="report_tb" lazy="false">
+		<id name="sid">
+			<generator class="identity"></generator> 
+		</id>
+		<property name="state"></property>
+		<property name="type"></property>
+		<property name="userId"></property>
+		<property name="scope"></property>
+		<property name="time"></property>
+		<property name="item1"></property>
+		<property name="item2"></property>
+		<property name="item3"></property>
+		<property name="item4"></property>
+		<property name="item5"></property>
+		<property name="item6"></property>
+		<property name="item7"></property>
+		<property name="item8"></property>
+		<property name="item9"></property>
+		<property name="item10"></property>
+		<property name="item11"></property>
+		<property name="item12"></property>
+		<property name="item13"></property>
+		<property name="item14"></property>
+		<property name="item15"></property>
+		<property name="item16"></property>
+		<property name="item17"></property>
+		<property name="item18"></property>
+		<property name="item19"></property>
+		<property name="item20"></property>
+		<property name="item21"></property>
+		<property name="item22"></property>
+		<property name="item23"></property>
+		<property name="item24"></property>
+		<property name="item25"></property>
+	</class>
+	
+</hibernate-mapping>
