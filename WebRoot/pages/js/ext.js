@@ -6,19 +6,24 @@ function show(obj) {
 function hide(obj) {
 	obj.style.display = 'none';
 }
-var isWebView = false;
+isWebView = false;
 function startUrl(url) {
-	startUrl(url, null);
+	startUrl(url, null, null);
 }
 
-function startUrl(url, attrs) {
+function startUrl(url, attrs, param) {
 	var s = "http://" +  location.host + "/unclezhang/pages/" + url;
 	if(isWebView) {
-		if(attrs == null || (''+attrs)=='undefined') {
-			android.startActivity(s);
+		/*if(attrs == null || (''+attrs)=='undefined') {
+			android.startActivity(s, null, param);
 		} else {
-			android.startActivity(s, attrs);
-		}
+			android.startActivity(s, attrs, param);
+		}*/
+		if(attrs!=null)
+			attrs.push('refresh');
+		else
+			attrs = ['refresh', 'title', 'nogesture'];
+		android.startActivity(s, attrs, param);
 	} else {
 		location.href = s;
 	}
@@ -34,14 +39,18 @@ function startReportHistory(url) {
 	}
 }
 
+function onPageFinished(param) {
+	isWebView = true;
+	onLoadData(param);
+}
+
 function closeWin() {
 	history.back(-1);
 }
 
-function onFinished(v) {
+function onWebView() {
 	isWebView = true;
 }
-
 
 Array.prototype.contains = function (obj) {
     var i = this.length;
@@ -74,7 +83,7 @@ function getSource() {
 	return "<html>" + document.getElementsByTagName("html")[0].innerHTML + "</html>";
 }
 
-function load(url, callback, params) {
+function ajaxPost(url, callback, params) {
 	ajax({
         type : 'POST',
         url : url,

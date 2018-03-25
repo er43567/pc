@@ -43,7 +43,7 @@
 		<!--引入的映射对象的xml文件的全路径及文件名-->
 		<mapping resource="cn/unclezhang/bean/user.hbm.xml"/>
 		<mapping resource="cn/unclezhang/bean/report.hbm.xml"/>
-		<mapping resource="cn/unclezhang/bean/push.hbm.xml"/>
+		<mapping resource="cn/unclezhang/bean/notice.hbm.xml"/>
 		<mapping resource="cn/unclezhang/bean/reply.hbm.xml"/>
 		
 	</session-factory>

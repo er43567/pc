@@ -9,7 +9,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import cn.lrxzl.lib.java.tool.Tool;
-import cn.unclezhang.bean.Push;
 import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
@@ -62,9 +61,10 @@ public class TestSpring extends TestCase {
 	public void testSave() {
 		//di.updateField("user_tb", "", "");
 		System.out.println("test");
+		
 		User user = new User();
-		user.setName("unclezhang");
-		user.setUserId("admin");
+		user.setName("名" + Math.random());
+		user.setUserId(Math.random()+"");
 		user.setPsw("psw");
 		user.setTime(Tool.time());
 		try {
@@ -72,6 +72,7 @@ public class TestSpring extends TestCase {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	public void testFind() throws Exception {
@@ -102,5 +103,12 @@ public class TestSpring extends TestCase {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void testReport() throws Exception {
+		Report r = new Report();
+		r.setItems(new String[]{"","sdfasd","多少了空间"});
+		r.setUserId("admin");
+		dao.saveEntity(r);
 	}
 }

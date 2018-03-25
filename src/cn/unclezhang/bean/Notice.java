@@ -1,9 +1,15 @@
 package cn.unclezhang.bean;
 
-public class Push {
+public class Notice {
 	int sid,impts;
-	String type,targetIds,title,content,readIds,readNames,time;
+	String userId,type,targetIds,title,content,readIds,readNames,time;
 	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	public int getSid() {
 		return sid;
 	}

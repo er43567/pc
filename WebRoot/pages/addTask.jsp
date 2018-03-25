@@ -61,7 +61,7 @@
 			</div>
 			<div class="mui-inline" style="margin-top: 10px">选择可见人员</div>
 			<div class="row mui-input-row">
-				<div style="padding: 10px;font-size: 45px;color: grey;" onclick="startUrl('PageAction!loadUserChoosePage', ['notitle','nogesture','norefresh'])">+</div>
+				<div style="padding: 10px;font-size: 45px;color: grey;" onclick="startUrl('PageAction!loadUserChoosePage', ['notitle','nogesture','norefresh'], this.innerText)">+</div>
 				<div id='resultDiv' style="position: absolute;left:40px;top:10px;color: gray;"></div>
 			</div>
 			<div class="mui-inline" style="margin-top: 10px">任务重要度</div>

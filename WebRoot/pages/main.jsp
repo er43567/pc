@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <img src="img/安全.png" style="width: 35px;margin: auto;">
                 </div>
                 <div class="aui-gird-lable aui-font-size-14 " style="color: gray;"
-                	onclick="startUrl('reportExplosive.jsp')">民爆行业质检</div>
+                	onclick="startUrl('PageAction!loadReportPage?type=ExplosiveReport')">民爆行业质检</div>
             </div>
             <div class="aui-col-xs-4 aui-border-r">
             	<div class="aui-text-warning">
@@ -80,10 +80,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </li>
             <li class="aui-list-item" onclick="startUrl('pushMessage.jsp')">
                 <div class="aui-list-item-label-icon">
-                    <img alt="" src="img/推送.png" style="width: 20px;">
+                    <img alt="" src="img/消息.png" style="width: 20px;">
                 </div>
                 <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">推送消息</div>
+                    <div class="aui-list-item-title">我的消息</div>
                     <div id='pushCount' class="aui-badge" style="position: static;">99+</div>
                 </div>
             </li>
@@ -150,7 +150,7 @@ function onActivityResult(result) {
 	}
 }
 
-load('AjaxAction!loadIndexDatas',
+ajaxPost('AjaxAction!loadIndexDatas',
 function(r) {
 	var data = eval("("+r+")");
 	result = eval("(" + data['result'] + ")");

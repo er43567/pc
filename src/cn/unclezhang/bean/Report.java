@@ -1,13 +1,61 @@
 package cn.unclezhang.bean;
+
 public class Report {
 	int sid, state;
-	String type, userId, scope, targets, time;
+	String type, userId, scope, targets, choices, rem, time;
 	String item1,item2,item3,item4,item5,
 		item6,item7,item8,item9,item10,
 		item11,item12,item13,item14,item15,
 		item16,item17,item18,item19,item20,
 		item21,item22,item23,item24,item25;
 	
+	public void setItems(String items[]) throws Exception {
+		System.out.println("item len:" + items.length);
+		if (items.length>=2) item1 = items[1];
+		if (items.length>=3) item2 = items[2];
+		if (items.length>=4) item3 = items[3];
+		if (items.length>=5) item4 = items[4];
+		if (items.length>=6) item5 = items[5];
+		if (items.length>=7) item6 = items[6];
+		if (items.length>=8) item7 = items[7];
+		if (items.length>=9) item8 = items[8];
+		if (items.length>=10) item9 = items[9];
+		if (items.length>=11) item10 = items[10];
+		if (items.length>=12) item11 = items[11];
+		if (items.length>=13) item12 = items[12];
+		if (items.length>=14) item13 = items[13];
+		if (items.length>=15) item14 = items[14];
+		if (items.length>=16) item15 = items[15];
+		if (items.length>=17) item16 = items[16];
+		if (items.length>=18) item17 = items[17];
+		if (items.length>=19) item18 = items[18];
+		if (items.length>=20) item19 = items[19];
+		if (items.length>=21) item20 = items[20];
+		if (items.length>=22) item21 = items[21];
+		if (items.length>=23) item22 = items[22];
+		if (items.length>=24) item23 = items[23];
+		if (items.length>=25) item24 = items[24];
+		if (items.length>=26) item25 = items[25];
+		/*System.out.println("===" + Arrays.toString(items));
+		for(int i=1;i<items.length;i++) {
+			Field f = this.getClass().getDeclaredField("item"+i);
+			f.setAccessible(true);
+			f.set(this, items[i]);
+		}*/
+	}
+	/*public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
+		Report tt = new Report();
+		try {
+			Field f = tt.getClass().getDeclaredField("item1");
+			f.setAccessible(true);
+			f.set(tt, "sdf");
+			System.out.println(tt.getItem1());
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+	}*/
 	public int getSid() {
 		return sid;
 	}
@@ -50,7 +98,18 @@ public class Report {
 	public void setTargets(String targets) {
 		this.targets = targets;
 	}
-	
+	public String getRem() {
+		return rem;
+	}
+	public void setRem(String rem) {
+		this.rem = rem;
+	}
+	public String getChoices() {
+		return choices;
+	}
+	public void setChoices(String choices) {
+		this.choices = choices;
+	}
 	/*==========*/
 	
 	public String getItem1() {

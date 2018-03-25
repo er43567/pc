@@ -17,10 +17,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
     <div class="aui-content aui-margin-b-1-5">
         <ul id="items" class="aui-list aui-list-in">
-            <li class="aui-list-header">
+            <li class="aui-list-header" style="position:fixed;left: 0px;top: 0px;width: 100%;z-index: 99">
             	<h4 class="aui-text-white"><input type="checkbox" class="aui-checkbox" onclick="reverseAll(this)"> 反选</h4>
             	<div class="aui-btn aui-btn-info aui-text-white" onclick="finished()">确定</div>
             </li>
+            <div style="height:50px"></div>
             <s:iterator value="#request.users" id='item' status="st">
             <li id="${st.index}" class="aui-list-item">
                 <div class="aui-list-item-inner">
@@ -50,9 +51,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	//var choices = ['a3','a1'];
 	//loadItems();
-	var choices = [];
 	
-	function loadItems() {
+	/* function loadItems() {
 		for(var i=0;i<titles.length;i++) {
 			var checked = choices.contains(titles[i])?'checked':'';
 			var htm = 
@@ -66,22 +66,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	+'</li>';
             items.innerHTML += htm; 
 		}
-	}
+	} */
 	var choices_ids = [];
-	
+	var choices_titles = [];
 	function clicked(n) {
-		if(!choices.contains(titles[n])) {
-			choices.push(titles[n]);
+		if(!choices_ids.contains(userIds[n])) {
 			choices_ids.push(userIds[n]);
+			choices_titles.push(titles[n]);
 		} else {
-			choices.remove(titles[n]);
 			choices_ids.remove(userIds[n]);
+			choices_titles.remove(titles[n]);
 		}
 	}
 	
 	function finished() {
-		//alert(choices);
-		android.closeActivity(choices + "##" + choices_ids);
+		android.closeActivity(choices_titles + "##" + choices_ids);
+	}
+	
+	function onLoadData(param) {
+		choices_titles = param.split("##")[0].split(",");
+		choices_ids = param.split("##")[1].split(",");
+		for(var i=0;i<userIds.length;i++) {
+			if(choices_ids.contains(userIds[i])) {
+				document.getElementById("ckbox" + i).setAttribute("checked","checked");
+			}
+		}
 	}
 	
 	function reverseAll(obj) {
@@ -93,4 +102,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	
 </script>
+
 </html>

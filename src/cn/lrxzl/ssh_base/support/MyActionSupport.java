@@ -41,6 +41,9 @@ public abstract class MyActionSupport {
 	public boolean isLogin() {
 		return getUserSession() != null;
 	}
+	public boolean notLogin() {
+		return getUserSession() == null;
+	}
 	
 	public interface Loginable {
 		String getId();

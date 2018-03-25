@@ -24,8 +24,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            </div>
            <div class="aui-text-right">
            	<label class="aui-text-info"></label>
-           	<input class="aui-radio" type="radio"  name="radio2"> 是</label>
-          		<input class="aui-radio" type="radio"  name="radio2" onclick="openDialog(this)"> 否</label>
+           	<input class="aui-radio" type="radio" name="radio2"> 是</label>
+          	<input class="aui-radio" type="radio" name="radio2" onclick="openDialog(this)"> 否</label>
            </div>
           </div>
       </li>

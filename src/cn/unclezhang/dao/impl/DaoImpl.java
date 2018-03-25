@@ -149,7 +149,6 @@ public class DaoImpl implements IDao {
 		} finally {
 			session.close();
 		}
-		session.close(); 
 	}
 	public void updateBySql(String sql, Object[] vals) throws Exception {
 		Session session = hibernateTemplate.getSessionFactory().openSession();
@@ -212,7 +211,6 @@ public class DaoImpl implements IDao {
 		} finally {
 			session.close();
 		}
-		session.close();
 	}
 	public void updateEntity(Object entity) throws Exception {
 		Session session = hibernateTemplate.getSessionFactory().openSession();
@@ -227,7 +225,6 @@ public class DaoImpl implements IDao {
 		} finally {
 			session.close();
 		}
-		session.close();
 	}
 	
 	/*public static void main(String[] args) {

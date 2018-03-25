@@ -3,10 +3,11 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping  >
-	<class name="cn.unclezhang.bean.Push" table="push_tb" lazy="false">
+	<class name="cn.unclezhang.bean.Notice" table="notice_tb" lazy="false">
 		<id name="sid">
 			<generator class="identity"></generator> 
 		</id>
+		<property name="userId"></property>
 		<property name="impts"></property>
 		<property name="type"></property>
 		<property name="targetIds"></property>

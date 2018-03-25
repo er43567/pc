@@ -19,6 +19,7 @@
 		
 		<action name="PageAction" class="PageActionBean">
 			<result name="choose">/pages/choose.jsp</result>
+			<result name="explosiveReport">/pages/reportExplosive.jsp</result>
 		</action>
 	</package>
 	

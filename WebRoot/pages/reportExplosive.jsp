@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%String path = request.getContextPath();
+<%
+String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";%>
 <!DOCTYPE HTML>
 <html>
@@ -16,10 +17,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="js/ext.js" ></script>
     
 </head>
-<body>
+<body >
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
-       <li class="aui-list-header">民爆行业质检表单</li>
+       <li class="aui-list-header">民爆行业质检表单 [创建于:${request.report.time.substring(0,10)}]</li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
@@ -27,9 +28,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	守库人员是否到岗：
                 </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="item1"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item1" onclick="openDialog(this)"> 否</label>
+                	<label id="info1" class="aui-text-info">
+                	${request.report.item1}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(0,1)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(0,1)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -39,9 +42,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	安全员、库管员是否持证上岗：
                 </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="item2"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item2" onclick="openDialog(this)"> 否</label>
+                	<label id="info2" class="aui-text-info">
+                	${request.report.item2}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(1,2)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(1,2)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -51,9 +56,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	入侵报警装置、周界报警装置是否正常运作：
                 </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="item3"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item3" onclick="openDialog(this)"> 否</label>
+                	<label id="info3" class="aui-text-info">
+                	${request.report.item3}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(2,3)}"> 是</label>
+               		<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(2,3)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -63,9 +70,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	是否配置两只以上大型犬（注：是否需要照相上传功能）：
                 </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="item4"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item4" onclick="openDialog(this)"> 否</label>
+                	<label id="info4" class="aui-text-info">
+                	${request.report.item4}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(3,4)}"> 是</label>
+               		<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(3,4)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -75,10 +84,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	大型犬是否正常、健康：
                 </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
+                	<label id="info5" class="aui-text-info">
+                	${request.report.item5}<!-- rem -->
+                	</label>
                 <!--	<input class="aui-text-center" type="text" name="text1" style="border:1px solid gray; width: 40px; height: 25px; float:left; margin-left:190px ;" /></label>-->
-                	<input class="aui-radio" type="radio"  name="item5"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item5" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(4,5)}"> 是</label>
+                	<!-- ${"asdfasd".substring(5,6)=="s"?"checked":""} value="1" -->
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(4,5)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -89,9 +101,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	库房值班记录本是否如实记录本班发生的事项：
                 </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio" name="item6"> 是</label>
-               		<input class="aui-radio" type="radio" name="item6" onclick="openDialog(this)"> 否</label>
+                	<label id="info6" class="aui-text-info">
+                	${request.report.item6}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(5,6)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(5,6)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -102,9 +116,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				消防水池储水量是否大于15立方米或设高位水池：
                    </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="item7"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item7" onclick="openDialog(this)"> 否</label>
+                	<label id="info7" class="aui-text-info">
+                	${request.report.item7}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(6,7)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(6,7)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -115,9 +131,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				库房内杂物是否清理干净：
                    </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="item8"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item8" onclick="openDialog(this)"> 否</label>
+                	<label id="info8" class="aui-text-info">
+                	${request.report.item8}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(7,8)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(7,8)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -128,9 +146,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	领用、发放、清退等级台账是否如实、齐全：
                 </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="item9"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item9" onclick="openDialog(this)"> 否</label>
+                	<label id="info9" class="aui-text-info">
+                	${request.report.item9}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(8,9)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(8,9)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -141,9 +161,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    	变质和过期失效的民爆物品，是否及时上报并清退出库，予以销毁：
                 </div>
                 <div class="aui-text-right">
-                	<label class="aui-text-info"></label>
-                	<input class="aui-radio" type="radio"  name="item10"> 是</label>
-               		<input class="aui-radio" type="radio"  name="item10" onclick="openDialog(this)"> 否</label>
+                	<label id="info10" class="aui-text-info">
+                	${request.report.item10}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -153,23 +175,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                       	<div class="aui-list-item-text">
                       	备注
                 		</div>
-                    	<textarea placeholder="这里输入备注信息" name="rem" class="aui-border-gray padding-5px" ></textarea>
+                    	<textarea placeholder="这里输入备注信息" id="rem" name="rem"
+                    		 class="aui-border-gray padding-5px" >${request.report.rem}</textarea>
                		</div>
              	</div>
           	</li>
           	<li class="aui-list-item">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px">上报</div>
+                    <div id="chooseUserBtn" style="overflow: scroll;text-align: center;"
+                    	onclick="chooseUser()">目标人员 ${request.report.targets.split("##")[0].substring(1)}</div>
+                </div>
+            </li>
+          	<li class="aui-list-item">
+                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+                    	onclick="saveReport()">保存表单</div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+                    	onclick="noticeView()">通知目标人员查看</div>
                 </div>
             </li>
 		</ul>
 	</div>
-
+	<input type="hidden" id="thisReport" value="${request.report.sid}"/>
 </body>
 <script type="text/javascript" src="../script/api.js" ></script>
 <script type="text/javascript" src="../script/aui-dialog.js" ></script>
 <script type="text/javascript">
-
+	var itemArray = [];
+	var tmpId = 0;
     apiready = function () {
         api.parseTapmode();
     };
@@ -182,10 +219,148 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             buttons:['取消','确定']
         },function(ret){
             if(ret.buttonIndex == 2) {
-            	obj.parentNode.getElementsByClassName("aui-text-info")[0].innerText = ret.text==''?"":"此项注释：" + ret.text;
+            	/* document.getElementById("info"+tmpId).innerText = ret.text;
+            	itemArray[tmpId] += "#rem#" + escape(ret.text); */
+            	document.getElementById("info"+tmpId).innerText = ret.text;
             }
         });
     }
+    
+    var radios = document.getElementsByClassName("aui-radio");
+    for(var i=0;i<radios.length;i++) {
+    	radios[i].addEventListener("click", function() {
+    		var nm = this.getAttribute("name");
+    		var id = nm.substring(4, nm.length);
+    		itemArray[id] = escape(this.parentNode.innerText);
+    		tmpId = id;
+    		document.getElementById("info"+id).innerText = "";
+    	});
+    }
+    
+    var userChoosed = '${request.report.targets}';
+    function chooseUser() {
+    	startUrl('PageAction!loadUserChoosePage', ['notitle','gesture','norefresh'], userChoosed);
+    };
+    
+    function onActivityResult(result) {
+    	userChoosed = result;
+    	var ss = userChoosed.split("##")[0].substring(1);
+    	chooseUserBtn.innerText = "已选择：" + ss.replaceAll(",", "，");
+    }
+    
+    String.prototype.replaceAll = function(s1,s2){
+   		return this.replace(new RegExp(s1,"gm"),s2);
+   	};
+    
+    /* function submitReport1() {
+    	ajax({
+    		type:"post",
+    		url:"AjaxAction!submitReport",
+    		dataType:"json",
+    		data:{
+    			items: itemArray,
+    			type:"",
+    			rem:escape(rem.value),
+    			targets:escape(userChoosed.split("##")[1])
+    		},
+    		success:function(r) {
+    			if(r['result'] == 'success') {
+    				submited();
+    			}
+    		}
+    	});
+    } */
+    
+    function submited() {
+    	//pushButton.innerText = "已通知";
+		//pushButton.setAttribute("onclick", "alert('今日表单已推送过，请勿重复推送')");
+    }
+</script>
+
+<script type="text/javascript">
+//初始化每个input的id, name属性
+var lists = document.getElementsByClassName("aui-text-right");
+for(var i=0;i<lists.length;i++) {
+	var tmp = lists[i].getElementsByTagName("input");
+	for(var j=0;j<tmp.length;j++) {
+		tmp[j].name = "item" + (i+1);
+		/*tmp[j].id = j+1;
+		if(tmp[j].id==tmp[j].value) {
+			tmp[j].setAttribute("checked", "checked");
+		}*/
+		if(j+1==tmp[j].value) {
+			tmp[j].setAttribute("checked", "checked");
+		}
+	}
+}
+
+function saveReport() {
+	var the_choices = "";
+	for(var i=0;i<lists.length;i++) {
+		var tmp = lists[i].getElementsByTagName("input");
+		var k = "";
+		for(var j=0;j<tmp.length;j++) {
+			tmp[j].name = "item" + (i+1);
+			if(tmp[j].checked) {
+				k = (j+1) + "";
+			}
+		}
+		the_choices += k==""?"0":k;
+	}
+	var url0 = "AjaxAction!saveReport";
+	if(thisReport.value!=null && thisReport.value != '') {
+		url0 = "AjaxAction!updateReport";
+	}
+	ajax({
+		type: "post",
+		url: url0,
+		dataType: "json",
+		data:{
+			"report.sid": thisReport.value,
+			"report.choices": the_choices,
+			"items": getItemRems(),
+			"report.type": "ExplosiveReport",
+			"report.rem": escape(rem.value),
+			"report.targets": escape(userChoosed)
+		}, success:function(r) {
+			if(r['result'] == 'success') {
+				alert('保存成功');
+			} else {
+				thisReport.value = r['result'];
+			}
+		}
+	});
+}
+
+function getItemRems() {
+	var textInfos = document.getElementsByClassName("aui-text-info");
+	var rems = [''];
+	for(var i=0;i<textInfos.length;i++) {
+		rems.push(escape(textInfos[i].innerText));
+	}
+	return rems;
+}
+
+function noticeView() {
+	ajax({
+		type: "post",
+		url: "AjaxAction!noticeOthers",
+		dataType: "json",
+		data:{
+			"notice.type": "ExplosiveNotice",
+			"notice.targetIds": escape(userChoosed.split("##")[1]),
+			"notice.title": escape(""),
+			"notice.content": escape(""),
+			"notice.impts": ""
+		}, success:function(r) {
+			if(r['result'] == 'success') {
+				alert('已通知给' + userChoosed.split("##")[0]);
+			} else {
+				thisReport.value = r['result'];
+			}
+		}
+	});
+}
 </script>
 
 </html>

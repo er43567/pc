@@ -41,11 +41,14 @@
 	 </bean>
 	 
 	 <!-- AjaxActionBean -->
+	 <bean id="ReportBean" class="cn.unclezhang.bean.Report"></bean>
+	 <bean id="NoticeBean" class="cn.unclezhang.bean.Notice"></bean>
 	 <bean id="AjaxActionBean" class="cn.unclezhang.action.AjaxAction" scope="prototype">
 	 	<property name="user" ref="UserBean"></property>
+	 	<property name="report" ref="ReportBean"></property>
+	 	<property name="notice" ref="NoticeBean"></property>
 	 	<property name="service" ref="ServiceImplBean"></property>
 	 </bean>
-	 
 	 
 	 <!--======================================== 配置事务======================================== -->
 	 <!-- (1) 创建事务对象 -->
