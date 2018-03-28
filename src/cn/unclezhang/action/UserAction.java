@@ -23,13 +23,24 @@ public class UserAction extends MyActionSupport {
 		return "login";
 	}
 	
+	//手机端没有用到，调试时候浏览器使用
 	public String login() {
-		if ("123".equals(user.getUserId()) && "456".equals(user.getUserId())) {
-			login(user);
-			return "explosiveIndex";
+		if (isLogin()) {
+			return "main";
 		}
+		System.out.println(user);
+		User tmp = service.findUserById(user.getUserId());
+		if (tmp == null) {
+			setResult("账号错误");
+			return "login";
+		} else if (!tmp.getPsw().equals(user.getPsw())) {
+			setResult("密码错误");
+			return "login";
+		}
+		
+		login(tmp);
 		setResult("登录失败！");
-		return "login";
+		return "main";
 	}
 	
 	public String logoff() {

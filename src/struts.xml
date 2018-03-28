@@ -19,7 +19,25 @@
 		
 		<action name="PageAction" class="PageActionBean">
 			<result name="choose">/pages/choose.jsp</result>
-			<result name="explosiveReport">/pages/reportExplosive.jsp</result>
+			<result name="historyReports">/pages/historyReports.jsp</result>
+			
+			<result name="ExplosiveReport">/pages/reportExplosive.jsp</result>
+			<result name="FirefightingReport">/pages/reportFirefighting.jsp</result>
+			<result name="HotalReport">/pages/reportHotal.jsp</result>
+			
+			<result name="ExplosiveReportHistory">/pages/reportExplosiveHistory.jsp</result>
+			<result name="FirefightingReportHistory">/pages/reportFirefightingHistory.jsp</result>
+			<result name="HotalReportHistory">/pages/reportHotalHistory.jsp</result>
+			
+			<result name="ExplosiveReportEdit">/pages/reportExplosiveEdit.jsp</result>
+			<result name="FirefightingReportEdit">/pages/reportFirefightingEdit.jsp</result>
+			<result name="HotalReportEdit">/pages/reportHotalEdit.jsp</result>
+			
+			<result name="ExplosiveReportReceive">/pages/reportExplosiveReceive.jsp</result>
+			<result name="FirefightingReportReceive">/pages/reportFirefightingReceive.jsp</result>
+			<result name="HotalReportReceive">/pages/reportHotalReceive.jsp</result>
+			
+			<result name="emptyReport">/pages/emptyReport.jsp</result>
 		</action>
 	</package>
 	

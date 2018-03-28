@@ -1,5 +1,7 @@
 package cn.unclezhang.action;
 
+import java.util.List;
+
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.json.annotations.JSON;
@@ -11,6 +13,11 @@ import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
 
 public class AjaxAction extends MyActionSupport {
+	int from_id, page, count_per_page = 10;
+	public void setPage(int page) {
+		this.page = page;
+		from_id = (page-1)*10;
+	}
 	User user;
 	@JSON(serialize=false)
 	public User getUser() {
@@ -26,15 +33,25 @@ public class AjaxAction extends MyActionSupport {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	@SuppressWarnings("unused")
 	public String login() {
-		System.out.println(user.getUserId() + "," + user.getPsw());
-		if ("123".equals(user.getUserId()) && "123".equals(user.getPsw())) {
-			login(user);
+		if (isLogin()) {
 			url = "main.jsp";
-			return "success";
+			return aa;
 		}
-		setResult("登录失败！");
-		return "success";
+		User tmp = service.findUserById(user.getUserId());
+		System.out.println(tmp.getPsw() + "," + user.getPsw());
+		if (tmp == null) {
+			setResult("账号错误");
+			return aa;
+		} else if (!tmp.getPsw().equals(user.getPsw())) {
+			setResult("密码错误");
+			return aa;
+		}
+		login(tmp);
+		url = "main.jsp";
+		return aa;
 	}
 	
 	String field, value;
@@ -53,8 +70,11 @@ public class AjaxAction extends MyActionSupport {
 	/*===========首页===========*/
 	public String loadIndexDatas() {
 		JSONObject jo = new JSONObject();
-		jo.put("reportCount", "88");
-		jo.put("pushCount", "77");
+		jo.put("reportCount", "");
+		//service.loadReportCount();
+		int ncount = service.loadNoticeCount(getSessionUserId());
+		System.out.println("noticeCount:" + ncount);
+		jo.put("noticeCount", ncount);
 		setResult(jo.toString());
 		return aa;
 	}
@@ -62,7 +82,7 @@ public class AjaxAction extends MyActionSupport {
 	/*===========用户设置页面===========*/
 	public String updateField() {
 		//[^a-zA-Z0-9\_]
-		service.updateUserFiled(getUserId(), field, value);
+		service.updateUserFiled(getSessionUserId(), field, value);
 		return aa;
 	}
 	/*===========表单提交页面===========*/
@@ -89,24 +109,34 @@ public class AjaxAction extends MyActionSupport {
 			System.out.println("choices = null");
 			return aa;
 		}
-		int sid = service.saveReport(getUserId(), Tool.unescape(report.getType()+"")
+		Report tmpr = null;
+		if((tmpr=service.findTypeReportByDate(report.getType(), report.getTime())) != null) {
+			setResult("reported");
+			report = tmpr;
+			return aa;
+		}
+		int sid = service.saveReport(getSessionUserId(), Tool.unescape(report.getType()+"")
 				, Tool.unescape(report.getTargets()+""), Tool.unescape(items+"").split(",")
-				, report.getChoices(), Tool.unescape(report.getRem()+""));
-		setResult(sid+"");
+				, report.getChoices(), Tool.unescape(report.getRem()+""), report.getTime());
+		setResult(sid + "");
 		return aa;
 	}
 	
 	public String updateReport() {
+		
 		service.updateReport(report.getSid()
-				, getUserId()
+				, getSessionUserId()
 				, Tool.unescape(report.getTargets()+"")
 				, Tool.unescape(items+"").split(",")
 				, report.getChoices()
 				, Tool.unescape(report.getRem()+""));
+		
 		return aa;
 	}
 	
-	
+	/**
+	 * Notice
+	 */
 	Notice notice;
 	public Notice getNotice() {
 		return notice;
@@ -120,11 +150,26 @@ public class AjaxAction extends MyActionSupport {
 			return aa;
 		}
 		System.out.println(Tool.unescape(notice.getTargetIds()));
-		service.savePush(getUserId()
+		
+		String noticeSid = service.saveNotice(getSessionUserId(), notice.getRef()
 				, Tool.unescape(notice.getType()), Tool.unescape(notice.getTargetIds())
 				, Tool.unescape(notice.getTitle()), Tool.unescape(notice.getContent())
 				, notice.getImpts());
 		
+		setResult(noticeSid);
+		return aa;
+	}
+	
+	
+	List<Notice> notices;
+	public List<Notice> getNotices() {
+		return notices;
+	}
+	public void setNotices(List<Notice> notices) {
+		this.notices = notices;
+	}
+	public String loadNoticeList() {
+		notices = service.loadNoticeList(getSessionUserId(), from_id, count_per_page);
 		return aa;
 	}
 	

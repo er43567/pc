@@ -19,20 +19,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 	
-    <header class="aui-bar aui-bar-nav" id="header" style="padding-top: 20px; position: fixed;">
+    <!-- <header class="aui-bar aui-bar-nav" id="header" style="padding-top: 20px; position: fixed;">
         <div class="aui-title">登录</div>
         <div class="aui-pull-right">
             <a class="aui-btn aui-iconfont aui-icon-refresh" href=""></a>
         </div>
     </header>
     <div style="margin-top: 45px;"></div>
-    
     <div id="header-bottom"></div>
+    
     <div class="aui-text-center" id="header-logo">
         <img src="../image/login_logo.png" />
-    </div>
-    
+    </div> -->
+    <div style="margin-top: 45px;"></div>
     <div class="aui-content-padded aui-margin-b-15">
+    	${request.result}
         <ul class="aui-list aui-form-list">
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
@@ -58,10 +59,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <p><div class="aui-btn aui-btn-info aui-btn-block aui-btn-sm" onclick="cmdLogin();">登录</div></p>
         <p><div class="aui-btn aui-btn-block aui-btn-sm" onclick="openWin('forget_win');">忘记密码</div></p>
     </div>
+    <div style="text-align: center;margin-top: 30px;">
+    	<div><img src="img/gongan.png" width="40%" style="margin-top: 10px"></div>
+    	<!-- <div><img src="img/gajzjxt.png" width="80%" style="margin-top: 10px"></div> -->
+    	<div style="font-family: Microsoft YaHei;color: #03a9f4;font-size: 42px;margin-top: 10px;" >
+    		<b>公安局质检系统</b>
+    	</div>
+    </div>
+    
     <div class="aui-text-center aui-font-size-14" style="position:fixed; bottom:10px; width:100%;">
-        <a href="#" class="aui-text-info" onclick="openWin('regist_win');">注册账号</a>
+        <%-- <a href="#" class="aui-text-info" onclick="openWin('regist_win');">萍乡</a>
         <span class="aui-text-info">&nbsp;|&nbsp;</span>
-        <a href="#" class="aui-text-info" onclick="openWin('about_win');">关于我们</a>
+        <a href="#" class="aui-text-info" onclick="openWin('about_win');">公安</a> --%>
     </div>
 </body>
 <%-- <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script> --%>
@@ -89,7 +98,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		android.login(userId, psw);
         		setTimeout(function(){toast.hide();}, 2000);
         	} else {
-        		ajax({
+        		startUrl("UserAction!login?user.userId="+userId+"&user.psw=" + psw);
+        		/* ajax({
 			        type : 'POST',
 			        url : 'AjaxAction!login',
 			        data : {"user.userId":userId,"user.psw":psw},  
@@ -115,7 +125,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			        	}
     			        	toast.hide();
     			        },
-        		{"user.userId":userId,"user.psw":psw});
+        		{"user.userId":userId,"user.psw":psw}); */
         		/* $.ajax({
 			        type : 'POST',
 			        url : 'AjaxAction!login',

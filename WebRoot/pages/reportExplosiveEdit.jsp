@@ -9,8 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>新建民爆行业质检表单</title>
-    
+    <title>修改民爆行业质检表单</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
     
@@ -31,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         var currentdate = year + seperator1 + month + seperator1 + strDate;
         return currentdate;
     }
-    window.onload = function(){
+    window.onload=function(){
     	datetime.innerText = getNowFormatDate();
     }
     </script>
@@ -40,9 +39,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
        <li class="aui-list-header">民爆行业质检表单 
-       	<div id='datetime' data-options='{"type":"date"}'
-        	style="background-color: #03a9f4;padding:2px;color: white;"
-       		 onclick="loadDateTimePickerLib();"></div>
+       <s:if test="#session.user.userId==#request.report.userId">
+	       <div id='datetime' data-options='{"type":"date"}'
+	        	style="background-color: #03a9f4;padding:2px;color: white;"
+	       		 onclick="loadDateTimePickerLib();">
+	       	修改表单
+	       </div>
+       </s:if>
+       	<!-- <button id='datetime' data-options='{"type":"date"}'
+       		 class="btn mui-btn mui-btn-block"
+       		 onclick="loadDateTimePickerLib();">
+        </button> -->
        </li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
            <li class="aui-list-item">
@@ -206,7 +213,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           	<li class="aui-list-item">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
                     <div id="saveButton" class="aui-btn aui-btn-primary aui-btn-block aui-btn-height-50px"
-                    	onclick="saveReport()">创建表单</div>
+                    	onclick="saveReport()">保存表单</div>
                 </div>
             </li>
             <li class="aui-list-item">
@@ -334,10 +341,8 @@ function saveReport() {
 				}
 				saveButton.innerText = "已保存,表单ID:" + thisReport.value;
 				alert('保存成功');
-			} else if('reported'==r['result']) {
-				alert(datetime.innerText + '日已发布此类型表单，请更换日期');
 			} else {
-				android.show(r['result']);
+				alert(r['result']);
 			}
 		}
 	});
@@ -371,7 +376,7 @@ function noticeView() {
 			"notice.sid": noticeId,
 			"notice.ref": thisReport.value,
 			"notice.type": "ExplosiveReport",
-			"notice.targetIds": escape(userChoosed),
+			"notice.targetIds": escape(userChoosed.split("##")[1]),
 			"notice.title": escape(""),
 			"notice.content": escape(""),
 			"notice.impts": "",

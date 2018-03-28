@@ -20,7 +20,8 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"
+				href="javascript:alert(1)"></a>
 			<button id="submit" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right"
 				onclick="publish()">发布</button>
 			<h1 class="mui-title">任务发布</h1>

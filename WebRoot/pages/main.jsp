@@ -23,17 +23,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
     <!-- 顶部 -->
-    <section class="aui-content" id="user-info" onclick="startUrl('setting.html')">
+    <section class="aui-content" id="user-info" onclick="startUrl('setting.jsp')">
         <div class="aui-list aui-media-list aui-list-noborder aui-bg-info">
             <div class="aui-list-item-middle"> <!-- class='aui-list-item aui-list-item-middle' -->
                 <div class="aui-media-list-item-inner ">
                     <div class="aui-list-item-media" style="width:3rem;">
-                        <img src="../image/demo1.png" class="aui-img-round" style="margin-left: 10px">
+                        <img src="${session.user.headImg}" class="aui-img-round" style="margin-left: 10px">
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
-                        <div class="aui-list-item-text text-white aui-font-size-18">38dd4ef6d</div>
+                        <div class="aui-list-item-text text-white aui-font-size-18">${session.user.userId}</div>
                         <div class="aui-list-item-text text-white">
-                           <div><i class="aui-iconfont aui-icon-mobile aui-font-size-14"></i>152****0989</div>
+                           <div><i class="aui-iconfont aui-icon-my aui-font-size-14"></i> ${session.user.name}</div>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <img src="img/安全.png" style="width: 35px;margin: auto;">
                 </div>
                 <div class="aui-gird-lable aui-font-size-14 " style="color: gray;"
-                	onclick="startUrl('PageAction!loadReportPage?type=ExplosiveReport')">民爆行业质检</div>
+                	onclick="startUrl('reportExplosive.jsp')">民爆行业质检</div>
             </div>
             <div class="aui-col-xs-4 aui-border-r">
             	<div class="aui-text-warning">
@@ -62,29 +62,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	<img src="img/消防车.png" style="width: 35px;margin: auto;">
             	</div>
                 <div class="aui-gird-lable aui-font-size-14 " style="color: gray;"
-                	onclick="startUrl('reportFirefighting3.jsp')">三级消防质检</div>
+                	onclick="startUrl('reportFirefighting.jsp')">三级消防质检</div>
             </div>
         </div>
     </section>
     <section class="aui-content">
         <ul class="aui-list aui-list-in aui-margin-b-15">
-            <li class="aui-list-item" onclick="startReportHistory('historyReports.jsp')">
+        	<li class="aui-list-item" onclick="startReportHistory('historyReports.jsp')">
                 <div class="aui-list-item-label-icon">
                     <!-- <i class="aui-iconfont aui-icon-location aui-text-info"></i> -->
                     <img alt="" src="img/历史.png" style="width: 20px;">
                 </div>
                 <div class="aui-list-item-inner aui-list-item-arrow">
-                    <span class="aui-list-item-title">上报历史</span>
+                    <span class="aui-list-item-title">历史质检表单</span>
                     <div id='reportCount' class="aui-badge" style="position: static;">99+</div>
                 </div>
             </li>
-            <li class="aui-list-item" onclick="startUrl('pushMessage.jsp')">
+        	<li class="aui-list-item" onclick="startUrl('noticePage.jsp');">
                 <div class="aui-list-item-label-icon">
                     <img alt="" src="img/消息.png" style="width: 20px;">
                 </div>
                 <div class="aui-list-item-inner aui-list-item-arrow">
                     <div class="aui-list-item-title">我的消息</div>
-                    <div id='pushCount' class="aui-badge" style="position: static;">99+</div>
+                    <div id='noticeCount' class="aui-badge" style="position: static;">99+</div>
                 </div>
             </li>
            <!--  <li class="aui-list-item">
@@ -92,7 +92,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <i class="aui-iconfont aui-icon-image aui-text-info"></i>
                 </div>
                 <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">美食相册</div>
+                    <div class="aui-list-item-title"></div>
                 </div>
             </li> -->
         </ul>
@@ -149,15 +149,30 @@ function onActivityResult(result) {
 		android.show('已注销登录');
 	}
 }
-
-ajaxPost('AjaxAction!loadIndexDatas',
-function(r) {
-	var data = eval("("+r+")");
-	result = eval("(" + data['result'] + ")");
-	reportCount.innerText = result['reportCount'];
-	pushCount.innerText = result['pushCount'];
-}, {});
-
+function onResume() {
+	updateBadgeNumber();
+}
+updateBadgeNumber();
+function updateBadgeNumber() {
+	ajaxPost('AjaxAction!loadIndexDatas',
+	function(r) {
+		var data = eval("("+r+")");
+		result = eval("(" + data['result'] + ")");
+		if(result['reportCount']=='0' || result['reportCount']=='') {
+			reportCount.style.display = "none";
+		} else {
+			reportCount.innerText = result['reportCount'];
+			reportCount.style.display = "inline-block";
+		}
+		if(result['noticeCount']=='0' || result['noticeCount']=='') {
+			noticeCount.style.display = "none";
+		} else {
+			noticeCount.innerText = result['noticeCount'];
+			noticeCount.style.display = "inline-block";
+		}
+		
+	}, null);
+}
 </script>
 
 </html>

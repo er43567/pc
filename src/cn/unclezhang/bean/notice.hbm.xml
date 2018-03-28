@@ -7,6 +7,7 @@
 		<id name="sid">
 			<generator class="identity"></generator> 
 		</id>
+		<property name="ref"></property>
 		<property name="userId"></property>
 		<property name="impts"></property>
 		<property name="type"></property>
@@ -16,6 +17,8 @@
 		<property name="readIds"></property>
 		<property name="readNames"></property>
 		<property name="time"></property>
+		<property name="userName" formula="(select tb.name from user_tb tb where tb.userId=userId)"></property>
+		<!-- <property name="readState" formula="(select locate(sessionUserId, readIds)>0)"></property> -->
 	</class>
 	
 </hibernate-mapping>

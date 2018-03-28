@@ -1,9 +1,44 @@
 package cn.unclezhang.bean;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts2.ServletActionContext;
+
 public class Notice {
-	int sid,impts;
+	public static final int READ = 1;
+	public static final int UNREAD = 0;
+	
+	int sid,ref,impts;
 	String userId,type,targetIds,title,content,readIds,readNames,time;
 	
+	int readState;
+	String userName;
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public int getReadState() {
+		if (readIds == null) 
+			return UNREAD;
+		readState = readIds.contains(getSessionUserId())?READ:UNREAD;
+		return readState;
+	}
+	User sessionUser;
+	public String getSessionUserId() {
+		if (sessionUser == null) {
+			HttpSession session = ServletActionContext.getRequest().getSession();
+			sessionUser = (User) session.getAttribute("user");
+		}
+		return sessionUser.getUserId();
+	}
+	public int getRef() {
+		return ref;
+	}
+	public void setRef(int ref) {
+		this.ref = ref;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -66,9 +101,12 @@ public class Notice {
 	}
 	@Override
 	public String toString() {
-		return "Push [sid=" + sid + ", impts=" + impts + ", type=" + type
-				+ ", targetIds=" + targetIds + ", title=" + title
-				+ ", content=" + content + ", readIds=" + readIds
-				+ ", readNams=" + readNames + "]";
+		return "Notice [sid=" + sid + ", ref=" + ref + ", impts=" + impts
+				+ ", userId=" + userId + ", type=" + type + ", targetIds="
+				+ targetIds + ", title=" + title + ", content=" + content
+				+ ", readIds=" + readIds + ", readNames=" + readNames
+				+ ", time=" + time + ", readState=" + readState + ", userName="
+				+ userName + "]";
 	}
+	
 }

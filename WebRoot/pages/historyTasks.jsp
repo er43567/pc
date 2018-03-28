@@ -33,79 +33,79 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div id="demo">
 			        <div class="aui-card-list">
 			            <div class="aui-card-list-header">
-			                卡片布局头部区域
+			                任务标题
 			            </div>
 			            <div class="aui-card-list-content-padded">
-			                内容区域，卡片列表布局样式可以实现APP中常见的各类样式
+			                任务内容。。。。
 			            </div>
 			            <div class="aui-card-list-footer">
-			                底部区域
+			                2018-01-26
 			            </div>
 			        </div>
 			        <div class="aui-card-list">
 			            <div class="aui-card-list-header">
-			                卡片布局头部区域
+			                任务标题
 			            </div>
 			            <div class="aui-card-list-content-padded">
-			                内容区域，卡片列表布局样式可以实现APP中常见的各类样式
+			                任务内容。。。。
 			            </div>
 			            <div class="aui-card-list-footer">
-			                底部区域
+			                2018-01-26
 			            </div>
 			        </div>
 			        <div class="aui-card-list">
 			            <div class="aui-card-list-header">
-			                卡片布局头部区域
+			                任务标题
 			            </div>
 			            <div class="aui-card-list-content-padded">
-			                内容区域，卡片列表布局样式可以实现APP中常见的各类样式
+			                任务内容。。。。
 			            </div>
 			            <div class="aui-card-list-footer">
-			                底部区域
+			                2018-01-26
 			            </div>
 			        </div>
 			        <div class="aui-card-list">
 			            <div class="aui-card-list-header">
-			                卡片布局头部区域
+			                任务标题
 			            </div>
 			            <div class="aui-card-list-content-padded">
-			                内容区域，卡片列表布局样式可以实现APP中常见的各类样式
+			                任务内容。。。。
 			            </div>
 			            <div class="aui-card-list-footer">
-			                底部区域
+			                2018-01-26
 			            </div>
 			        </div>
 			        <div class="aui-card-list">
 			            <div class="aui-card-list-header">
-			                卡片布局头部区域
+			                任务标题
 			            </div>
 			            <div class="aui-card-list-content-padded">
-			                内容区域，卡片列表布局样式可以实现APP中常见的各类样式
+			                任务内容。。。。
 			            </div>
 			            <div class="aui-card-list-footer">
-			                底部区域
+			                2018-01-26
 			            </div>
 			        </div>
 			        <div class="aui-card-list">
 			            <div class="aui-card-list-header">
-			                卡片布局头部区域
+			                任务标题
 			            </div>
 			            <div class="aui-card-list-content-padded">
-			                内容区域，卡片列表布局样式可以实现APP中常见的各类样式
+			                任务内容。。。。
 			            </div>
 			            <div class="aui-card-list-footer">
-			                底部区域
+			                2018-01-26
 			            </div>
 			        </div>
 			        <div class="aui-card-list">
 			            <div class="aui-card-list-header">
-			                卡片布局头部区域
+			                任务标题
 			            </div>
 			            <div class="aui-card-list-content-padded">
-			                内容区域，卡片列表布局样式可以实现APP中常见的各类样式
+			                任务内容。。。。
 			            </div>
 			            <div class="aui-card-list-footer">
-			                底部区域
+			                2018-01-26
 			            </div>
 			        </div>
 		        </div>
@@ -128,13 +128,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					for (var i = lis.length, length = i + 10; i < length; i++) {
 						var html = '<div class="aui-card-list">'+
 					            '<div class="aui-card-list-header">'+
-					                '卡片布局头部区域'+(i+1)+''+
+					                '任务标题'+(i+1)+''+
 					            '</div>'+
 					            '<div class="aui-card-list-content-padded">'+
-					                '内容区域，卡片列表布局样式可以实现APP中常见的各类样式'+
+					                '任务内容。。。。'+
 					            '</div>'+
 					            '<div class="aui-card-list-footer">'+
-					                '底部区域'+
+					                '2018-01-26'+
 					            '</div>'+
 					        '</div>';
 						wrap.insertAdjacentHTML('afterbegin', html);

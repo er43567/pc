@@ -2,7 +2,7 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";%>
-<!DOCTYPE HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
     <meta charset="utf-8">
@@ -17,6 +17,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="js/jquery-3.2.1.min.js" ></script>
     
     <script type="text/javascript" src="js/ext.js" ></script>
+    
+    <style type="text/css">
+    html,body {height:100%}
+    </style>
     
 </head>
 
@@ -50,26 +54,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     }
 	</style>
 	<div class="tab-contents">
-		<div id="tab-content-1" class="aui-show tab-content">
+		<div id="tab-content-1" class="aui-show tab-content" style="height: 100%">
          	<!--=====民爆行业折叠 Start=======-->
-         	民爆行业
+         	<iframe id="explosiveFrame" src="" style="width: 100%;height:100%;border: none;" ></iframe>
 		</div>
 		<div id="tab-content-2" class="aui-hide tab-content">
 			<!--=====旅馆业折叠 Start=======-->
-			旅馆业
+			<iframe id="hotalFrame" src="" style="width: 100%;height:100%;border: none;" ></iframe>
 		</div>
 		<div id="tab-content-3" class="aui-hide tab-content">
 			<!--=====三级消防折叠 Start=======-->
-			三级消防
+			<iframe id="firefightingFrame" src="" style="width: 100%;height:100%;border: none;" ></iframe>
 		</div>
 	</div>
-	
 	<script type="text/javascript" src="../script/api.js"></script>
 	<script type="text/javascript" src="../script/aui-tab.js"></script>
 	<script type="text/javascript">
 		apiready = function() {
 			api.parseTapmode();
 		};
+		var currentTab = 1;
 		var tab = new auiTab({
 			element: document.getElementById("tab"),
 		}, function(ret) {
@@ -79,13 +83,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 			var o = document.getElementById("tab-content-" + ret.index);
 			o.className = o.className.replace("aui-hide","aui-show");
+			currentTab = ret.index;
+			onChooseDate(date);
 		});
 	</script>
 	
 	<script type="text/javascript">
+	var date;
 	function onChooseDate(t) {
-		android.show(t);
+		date = t;
+		if(currentTab == 1) {
+			explosiveFrame.src = "PageAction!loadReportsByDate?report.type=ExplosiveReport&report.time=" + escape(t);
+		} else if(currentTab == 2) {
+			hotalFrame.src = "PageAction!loadReportsByDate?report.type=HotalReport&report.time=" + escape(t);
+		} else if(currentTab == 3) {
+			firefightingFrame.src = "PageAction!loadReportsByDate?report.type=FirefightingReport&report.time=" + escape(t);
+		}
 	}
+	
+	setTimeout(function(){onChooseDate(getNowFormatDate());}, 150);
+	function getNowFormatDate() {
+	    var date = new Date();
+	    var seperator1 = "-";
+	    var year = date.getFullYear();
+	    var month = date.getMonth() + 1;
+	    var strDate = date.getDate();
+	    if (month >= 1 && month <= 9) {
+	        month = "0" + month;
+	    }
+	    if (strDate >= 0 && strDate <= 9) {
+	        strDate = "0" + strDate;
+	    }
+	    var currentdate = year + seperator1 + month + seperator1 + strDate;
+	    return currentdate;
+	}
+	//android.setChoosedTime("2018-03-25");
+ 	/* startUrl("login.jsp");
+	
+	function startUrl(url) {
+		startUrl(url, null, null);
+	}
+	function startUrl(url, attrs, param) {
+		var s = "http://" +  location.host + "/unclezhang/pages/" + url;
+		if(attrs!=null)
+			attrs.push('refresh');
+		else
+			attrs = ['refresh', 'title', 'nogesture'];
+		android.startActivity(s, attrs, param);
+	} */
+ 
 	</script>
 	<!--<section>
         <ul class="aui-list aui-collapse">

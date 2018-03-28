@@ -68,11 +68,13 @@ public class User implements Loginable {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", psw=" + psw
-				+ ", name=" + name + ", time=" + time + "]";
+		return "User [userId=" + userId + ", psw=" + psw + ", name=" + name
+				+ ", position=" + position + ", headImg=" + headImg
+				+ ", phone=" + phone + ", scopes=" + scopes + ", time=" + time
+				+ "]";
 	}
 
 	@Override

@@ -1,11 +1,16 @@
-
-
 function show(obj) {
 	obj.style.display = 'inhert';
 }
 function hide(obj) {
 	obj.style.display = 'none';
 }
+
+function getParam(name) {
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null) return unescape(r[2]); return null;
+}
+
 isWebView = false;
 function startUrl(url) {
 	startUrl(url, null, null);
@@ -37,6 +42,11 @@ function startReportHistory(url) {
 	} else {
 		startUrl(url);
 	}
+}
+
+function startUrlWithoutResult(url) {
+	var s_url = "http://" +  location.host + "/unclezhang/pages/" + url;
+	android.startActivityWithoutResult(s_url, null, null);
 }
 
 function onPageFinished(param) {
@@ -87,7 +97,7 @@ function ajaxPost(url, callback, params) {
 	ajax({
         type : 'POST',
         url : url,
-        data : params,  
+        data : params,
         success : callback
 	});
 }
@@ -216,5 +226,6 @@ String.prototype.parseURL = function() {
         })()
     }
 };
+
 
 

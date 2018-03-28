@@ -8,7 +8,7 @@ public class Report {
 		item11,item12,item13,item14,item15,
 		item16,item17,item18,item19,item20,
 		item21,item22,item23,item24,item25;
-	
+	int noticed;
 	public void setItems(String items[]) throws Exception {
 		System.out.println("item len:" + items.length);
 		if (items.length>=2) item1 = items[1];
@@ -109,6 +109,14 @@ public class Report {
 	}
 	public void setChoices(String choices) {
 		this.choices = choices;
+	}
+	
+	
+	public int getNoticed() {
+		return noticed;
+	}
+	public void setNoticed(int noticed) {
+		this.noticed = noticed;
 	}
 	/*==========*/
 	

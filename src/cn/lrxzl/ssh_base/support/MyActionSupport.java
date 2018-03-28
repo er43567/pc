@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
 
+import cn.unclezhang.bean.User;
 import cn.unclezhang.service.IService;
 
 
@@ -27,22 +28,22 @@ public abstract class MyActionSupport {
 		session.removeAttribute("user");
 	}
 	
-	public <T> T getUserSession() {
+	public <T> T getSessionUser() {
 		return (T) session.getAttribute("user");
 	}
 	
-	public String getUserId() {
+	public String getSessionUserId() {
 		if (isLogin()) {
-			return ((Loginable)getUserSession()).getId();
+			return ((Loginable)getSessionUser()).getId();
 		}
 		return null;
 	}
 	
 	public boolean isLogin() {
-		return getUserSession() != null;
+		return getSessionUser() != null;
 	}
 	public boolean notLogin() {
-		return getUserSession() == null;
+		return getSessionUser() == null;
 	}
 	
 	public interface Loginable {

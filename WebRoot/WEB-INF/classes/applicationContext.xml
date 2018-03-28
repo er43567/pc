@@ -38,6 +38,7 @@
 	 <bean id="PageActionBean" class="cn.unclezhang.action.PageAction" scope="prototype">
 	 	<property name="user" ref="UserBean"></property>
 	 	<property name="service" ref="ServiceImplBean"></property>
+	 	<property name="report" ref="ReportBean"></property>
 	 </bean>
 	 
 	 <!-- AjaxActionBean -->

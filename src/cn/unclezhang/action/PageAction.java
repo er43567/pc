@@ -4,6 +4,7 @@ import java.util.List;
 
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
+import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
 
@@ -29,14 +30,7 @@ public class PageAction extends MyActionSupport {
 	}
 	
 	/*===========表单 页面===========*/
-	String type;
 	Report report;
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	public Report getReport() {
 		return report;
 	}
@@ -44,10 +38,20 @@ public class PageAction extends MyActionSupport {
 		this.report = report;
 	}
 	public String loadReportPage() {
-		System.out.println(type);
-		report = service.findTypeReportByDate(type, Tool.time().substring(0, 10));
-		System.out.println(report);
-		return "explosiveReport";
+		report = service.findReportById(report.getSid());
+		//标记已读
+		service.readNotice(report.getSid(), getSessionUserId());
+		return report.getType() + "History";
+	}
+	public String loadReportEditPage() {
+		report = service.findReportById(report.getSid());
+		return report.getType() + "Edit";
+	}
+	public String loadReportReceivePage() {
+		report = service.findReportById(report.getSid());
+		//标记已读
+		service.readNotice(report.getSid(), getSessionUserId());
+		return report.getType() + "Receive";
 	}
 	
 	/*===========历史页面===========*/
@@ -59,8 +63,16 @@ public class PageAction extends MyActionSupport {
 		this.reports = reports;
 	}
 	public String loadReportsByDate() {
-		reports = service.loadReportsByDate(report.getTime());
-		return "historyReports";
+		if (report.getTime() == null) {
+			report.setTime(Tool.time());
+		}
+		reports = service.loadReportsByDate(report.getType(), report.getTime());
+		if (reports == null || reports.size() == 0) {
+			return "emptyReport";
+		}
+		report = reports.get(0);
+		users = service.loadAllUsers();
+		return report.getType() + "History";
 	}
 	
 	@Override

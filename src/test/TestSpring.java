@@ -1,9 +1,12 @@
 package test;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -110,5 +113,25 @@ public class TestSpring extends TestCase {
 		r.setItems(new String[]{"","sdfasd","多少了空间"});
 		r.setUserId("admin");
 		dao.saveEntity(r);
+	}
+	
+	public void testLocate() throws Exception {
+		/*Session session = hibernateTemplate.getSessionFactory().openSession();
+		org.hibernate.Transaction tx = session.beginTransaction(); 
+		SQLQuery query = session.createSQLQuery("SELECT LOCATE( 'Peter', 'Peter Steve Tom' ) limit 1");
+		try {
+			tx.commit();
+			List li = query.list();
+			System.out.println(li.get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+			throw e;
+		} finally {
+			session.close(); 
+		}*/
+		List li = dao.findBySql("SELECT LOCATE( 'Peter', 'Peter Steve Tom' )");
+		BigInteger bi = (BigInteger) li.get(0);
+		System.out.println(bi.intValue());
 	}
 }

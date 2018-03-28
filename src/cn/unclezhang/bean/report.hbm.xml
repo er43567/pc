@@ -11,7 +11,6 @@
 		<property name="type"></property>
 		<property name="userId"></property>
 		<property name="scope"></property>
-		<property name="targets"></property>
 		<property name="choices"></property>
 		<property name="rem"></property>
 		<property name="time"></property>
@@ -40,6 +39,8 @@
 		<property name="item23"></property>
 		<property name="item24"></property>
 		<property name="item25"></property>
+		<property name="targets" formula="(select tb.targetIds from notice_tb tb where tb.ref=sid)"></property>
+		<!-- <property name="noticed" formula="(select count(ref) from notice_tb tb where tb.ref=sid)"></property> -->
 	</class>
 	
 </hibernate-mapping>
