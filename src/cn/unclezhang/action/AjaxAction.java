@@ -9,6 +9,7 @@ import org.apache.struts2.json.annotations.JSON;
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
 import cn.unclezhang.bean.Notice;
+import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
 
@@ -172,6 +173,40 @@ public class AjaxAction extends MyActionSupport {
 		notices = service.loadNoticeList(getSessionUserId(), from_id, count_per_page);
 		return aa;
 	}
+	
+	/**
+	 * Reply
+	 */
+	Reply reply;
+	List<Reply> replies;
+	public Reply getReply() {
+		return reply;
+	}
+	public void setReply(Reply reply) {
+		this.reply = reply;
+	}
+	public List<Reply> getReplies() {
+		return replies;
+	}
+	public void setReplies(List<Reply> replies) {
+		this.replies = replies;
+	}
+	public String submitReply() {
+		boolean bo = service.saveReply(reply.getRef(), reply.getUserId(), reply.getTargetId(), reply.getContent());
+		if (!bo) {
+			setResult("fail");
+		}
+		return aa;
+	}
+	
+	public String loadReplyList() {
+		replies = service.loadReplies(reply.getRef(), 0, 0);
+		if (replies == null) {
+			setResult("fail");
+		}
+		return aa;
+	}
+	
 	public String getResult() {
 		return result;
 	}

@@ -1,12 +1,18 @@
 package cn.unclezhang.bean;
 public class Reply {
-	int sid,state;
-	String userId,targetIds,content,img,time;
+	int sid,ref,state;
+	String userId,targetId,content,img,time;
 	public int getSid() {
 		return sid;
 	}
 	public void setSid(int sid) {
 		this.sid = sid;
+	}
+	public int getRef() {
+		return ref;
+	}
+	public void setRef(int ref) {
+		this.ref = ref;
 	}
 	public int getState() {
 		return state;
@@ -20,11 +26,11 @@ public class Reply {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getTargetIds() {
-		return targetIds;
+	public String getTargetId() {
+		return targetId;
 	}
-	public void setTargetIds(String targetIds) {
-		this.targetIds = targetIds;
+	public void setTargetId(String targetId) {
+		this.targetId = targetId;
 	}
 	public String getContent() {
 		return content;
@@ -48,7 +54,7 @@ public class Reply {
 	@Override
 	public String toString() {
 		return "Reply [sid=" + sid + ", state=" + state + ", userId=" + userId
-				+ ", targetIds=" + targetIds + ", content=" + content
+				+ ", targetId=" + targetId + ", content=" + content
 				+ ", img=" + img + "]";
 	}
 }

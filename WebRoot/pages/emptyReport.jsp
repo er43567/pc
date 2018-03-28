@@ -35,7 +35,4 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div style="text-align: center;margin-top: 15%;font-size: 24px">
 <img alt="" src="img/无信息.png" style="margin: auto">
 </div>
-<script type="text/javascript">
-window.parent.start("login.jsp");
-</script>
 </body>

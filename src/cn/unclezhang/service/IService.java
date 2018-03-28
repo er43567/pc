@@ -3,6 +3,7 @@ package cn.unclezhang.service;
 import java.util.List;
 
 import cn.unclezhang.bean.Notice;
+import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
 
@@ -33,5 +34,9 @@ public interface IService {
 	void readNotice(int sid, String userId);
 
 	User findUserById(String userId);
+
+	boolean saveReply(int ref, String userId, String targetId, String content);
+
+	List<Reply> loadReplies(int ref, int from_id, int len);
 	
 }

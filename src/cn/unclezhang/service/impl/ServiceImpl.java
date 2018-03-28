@@ -9,6 +9,7 @@ import java.util.List;
 
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.unclezhang.bean.Notice;
+import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
 import cn.unclezhang.dao.IDao;
@@ -243,6 +244,35 @@ public class ServiceImpl implements IService {
 	public User findUserById(String userId) {
 		try {
 			return dao.findOneByHql("from User where userId=?", new Object[]{userId});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public boolean saveReply(int ref, String userId, String targetId, String content) {
+		Reply reply = new Reply();
+		reply.setRef(ref);
+		reply.setUserId(userId);
+		reply.setTargetId(targetId);
+		reply.setContent(content);
+		reply.setTime(Tool.time());
+		reply.setState(0);
+		try {
+			dao.saveEntity(reply);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@Override
+	public List<Reply> loadReplies(int ref, int from_id, int len) {
+		try {
+			return dao.findByHql("from Reply where ref=?", new Object[]{ref}
+					, from_id, len);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -35,10 +35,12 @@
 	 	<property name="service" ref="ServiceImplBean"></property>
 	 </bean>
 	 <!-- PageActionBean -->
+	 <bean id="ReplyBean" class="cn.unclezhang.bean.Reply"></bean>
 	 <bean id="PageActionBean" class="cn.unclezhang.action.PageAction" scope="prototype">
 	 	<property name="user" ref="UserBean"></property>
 	 	<property name="service" ref="ServiceImplBean"></property>
 	 	<property name="report" ref="ReportBean"></property>
+	 	<property name="reply" ref="ReplyBean"></property>
 	 </bean>
 	 
 	 <!-- AjaxActionBean -->
@@ -48,6 +50,7 @@
 	 	<property name="user" ref="UserBean"></property>
 	 	<property name="report" ref="ReportBean"></property>
 	 	<property name="notice" ref="NoticeBean"></property>
+	 	<property name="reply" ref="ReplyBean"></property>
 	 	<property name="service" ref="ServiceImplBean"></property>
 	 </bean>
 	 
