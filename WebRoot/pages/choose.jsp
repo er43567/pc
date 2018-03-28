@@ -12,6 +12,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     
     <script type="text/javascript" src="js/ext.js" ></script>
+    
 </head>
 <body>
 	
@@ -100,6 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			clicked(i);
 		}
 	}
+	
 	
 </script>
 

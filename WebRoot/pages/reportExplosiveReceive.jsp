@@ -197,7 +197,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
                     <div id="chooseUserBtn" style="overflow: scroll;text-align: center;"
                     	 onclick="chooseUser()">
-                    	选择目标人员<s:property value="#request.report.targets.split('##')[0].substring(1)"/>
+                    	选择目标人员 <s:property value="#request.report.targets.split('##')[0].substring(1)"/>
                     </div>
                 </div>
             </li>

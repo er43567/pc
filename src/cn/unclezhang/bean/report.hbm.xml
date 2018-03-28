@@ -40,7 +40,7 @@
 		<property name="item24"></property>
 		<property name="item25"></property>
 		<property name="targets" formula="(select tb.targetIds from notice_tb tb where tb.ref=sid)"></property>
-		<!-- <property name="noticed" formula="(select count(ref) from notice_tb tb where tb.ref=sid)"></property> -->
+		<property name="userName" formula="(select tb.name from user_tb tb where tb.userId=userId)"></property>
 	</class>
 	
 </hibernate-mapping>

@@ -15,18 +15,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" href="css/ext.css" />
     
     <script type="text/javascript" src="js/ext.js" ></script>
-    
+    <%-- <style type="text/css">
+    .aui-list-item-text {
+    	font-size: 16px !important;
+    	color: black !important;
+    }
+    label {font-size: 18px !important;
+    	color: gray !important;}
+    </style> --%>
 </head>
 <body>
 	
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
        <li class="aui-list-header">
-       	<div>民爆行业质检表单 [创建于:${request.report.time.substring(0,10)}]</div>
+       	<div>民爆行业质检表单 创建于 ${request.report.time.substring(0,10)}</div>
        	<s:if test="#session.user.userId==#request.report.userId">
 	       	<div style="background-color: #03a9f4;padding:2px;color: white;"
 	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div>
        	</s:if>
+       	<s:else>
+       		<a href="javascript:void(0)"
+       			 style="background-color: #03a9f4;padding:2px;color: white;"
+       			 >联系${request.report.userName}</a>
+       	</s:else>
        </li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
            <li class="aui-list-item">
@@ -120,7 +132,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-				消防水池储水量是否大于15立方米或设高位水池：
+					消防水池储水量是否大于15立方米或设高位水池：
                    </div>
                 <div class="aui-text-right">
                 	<label id="info7" class="aui-text-info">
@@ -179,11 +191,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	<li class="aui-list-item">
           		<div class="aui-list-item-inner">
                   	<div class="aui-list-item-input">
-                      	<div class="aui-list-item-text">
-                      	备注
+                      	<div class="aui-list-item-text" style="font-size: 16px">
+                      	备注：${request.report.rem}
                 		</div>
-                    	<textarea placeholder="这里输入备注信息" id="rem" name="rem"
-                    		 class="aui-border-gray padding-5px" >${request.report.rem}</textarea>
                		</div>
              	</div>
           	</li>
@@ -193,9 +203,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	onclick="saveReport()">保存表单</div>
                 </div>
             </li> -->
-            <li class="aui-list-item">
+            <%-- <li class="aui-list-item">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="chooseUserBtn" style="overflow: scroll;text-align: center;">
+                    <div id="chooseUserBtn" class="aui-btn" style="overflow: scroll;text-align: center;width: 100%;">
                     	目标人员 ${request.report.targets.split("##")[0]}
 				    </div>
 				    <select id="sel" multiple="multiple" class="hiddenSel" onchange="onActivityResult(this)">
@@ -208,15 +218,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				    border:1px solid;left:-8px;top:-1px;opacity:0;}
 				    </style>
                 </div>
-            </li>
-            <li class="aui-list-item">
+            </li> --%>
+            <!-- <li class="aui-list-item">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
                     <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
                     	onclick="noticeView()">通知目标人员查看</div>
                 </div>
-            </li>
+            </li> -->
+             <%-- <li class="aui-list-item">
+                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+                    	onclick="reply('${request.report.sid}','${request.report.userId}')">展开回复</div>
+                </div>
+             </li> --%>
 		</ul>
-	</div>
+		<%@include file="reply.jsp"%>
 	<input type="hidden" id="thisReport" value="${request.report.sid}"/>
 </body>
 <%-- <script type="text/javascript">
@@ -285,7 +301,7 @@ setInterval(function(){
     }
     var times = 0;
     function onActivityResult(sel_obj) {
-    	if(++times%2==1) {return;}//第一次不算
+    	if(++times%2==1) {initUserChoosed();}
     	var result_ids = '';
     	var result_names = '';
     	for(var i = 0 ;i<sel_obj.options.length;i++) {
@@ -413,7 +429,7 @@ function noticeView() {
 		data:{
 			"notice.ref": thisReport.value,//report.sid
 			"notice.type": "ExplosiveNotice",
-			"notice.targetIds": escape(userChoosed.split("##")[1]),
+			"notice.targetIds": escape(userChoosed),
 			"notice.title": escape(""),
 			"notice.content": escape(""),
 			"notice.impts": "",
@@ -422,6 +438,16 @@ function noticeView() {
 				alert('已通知给' + userChoosed.split("##")[0]);
 			}
 		}
+	});
+}
+
+function reply(ref, userId) {
+	ajaxPost("AjaxAction!reply", function(r) {
+		alert(r);
+	}, {
+		"reply.ref": ref,
+		"reply.targetId": userId,
+		"reply.content": escape("回复的内容")
 	});
 }
 </script>

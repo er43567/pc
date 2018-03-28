@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>新建民爆行业质检表单</title>
+    <title>新建：民爆行业质检表单</title>
     
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
@@ -209,20 +209,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	onclick="saveReport()">创建表单</div>
                 </div>
             </li>
-            <li class="aui-list-item">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="chooseUserBtn" style="overflow: scroll;text-align: center;"
-                    	 onclick="chooseUser()">
-                    	选择目标人员<s:property value="#request.report.targets.split('##')[0].substring(1)"/>
-                    </div>
-                </div>
-            </li>
-            <li class="aui-list-item">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
-                    	onclick="noticeView()">通知目标人员查看</div>
-                </div>
-            </li>
+            <div id="showAfterSaved" style="display: none;">
+	            <li class="aui-list-item">
+	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+	                    <div id="chooseUserBtn" style="overflow: scroll;text-align: center;"
+	                    	 onclick="chooseUser()">
+	                    	选择目标人员<s:property value="#request.report.targets.split('##')[0].substring(1)"/>
+	                    </div>
+	                </div>
+	            </li>
+	            <li class="aui-list-item">
+	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+	                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+	                    	onclick="noticeView()">通知目标人员查看</div>
+	                </div>
+	            </li>
+            </div>
 		</ul>
 	</div>
 	<input type="hidden" id="thisReport" value="${request.report.sid}"/>
@@ -332,8 +334,11 @@ function saveReport() {
 				if(saves) {
 					thisReport.value = r['result'];
 				}
-				saveButton.innerText = "已保存,表单ID:" + thisReport.value;
+				//saveButton.innerText = "已保存,表单ID:" + thisReport.value;
+				saveButton.innerText = "保存更改";
 				alert('保存成功');
+				saveButton.parentNode.parentNode.style.display = "none";
+				showAfterSaved.style.display = "block";
 			} else if('reported'==r['result']) {
 				alert(datetime.innerText + '日已发布此类型表单，请更换日期');
 			} else {

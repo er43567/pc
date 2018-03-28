@@ -27,8 +27,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="aui-list aui-media-list aui-list-noborder aui-bg-info">
             <div class="aui-list-item-middle"> <!-- class='aui-list-item aui-list-item-middle' -->
                 <div class="aui-media-list-item-inner ">
-                    <div class="aui-list-item-media" style="width:3rem;">
-                        <img src="${session.user.headImg}" class="aui-img-round" style="margin-left: 10px">
+                    <div class="aui-list-item-media" style="margin-left: 10px;width: auto;">
+                        <img src="${session.user.headImg}" class="aui-img-round" style="width: 50px;height:50px">
                     </div>
                     <div class="aui-list-item-inner aui-list-item-arrow">
                         <div class="aui-list-item-text text-white aui-font-size-18">${session.user.userId}</div>

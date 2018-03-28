@@ -19,21 +19,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 	
-    <!-- <header class="aui-bar aui-bar-nav" id="header" style="padding-top: 20px; position: fixed;">
+    <header class="aui-bar aui-bar-nav" id="header" style="padding-top: 20px; position: fixed;">
         <div class="aui-title">登录</div>
         <div class="aui-pull-right">
             <a class="aui-btn aui-iconfont aui-icon-refresh" href=""></a>
         </div>
     </header>
-    <div style="margin-top: 45px;"></div>
-    <div id="header-bottom"></div>
+    <div style="margin-top: 40px;"></div>
     
     <div class="aui-text-center" id="header-logo">
         <img src="../image/login_logo.png" />
-    </div> -->
+    </div>
     <div style="margin-top: 45px;"></div>
     <div class="aui-content-padded aui-margin-b-15">
-    	${request.result}
+    	${request.result=='success'?"":request.result}
         <ul class="aui-list aui-form-list">
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">

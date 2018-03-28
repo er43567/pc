@@ -148,11 +148,27 @@ public class ServiceImpl implements IService {
 			}
 		} else {
 			System.out.println("exist");
-			notice.setTargetIds(targetIds);
+			//notice.setTargetIds(targetIds);
 			notice.setTitle(title);
 			notice.setContent(content);
 			notice.setImpts(impts);
-			notice.setReadIds("");//清空已阅读人员名单
+			//notice.setReadIds("");//清空已阅读人员名单
+			/**
+			 * 添加readIds用户
+			 */
+			if (notice.getTargetIds()==null || "".equals(notice.getTargetIds())) {
+				notice.setTargetIds(targetIds);
+			} else if (targetIds.contains("##")) {
+				String ids[] = targetIds.split("##")[1].split(",");
+				for (int i = 0; i < ids.length; i++) {
+					if (notice.getTargetIds().contains(ids[i]) == false) {
+						notice.setTargetIds(notice.getTargetIds() + "," + ids[i]);
+					}
+				}
+			} else {
+				System.out.println("What Happend?");
+			}
+			
 			try {
 				dao.updateEntity(notice);
 				return notice.getSid() + "";

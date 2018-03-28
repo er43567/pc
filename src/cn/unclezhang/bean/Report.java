@@ -9,6 +9,8 @@ public class Report {
 		item16,item17,item18,item19,item20,
 		item21,item22,item23,item24,item25;
 	int noticed;
+	String userName;
+	
 	public void setItems(String items[]) throws Exception {
 		System.out.println("item len:" + items.length);
 		if (items.length>=2) item1 = items[1];
@@ -42,6 +44,12 @@ public class Report {
 			f.setAccessible(true);
 			f.set(this, items[i]);
 		}*/
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	/*public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
 		Report tt = new Report();

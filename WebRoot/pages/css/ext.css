@@ -5,3 +5,7 @@ body{background-color: #f3f3f3;}
 .padding-5px {padding: 5px;}
 .header-bottom{margin-top: 20%;}
 .red-badge-26px{min-width: 26px;height: 26px;line-height: 26px;}
+
+.padding-2px{padding: 2px}
+
+.sm-info-btn{background-color: #03a9f4;padding:2px;color: white;}

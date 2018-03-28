@@ -37,6 +37,7 @@ public class AjaxAction extends MyActionSupport {
 	@SuppressWarnings("unused")
 	public String login() {
 		if (isLogin()) {
+			System.out.println("not login yet");
 			url = "main.jsp";
 			return aa;
 		}
@@ -160,7 +161,6 @@ public class AjaxAction extends MyActionSupport {
 		return aa;
 	}
 	
-	
 	List<Notice> notices;
 	public List<Notice> getNotices() {
 		return notices;
@@ -172,7 +172,6 @@ public class AjaxAction extends MyActionSupport {
 		notices = service.loadNoticeList(getSessionUserId(), from_id, count_per_page);
 		return aa;
 	}
-	
 	public String getResult() {
 		return result;
 	}

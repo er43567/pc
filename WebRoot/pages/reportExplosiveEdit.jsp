@@ -40,8 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        <ul class="aui-list aui-select-list">
        <li class="aui-list-header">民爆行业质检表单 
        <s:if test="#session.user.userId==#request.report.userId">
-	       <div id='datetime' data-options='{"type":"date"}'
-	        	style="background-color: #03a9f4;padding:2px;color: white;"
+	       <div id='datetime' data-options='{"type":"date"}' class="sm-info-btn"
 	       		 onclick="loadDateTimePickerLib();">
 	       	修改表单
 	       </div>
