@@ -264,7 +264,7 @@ for(var i=0;i<radios.length;i++) {
 
 var userChoosed = '${request.report.targets}';
 function chooseUser() {
-	startUrl('PageAction!loadUserChoosePage', ['notitle','gesture','norefresh'], userChoosed);
+	startUrl('PageAction!loadUserChoosePage#withDisabled', ['notitle','gesture','norefresh'], userChoosed);
 };
 
 function onActivityResult(result) {
@@ -362,7 +362,7 @@ function noticeView() {
 		dataType: "json",
 		data:{
 			"notice.ref": thisReport.value,//report.sid
-			"notice.type": "ExplosiveNotice",
+			"notice.type": "ExplosiveReport",
 			"notice.targetIds": escape(userChoosed),
 			"notice.title": escape(""),
 			"notice.content": escape(""),

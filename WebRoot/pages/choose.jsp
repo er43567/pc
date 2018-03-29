@@ -50,6 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			userIds.push(namesDiv[i].id);
 		}
 	}
+	
 	//var choices = ['a3','a1'];
 	//loadItems();
 	
@@ -90,6 +91,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		for(var i=0;i<userIds.length;i++) {
 			if(choices_ids.contains(userIds[i])) {
 				document.getElementById("ckbox" + i).setAttribute("checked","checked");
+				
+				if(location.href.indexOf('#withDisabled')>=0) {
+					document.getElementById("ckbox" + i).setAttribute("disabled", "disabled");
+				}
 			}
 		}
 	}
