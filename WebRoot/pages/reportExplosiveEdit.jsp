@@ -142,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-				消防水池储水量是否大于15立方米或设高位水池：
+					消防水池储水量是否大于15立方米或设高位水池：
                    </div>
                 <div class="aui-text-right">
                 	<label id="info7" class="aui-text-info">

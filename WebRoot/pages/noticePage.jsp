@@ -31,6 +31,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  }
 	  #timeline{min-height: 89%}
 	</style>
+	
+	<script>
+	window.onscroll = function () {
+	    var a = document.documentElement.scrollTop == 0 ? document.body.clientHeight : document.documentElement.clientHeight;
+	    var b = document.documentElement.scrollTop == 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+	    var c = document.documentElement.scrollTop == 0 ? document.body.scrollHeight : document.documentElement.scrollHeight;
+	    if (b != 0) {
+	        if (a + b == c) {
+	        	loadMore();
+	        }
+	    }
+	};
+	</script>
 </head>
 
 <body>
@@ -103,7 +116,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </body>
 <script type="text/javascript">
 function onMsgClicked(_self, reportId, type) {
-	startUrl("PageAction!loadReportReceivePage?report.sid="+reportId+"&report.type="+type);
+	var sharp = "";
+	if(type=='Reply') {
+		sharp = "#nowReviewReply";
+	}
+	startUrl("PageAction!loadReportReceivePage?report.sid="+reportId+"&report.type="+type + sharp);
 	setTimeout(function(){
 		_self.getElementsByClassName("state-img")[0].src = "img/已读.png";
 	}, 1000);
@@ -122,6 +139,7 @@ function loadMore() {
 	if(hasNext == false) {
 		return;
 	}
+	loadMoreBtn.innerText = "正在加载...";
 	ajaxPost("AjaxAction!loadNoticeList", function(r) {
 		var result = eval("("+r+")");
 		if("success"==result['result']) {
@@ -130,11 +148,12 @@ function loadMore() {
 			for(var i=0;i<list.length;i++) {
 				var item = list[i];
 				timeline.innerHTML += getItem(item.type, item.time.substring(0,10)
-						, item.userId, item.userName, item.ref, item.readState);
+						, item.userId, item.userName, item.ref, item.readState, item.content);
 				hasNext = true;
 			}
 			if(hasNext) {
 				nextPage++;
+				loadMoreBtn.innerText = "加载更多";
 			} else {
 				loadMoreBtn.innerText = "没有更多数据了";
 			}
@@ -144,7 +163,7 @@ function loadMore() {
 
 var oldTime = null;
 var count = 0;
-function getItem(type, time, userId, userName, refId, readState) {
+function getItem(type, time, userId, userName, refId, readState, content) {
 	var timeDiv = "<div class='aui-timeline-item-header'>"+time+"</div>";
 	if(time == oldTime) {
 		time = "";
@@ -153,8 +172,8 @@ function getItem(type, time, userId, userName, refId, readState) {
 		oldTime = time;
 	}
 	var readStateSrc = readState==1?"img/已读.png":"img/未读.png";
-	var itemTitle = "来自"+userName+"的" + time + (type.indexOf("Report")>=0?"日表单":"回复消息");
-	var itemContent = "";
+	var itemTitle = "来自"+userName+"的" + time + (type.indexOf("Report")>=0?"日表单":"回复消息：" + content);
+	var itemContent = "回复消息";
 	switch(type) {
 	case "ExplosiveReport":
 		itemContent = "民爆行业质检表单";

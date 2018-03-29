@@ -34,7 +34,7 @@ public abstract class MyActionSupport {
 	
 	public String getSessionUserId() {
 		if (isLogin()) {
-			return ((Loginable)getSessionUser()).getId();
+			return ((Loginable) getSessionUser()).getId();
 		}
 		return null;
 	}

@@ -1,5 +1,6 @@
 package cn.unclezhang.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.json.JSONObject;
@@ -12,6 +13,7 @@ import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
+import cn.unclezhang.conf.Conf;
 
 public class AjaxAction extends MyActionSupport {
 	int from_id, page, count_per_page = 10;
@@ -37,21 +39,24 @@ public class AjaxAction extends MyActionSupport {
 	
 	@SuppressWarnings("unused")
 	public String login() {
-		if (isLogin()) {
-			System.out.println("not login yet");
+		/*if (isLogin()) {
+			System.out.println("already logined");
 			url = "main.jsp";
 			return aa;
-		}
+		}*/
 		User tmp = service.findUserById(user.getUserId());
 		System.out.println(tmp.getPsw() + "," + user.getPsw());
 		if (tmp == null) {
 			setResult("账号错误");
+			System.out.println("账号错误");
 			return aa;
 		} else if (!tmp.getPsw().equals(user.getPsw())) {
 			setResult("密码错误");
+			System.out.println("密码错误");
 			return aa;
 		}
 		login(tmp);
+		System.out.println("login success " + tmp);
 		url = "main.jsp";
 		return aa;
 	}
@@ -72,8 +77,9 @@ public class AjaxAction extends MyActionSupport {
 	/*===========首页===========*/
 	public String loadIndexDatas() {
 		JSONObject jo = new JSONObject();
-		jo.put("reportCount", "");
+		jo.put("reportCount", "0");
 		//service.loadReportCount();
+		System.out.println(getSessionUserId());
 		int ncount = service.loadNoticeCount(getSessionUserId());
 		System.out.println("noticeCount:" + ncount);
 		jo.put("noticeCount", ncount);
@@ -170,7 +176,13 @@ public class AjaxAction extends MyActionSupport {
 		this.notices = notices;
 	}
 	public String loadNoticeList() {
-		notices = service.loadNoticeList(getSessionUserId(), from_id, count_per_page);
+		//notices = service.loadNoticeList(getSessionUserId(), from_id, count_per_page);
+		List<Notice> li1 = service.loadNoticeList(getSessionUserId(), 0, 0, 0);
+		List<Notice> li2 = service.loadNoticeList(getSessionUserId(), from_id, count_per_page, 1);
+		List<Notice> li = new ArrayList<Notice>();
+		li.addAll(li1);
+		li.addAll(li2);
+		notices = li;
 		return aa;
 	}
 	
@@ -192,18 +204,41 @@ public class AjaxAction extends MyActionSupport {
 		this.replies = replies;
 	}
 	public String submitReply() {
-		boolean bo = service.saveReply(reply.getRef(), reply.getUserId(), reply.getTargetId(), reply.getContent());
+		boolean bo = service.saveReply(reply.getRef(), getSessionUserId()
+				, reply.getTargetId(), reply.getContent());
 		if (!bo) {
 			setResult("fail");
+		} else {
+			service.saveNotice(getSessionUserId(), reply.getRef()
+					, Conf.notice_回复, reply.getTargetId(), "回复", reply.getContent()
+					, Conf.important_normal);
 		}
 		return aa;
 	}
 	
 	public String loadReplyList() {
-		replies = service.loadReplies(reply.getRef(), 0, 0);
+		replies = service.loadReplies(reply.getRef(), getSessionUserId(), 0, 0);
 		if (replies == null) {
 			setResult("fail");
+		} else {
+			service.readNotice(reply.getRef(), getSessionUserId(), Conf.notice_回复);
 		}
+		return aa;
+	}
+	
+	
+	/**
+	 * History Page API For Android 
+	 */
+	List<Integer> states;
+	public List<Integer> getStates() {
+		return states;
+	}
+	public void setStates(List<Integer> states) {
+		this.states = states;
+	}
+	public String loadHistoryStates() {
+		
 		return aa;
 	}
 	

@@ -48,6 +48,13 @@
 				<param name="contentType">text/html</param>
 			</result>
 		</action>
+		<action name="NotificationAction" class="NotificationActionBean">
+			<result name="*" type="json"> <!-- class="org.apache.struts2.json.JSONResult" -->
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>
+		</action>
+		
 	</package>
 	
 </struts>

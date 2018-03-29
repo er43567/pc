@@ -54,6 +54,9 @@
 	 	<property name="service" ref="ServiceImplBean"></property>
 	 </bean>
 	 
+	 <bean id="NotificationActionBean" class="cn.unclezhang.action.NotificationAction" scope="prototype">
+	 	<property name="service" ref="ServiceImplBean"></property>
+	 </bean>
 	 <!--======================================== 配置事务======================================== -->
 	 <!-- (1) 创建事务对象 -->
 	 <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">

@@ -101,7 +101,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 	}
 	
-	setTimeout(function(){onChooseDate(getNowFormatDate());}, 150);
 	function getNowFormatDate() {
 	    var date = new Date();
 	    var seperator1 = "-";

@@ -27,16 +27,16 @@ public interface IService {
 
 	int loadNoticeCount(String userId);
 
-	List<Notice> loadNoticeList(String userId, int from_id, int count_per_page);
+	List<Notice> loadNoticeList(String userId, int from_id, int count_per_page, int readState);
 
 	Report findReportById(int sid);
 
-	void readNotice(int sid, String userId);
+	void readNotice(int ref, String userId, String type);
 
 	User findUserById(String userId);
 
 	boolean saveReply(int ref, String userId, String targetId, String content);
 
-	List<Reply> loadReplies(int ref, int from_id, int len);
+	List<Reply> loadReplies(int ref, String whoLoad, int from_id, int len);
 	
 }
