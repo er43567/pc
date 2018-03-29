@@ -137,7 +137,7 @@ public class AjaxAction extends MyActionSupport {
 	}
 	
 	/**
-	 * Notice
+	 * ============Notice===========
 	 */
 	Notice notice;
 	public Notice getNotice() {
@@ -175,7 +175,7 @@ public class AjaxAction extends MyActionSupport {
 	}
 	
 	/**
-	 * Reply
+	 * ===========Reply===========
 	 */
 	Reply reply;
 	List<Reply> replies;

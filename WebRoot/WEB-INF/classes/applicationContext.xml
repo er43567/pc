@@ -40,7 +40,7 @@
 	 	<property name="user" ref="UserBean"></property>
 	 	<property name="service" ref="ServiceImplBean"></property>
 	 	<property name="report" ref="ReportBean"></property>
-	 	<property name="reply" ref="ReplyBean"></property>
+	 	<!-- <property name="reply" ref="ReplyBean"></property> -->
 	 </bean>
 	 
 	 <!-- AjaxActionBean -->

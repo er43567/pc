@@ -12,7 +12,7 @@
 		<property name="position"></property>
 		<property name="headImg"></property>
 		<property name="phone"></property>
-		<property name="scopes"></property>
+		<property name="scope"></property>
 		<property name="time"></property>
 	</class>
 	

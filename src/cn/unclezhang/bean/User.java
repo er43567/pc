@@ -5,7 +5,7 @@ import org.apache.struts2.json.annotations.JSON;
 import cn.lrxzl.ssh_base.support.MyActionSupport.Loginable;
 
 public class User implements Loginable {
-	String userId, psw, name, position, headImg, phone, scopes, time;
+	String userId, psw, name, position, headImg, phone, scope, time;
 	
 	public String getUserId() {
 		return userId;
@@ -46,15 +46,12 @@ public class User implements Loginable {
 	public void setHeadImg(String headImg) {
 		this.headImg = headImg;
 	}
-
-	public String getScopes() {
-		return scopes;
+	public String getScope() {
+		return scope;
 	}
-
-	public void setScopes(String scopes) {
-		this.scopes = scopes;
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
-
 	public String getTime() {
 		return time;
 	}
@@ -73,7 +70,7 @@ public class User implements Loginable {
 	public String toString() {
 		return "User [userId=" + userId + ", psw=" + psw + ", name=" + name
 				+ ", position=" + position + ", headImg=" + headImg
-				+ ", phone=" + phone + ", scopes=" + scopes + ", time=" + time
+				+ ", phone=" + phone + ", scope=" + scope + ", time=" + time
 				+ "]";
 	}
 
