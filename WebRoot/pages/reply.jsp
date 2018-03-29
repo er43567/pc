@@ -18,7 +18,7 @@
             <div id="replyDiv" style="display: none;">
 	            <li class="aui-list-item">
 	               	<div id="replyList" class="aui-chat" style="padding: 0.2rem">
-		               			<div class='aui-chat-header' style='margin-bottom: 0.2rem;'>2016-07-13</div>
+		               			<%-- <div class='aui-chat-header' style='margin-bottom: 0.2rem;'>2016-07-13</div>
 						        <div class='aui-chat-item aui-chat-left'>
 						            <div class='aui-chat-media'>
 						                <img src='../image/demo2.png' />
@@ -50,7 +50,7 @@
 						                    <i class='aui-iconfont aui-icon-info aui-text-danger'></i>
 						                </div>
 						            </div>
-						        </div>
+						        </div> --%>
 		               </div>
 		           </li>
 		           
