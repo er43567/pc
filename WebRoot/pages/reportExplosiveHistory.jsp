@@ -233,7 +233,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              </li> --%>
 		</ul>
 		<%@include file="reply.jsp"%>
-	<input type="hidden" id="thisReport" value="${request.report.sid}"/>
+		<input type="hidden" id="thisReport" value="${request.report.sid}"/>
 </body>
 <%-- <script type="text/javascript">
 var interceptStete = true;
@@ -428,7 +428,7 @@ function noticeView() {
 		dataType: "json",
 		data:{
 			"notice.ref": thisReport.value,//report.sid
-			"notice.type": "ExplosiveNotice",
+			"notice.type": "ExplosiveReport",
 			"notice.targetIds": escape(userChoosed),
 			"notice.title": escape(""),
 			"notice.content": escape(""),

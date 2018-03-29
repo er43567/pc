@@ -12,6 +12,7 @@ import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
+import cn.unclezhang.conf.Conf;
 import cn.unclezhang.dao.IDao;
 import cn.unclezhang.service.IService;
 
@@ -112,9 +113,8 @@ public class ServiceImpl implements IService {
 	public List<Report> loadReportsByDate(String type, String time) {
 		time = time.length()>10?time.substring(0,10):time;
 		try {
-			System.out.println(type);
 			System.out.println(time);
-			return dao.findByHql("from Report where type=? and substring(time, 1, 10)=?)"
+			return dao.findByHql("from Report where type=? and locate(?, time)>0"
 					, new Object[]{type, time});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,12 +127,17 @@ public class ServiceImpl implements IService {
 			String title, String content, int impts) {
 		Notice notice = null;
 		try {
-			notice = dao.findOneByHql("from Notice where ref=?", new Object[]{ref});
+			notice = dao.findOneByHql("from Notice where ref=? and type=?"
+					, new Object[]{ref,type});
 			System.out.println("found "+ ref + ":" + notice);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		if (notice == null) {
+		/**
+		 * 如果是回复类型，则添加回复Notice
+		 * 如果不是回复类型，则更新Notice
+		 */
+		if (notice == null || Conf.notice_回复.equals(type)) {
 			notice = new Notice();
 			notice.setRef(ref);
 			notice.setUserId(userId);
@@ -155,7 +160,7 @@ public class ServiceImpl implements IService {
 			notice.setImpts(impts);
 			//notice.setReadIds("");//清空已阅读人员名单
 			/**
-			 * 添加readIds用户
+			 * 添加targetIds 
 			 */
 			if (notice.getTargetIds()==null || "".equals(notice.getTargetIds())) {
 				notice.setTargetIds(targetIds);
@@ -197,23 +202,23 @@ public class ServiceImpl implements IService {
 	}
 
 	@Override
-	public List<Notice> loadNoticeList(String userId, int from_id, int len) {
+	public List<Notice> loadNoticeList(String userId, int from_id, int len, int readState) {
 		try {
-			List<Notice> li = dao.findByHql("from Notice where locate(?, targetIds)>0"
-					, new Object[]{userId}, from_id, len);
-			System.out.println(Arrays.toString(li.toArray()).replaceAll("],", "\n"));
-			Collections.sort(li, new Comparator<Notice>() {
+			List<Notice> li = dao.findByHql("from Notice where locate(?, targetIds)>0 and locate(?, ifnull(readIds,''))"+(readState==1?">":"<=")+"0 order by sid desc"
+					, new Object[]{userId, userId}, from_id, len);
+			/*Collections.sort(li, new Comparator<Notice>() {
 				@Override
 				public int compare(Notice o1, Notice o2) {
 					return o1.getReadState() - o2.getReadState();
 				}
-			});
+			});*/
 			return li;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
 
 	@Override
 	public Report findReportById(int sid) {
@@ -226,9 +231,9 @@ public class ServiceImpl implements IService {
 	}
 	
 	@Override
-	public void readNotice(int sid, String userId) {
-		try {
-			Notice notice = dao.findOneByHql("from Notice where ref=?", new Object[]{sid});
+	public void readNotice(int ref, String userId, String type) {
+		/*try {
+			Notice notice = dao.findOneByHql("from Notice where ref=?", new Object[]{ref});
 			if(notice.getReadIds()==null || "".equals(notice.getReadIds())
 					|| notice.getReadIds().contains(userId) == false) {
 				notice.setReadIds(notice.getReadIds() + "," + userId);
@@ -237,8 +242,17 @@ public class ServiceImpl implements IService {
 		} catch (Exception e) {
 			//e.printStackTrace();
 			System.out.println("read notice exception but never mind.");
+		}*/
+		try {
+			System.out.println(userId + " read notice " + ref);
+			dao.updateBySql("update notice_tb set readIds=concat(ifnull(readIds, ''),',',?)"
+					+ " where ref=? and (readIds is NULL or locate(?, readIds)<1)"
+					+ " and locate(?, targetIds)>0 and type=?"
+					, new Object[]{userId, ref, userId, userId, type});
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	}
+	} 
 
 	@Override
 	public User findUserById(String userId) {
@@ -269,10 +283,14 @@ public class ServiceImpl implements IService {
 	}
 	
 	@Override
-	public List<Reply> loadReplies(int ref, int from_id, int len) {
+	public List<Reply> loadReplies(int ref, String whoLoad, int from_id, int len) {
 		try {
-			return dao.findByHql("from Reply where ref=?", new Object[]{ref}
+			List<Reply> li = dao.findByHql("from Reply where ref=?"
+					, new Object[]{ref}
 					, from_id, len);
+			/*dao.updateBySql("update notice_tb set readIds=? where ref=? and locate(?, targetIds)>0"
+					, new Object[]{ref, whoLoad});*/
+			return li;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

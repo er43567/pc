@@ -208,6 +208,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
             </li>
 		</ul>
+		<%@include file="reply.jsp"%>
 	</div>
 	<input type="hidden" id="thisReport" value="${request.report.sid}"/>
 </body>

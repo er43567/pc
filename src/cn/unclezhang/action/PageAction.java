@@ -40,7 +40,7 @@ public class PageAction extends MyActionSupport {
 	public String loadReportPage() {
 		report = service.findReportById(report.getSid());
 		//标记已读
-		service.readNotice(report.getSid(), getSessionUserId());
+		service.readNotice(report.getSid(), getSessionUserId(), report.getType());
 		return report.getType() + "History";
 	}
 	public String loadReportEditPage() {
@@ -50,7 +50,7 @@ public class PageAction extends MyActionSupport {
 	public String loadReportReceivePage() {
 		report = service.findReportById(report.getSid());
 		//标记已读
-		service.readNotice(report.getSid(), getSessionUserId());
+		service.readNotice(report.getSid(), getSessionUserId(), report.getType());
 		return report.getType() + "Receive";
 	}
 	
@@ -66,12 +66,13 @@ public class PageAction extends MyActionSupport {
 		if (report.getTime() == null) {
 			report.setTime(Tool.time());
 		}
+		System.out.println(report.getType());
 		reports = service.loadReportsByDate(report.getType(), report.getTime());
 		if (reports == null || reports.size() == 0) {
 			return "emptyReport";
 		}
 		report = reports.get(0);
-		users = service.loadAllUsers();
+		//users = service.loadAllUsers();
 		return report.getType() + "History";
 	}
 	

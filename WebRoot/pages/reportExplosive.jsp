@@ -16,21 +16,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     <script type="text/javascript" src="js/ext.js" ></script>
     <script type="text/javascript">
-    function getNowFormatDate() {
-        var date = new Date();
-        var seperator1 = "-";
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = year + seperator1 + month + seperator1 + strDate;
-        return currentdate;
-    }
     window.onload = function(){
     	datetime.innerText = getNowFormatDate();
     }
