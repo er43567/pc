@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping  >
+	<class name="cn.unclezhang.bean.Notice" table="notice_tb" lazy="false">
+		<id name="sid">
+			<generator class="identity"></generator> 
+		</id>
+		<property name="ref"></property>
+		<property name="userId"></property>
+		<property name="impts"></property>
+		<property name="type"></property>
+		<property name="targetIds"></property>
+		<property name="title"></property>
+		<property name="content"></property>
+		<property name="readIds"></property>
+		<property name="readNames"></property>
+		<property name="time"></property>
+		<property name="userName" formula="(select tb.name from user_tb tb where tb.userId=userId)"></property>
+		<!-- <property name="readState" formula="(select locate(sessionUserId, readIds)>0)"></property> -->
+	</class>
+	
+</hibernate-mapping>
