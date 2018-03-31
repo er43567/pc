@@ -14,7 +14,7 @@ public interface IService {
 	List<User> loadAllUsers();
 	
 	int saveReport(String userId, String type, String targets, 
-			String[] items, String choices, String rem, String time);
+			String[] items, String choices, String rem, String time, String scope);
 
 	Report findTypeReportByDate(String type, String date);
 

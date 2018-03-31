@@ -2,7 +2,8 @@ package cn.unclezhang.bean;
 public class Reply {
 	int sid,ref,state;
 	String userId,targetId,content,img,time;
-	String headImg,userName,scope,position;
+	
+	String headImg, userName, scope, position;
 	
 	public int getSid() {
 		return sid;

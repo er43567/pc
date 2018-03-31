@@ -63,7 +63,7 @@ public class ServiceImpl implements IService {
 
 	@Override
 	public int saveReport(String userId, String type, String targets
-			, String[] items, String choices, String rem, String time) {
+			, String[] items, String choices, String rem, String time, String scope) {
 		try {
 			Report r = new Report();
 			r.setUserId(userId);
@@ -73,6 +73,7 @@ public class ServiceImpl implements IService {
 			r.setTargets(targets);
 			r.setRem(rem);
 			r.setTime(time);
+			r.setScope(scope);
 			return (Integer) dao.saveEntity(r);
 		} catch (Exception e) {
 			e.printStackTrace();

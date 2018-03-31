@@ -145,4 +145,9 @@ public class TestSpring extends TestCase {
 			e.printStackTrace();
 		}
 	}
+	
+	public void testReport1() {
+		List<Report> li = service.loadReportsByDate("HotalReport", "2018-03-31");
+		System.out.println(Arrays.toString(li.toArray()));
+	}
 }

@@ -295,7 +295,10 @@ public class Report {
 	@Override
 	public String toString() {
 		return "Report [sid=" + sid + ", state=" + state + ", type=" + type
-				+ ", userId=" + userId + "]";
+				+ ", userId=" + userId + ", scope=" + scope + ", targets="
+				+ targets + ", choices=" + choices + ", rem=" + rem + ", time="
+				+ time + ", noticed=" + noticed + ", userName=" + userName
+				+ ", phone=" + phone + ", wholeName=" + wholeName + "]";
 	}
 	
 }

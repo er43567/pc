@@ -125,14 +125,15 @@ public class AjaxAction extends MyActionSupport {
 			return aa;
 		}
 		Report tmpr = null;
-		if((tmpr=service.findTypeReportByDate(report.getType(), report.getTime())) != null) {
+		if((tmpr = service.findTypeReportByDate(report.getType(), report.getTime())) != null) {
 			setResult("reported");
 			report = tmpr;
 			return aa;
 		}
 		int sid = service.saveReport(getSessionUserId(), Tool.unescape(report.getType()+"")
 				, Tool.unescape(report.getTargets()+""), Tool.unescape(items+"").split(",")
-				, report.getChoices(), Tool.unescape(report.getRem()+""), report.getTime());
+				, report.getChoices(), Tool.unescape(report.getRem()+""), report.getTime()
+				, getSessionUser().getScope());
 		setResult(sid + "");
 		return aa;
 	}

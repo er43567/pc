@@ -146,7 +146,7 @@
 					  , true
 					  , "${session.user.headImg}"
 					  , "${session.user.name}"
-					  , "${session.user.scope}"
+					  , ""
 					  , "${session.user.position}"
 					  , content.value
 					  , getNowFormatDate());
@@ -189,7 +189,7 @@
 					  item.userId,
 					  item.userId=='${session.user.userId}'
 					  , item.headImg
-					  , item.userName, item.scope, item.scope, item.content, item.time);
+					  , item.userName, item.scope, item.position, item.content, item.time);
 		  }
 		  callback();
 	  }, {
@@ -223,7 +223,7 @@
 	  var isMineClass = bo?"aui-chat-right":"aui-chat-left";//'${session.user.userId==reply.userId}'=='true'?"aui-chat-right":"aui-chat-left";
 	  var isMineBGColor = bo?'style=\"background-color: #f1f1f1;\"':'';
 	  var isMineStyle = bo?'style=\"background-image: linear-gradient(45deg, #f3f3f3, #f3f3f3 50%, transparent 50%);\"':'';
-	  var label = bo?"":"<span class='aui-label aui-label-warning'>"+scope+position+"职位</span>";
+	  var label = bo?"":"<span class='aui-label aui-label-warning'>"+scope+position+"</span>";
 	  var itemHtml = 
 		  "<div class='aui-chat-header' style='margin-bottom: 0.2rem;'>"+time+"</div>"
 	      +"  <div class='aui-chat-item "+isMineClass+"'>"
