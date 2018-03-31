@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.unclezhang.bean.Notice;
@@ -61,7 +63,7 @@ public class ServiceImpl implements IService {
 
 	@Override
 	public int saveReport(String userId, String type, String targets
-			, String[] items, String choices, String rem, String time) {
+			, String[] items, String choices, String rem, String time, String scope) {
 		try {
 			Report r = new Report();
 			r.setUserId(userId);
@@ -71,6 +73,7 @@ public class ServiceImpl implements IService {
 			r.setTargets(targets);
 			r.setRem(rem);
 			r.setTime(time);
+			r.setScope(scope);
 			return (Integer) dao.saveEntity(r);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -295,6 +298,18 @@ public class ServiceImpl implements IService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public List<String> loadHistoryColors() {
+		try {
+			List<String> li = dao.findBySql("select concat(time,'=',(locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0))"
+					+ " from report_tb");
+			return li;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

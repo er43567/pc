@@ -60,7 +60,7 @@
 		                     	<div class="aui-list-item-text">
 		               		</div>
 		                   	<textarea placeholder="这里输入回复内容" id="content" name="rem"
-		                   		 class="aui-border-gray padding-5px" ></textarea>
+		                   		 class="aui-border-gray padding-5px" >@${request.report.userName}: </textarea>
 		              		</div>
 		              		<div style="text-align: right;margin-right: 1rem;">
 		              			<div onclick="submitReply()" class="aui-btn aui-btn-info">提交回复</div>
@@ -72,16 +72,23 @@
       <div id="bottomSpace"></div>
   </body>
   <script type="text/javascript">
+  content.addEventListener("keyup", function() {
+	  if(this.value.indexOf("@"+targetUserName+":")!=0) {
+		  headImgClicked(targetUserId, targetUserName);
+	  } else if(this.value.length != ("@"+targetUserName+":").length) {
+		  headImgClicked(targetUserId, targetUserName);
+	  }
+  }, false);
+  </script>
+  <script type="text/javascript">
   var loaded = false;
   function toggleRplyDiv(callback) {
   	if(replyDiv.style.display.indexOf("none")>=0) {
-  		
-  		
   		//document.body.scrollTop = document.body.scrollHeight;
   		
   		//加载回复列表
   		if(!loaded) {
-	  		loadReplies(function() {
+	  		loadReplies(null, function() {
 	  			loaded = true;
 	  			callback();
 	  		});
@@ -119,11 +126,13 @@
 	  }, 10);
   };
   
-  function submitReply(ref, targetUserId) {
-	  if(content.value == "") {
-		  alert("请输入内容");
+  function submitReply() {
+	  if(content.value.replace(/^\s+|\s+$/gm,'') == "@"+targetUserName+":"
+			  ||content.value == "") {
+		  alert("请输入回复内容");
 		  return;
 	  }
+	  
 	  ajaxPost("AjaxAction!submitReply", function(r) {
 		  var res = eval("("+r+")");
 		  if(res['result'] == 'fail') {
@@ -132,21 +141,23 @@
 			  /* alert("${session.user.headImg},${session.user.name},${session.user.scope},${session.user.position}");
 			  alert(content.value);
 			  alert(getNowFormatDate()); */
-			  replyList.innerHTML += getItemHtml(true, "${session.user.headImg}"
+			  replyList.innerHTML += getItemHtml(
+					  "${session.user.name}"
+					  , true
+					  , "${session.user.headImg}"
 					  , "${session.user.name}"
-					  , "${session.user.scope}"
+					  , ""
 					  , "${session.user.position}"
 					  , content.value
 					  , getNowFormatDate());
-			  
-			  content.value = "";
+			  content.value = "@" + targetUserName + ": ";
 			  bottomSpace.style.marginTop = "0rem";
 			  document.body.scrollTop = document.body.scrollHeight;
 		  }
 	  }, {
 		  "reply.ref" : '${request.report.sid}',
-		  "reply.targetId" : '${request.report.userId}',
-		  "reply.content" : content.value,
+		  "reply.targetId" : targetUserId,
+		  "reply.content" : escape(content.value),
 		  "reply.scope" : '${request.report.scope}'
 	  });
   };
@@ -166,15 +177,19 @@
 	    return currentdate;
   }
   
-  function loadReplies(callback) {
+  function loadReplies(callbefore, callback) {
 	  ajaxPost("AjaxAction!loadReplyList", function(r) {
+		  if(callbefore!=null)
+		  	callbefore();
 		  var res = eval("("+r+")");
 		  var replies = res['replies'];
 		  for(var i=0;i<replies.length;i++) {
 			  var item = replies[i];
-			  replyList.innerHTML += getItemHtml(item.userId=='${session.user.userId}'
+			  replyList.innerHTML += getItemHtml(
+					  item.userId,
+					  item.userId=='${session.user.userId}'
 					  , item.headImg
-					  , item.userId, item.scope, item.scope, item.content, item.time);
+					  , item.userName, item.scope, item.position, item.content, item.time);
 		  }
 		  callback();
 	  }, {
@@ -182,22 +197,38 @@
 	  });
   }
   
+  var targetUserId = '${request.report.userId}';
+  var targetUserName = '${request.report.userName}';
+  function headImgClicked(targetId, targetName) {
+	  targetUserId = targetId;
+	  targetUserName = targetName;
+	  if(content.value.indexOf("@")==0) {
+		  var str = content.value.substring(content.value.indexOf("@")+1,content.value.indexOf(":"));
+		  if(str != targetName) {
+			  content.value = "@" + targetName + ":" + content.value.substring(content.value.indexOf(":")+1);
+			  document.body.scrollTop = document.body.scrollHeight;
+		  }
+	  } else {
+		  content.value = "@" + targetName + ":" + content.value;
+		  document.body.scrollTop = document.body.scrollHeight;
+	  }
+  }
   </script>
   
   <script type="text/javascript">
   //alert(getItemHtml());
   var oldTime = null;
-  function getItemHtml(isMine, headImg, userName, scope, position, content, time) {
+  function getItemHtml(targetId, isMine, headImg, userName, scope, position, content, time) {
 	  var bo = (isMine+'')=='true';
 	  var isMineClass = bo?"aui-chat-right":"aui-chat-left";//'${session.user.userId==reply.userId}'=='true'?"aui-chat-right":"aui-chat-left";
 	  var isMineBGColor = bo?'style=\"background-color: #f1f1f1;\"':'';
 	  var isMineStyle = bo?'style=\"background-image: linear-gradient(45deg, #f3f3f3, #f3f3f3 50%, transparent 50%);\"':'';
-	  var label = bo?"":"<span class='aui-label aui-label-warning'>"+scope+"公安局"+position+"职位</span>";
+	  var label = bo?"":"<span class='aui-label aui-label-warning'>"+scope+position+"</span>";
 	  var itemHtml = 
 		  "<div class='aui-chat-header' style='margin-bottom: 0.2rem;'>"+time+"</div>"
 	      +"  <div class='aui-chat-item "+isMineClass+"'>"
 	      +"      <div class='aui-chat-media'>"
-	      +"          <img src='"+headImg+"' />"
+	      +"          <img src='"+headImg+"' onclick='headImgClicked(\""+targetId+"\",\""+userName+"\")' />"
 	      +"      </div>"
 	      +"      <div class='aui-chat-inner'>"
 	      +"          <div class='aui-chat-name'>"+userName
@@ -214,5 +245,16 @@
 	      +"  </div>";
 	  return itemHtml;
   }
+  
   </script>
+  
+<script type="text/javascript">
+function onReceivedNotice() {
+	loadReplies(function() {
+		replyList.innerHTML = "";
+	}, function() {
+		 document.body.scrollTop = document.body.scrollHeight;
+	});
+}
+</script>
 </html>

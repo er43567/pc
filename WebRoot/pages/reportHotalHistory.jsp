@@ -9,52 +9,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>修改：民爆行业质检表单</title>
+    <title>旅馆行业质检表单</title>
+    
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
     
     <script type="text/javascript" src="js/ext.js" ></script>
-    <script type="text/javascript">
-    function getNowFormatDate() {
-        var date = new Date();
-        var seperator1 = "-";
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = year + seperator1 + month + seperator1 + strDate;
-        return currentdate;
+    <%-- <style type="text/css">
+    .aui-list-item-text {
+    	font-size: 16px !important;
+    	color: black !important;
     }
-    window.onload=function(){
-    	datetime.innerText = getNowFormatDate();
-    }
-    </script>
+    label {font-size: 18px !important;
+    	color: gray !important;}
+    </style> --%>
 </head>
-<body >
+<body>
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
-       <li class="aui-list-header">民爆行业质检表单 
-       <s:if test="#session.user.userId==#request.report.userId">
-	       <div id='datetime' data-options='{"type":"date"}' class="sm-info-btn"
-	       		 onclick="loadDateTimePickerLib();">
-	       	修改表单
-	       </div>
-       </s:if>
-       	<!-- <button id='datetime' data-options='{"type":"date"}'
-       		 class="btn mui-btn mui-btn-block"
-       		 onclick="loadDateTimePickerLib();">
-        </button> -->
+       <li class="aui-list-header">
+       	<div>旅馆行业质检表单 - ${request.report.time}</div>
+       	<s:if test="#session.user.userId==#request.report.userId">
+	       	<div style="background-color: #03a9f4;padding:2px;color: white;"
+	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div>
+       	</s:if>
+       	<s:else>
+       		<a href="javascript:android.callUp('${request.report.phone}')"
+       			 style="background-color: #03a9f4;padding:2px;color: white;"
+       			 >联系${request.report.userName}</a>
+       	</s:else>
        </li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	守库人员是否到岗：
+                   	是否实名登记旅客信息：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info1" class="aui-text-info">
@@ -68,7 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	安全员、库管员是否持证上岗：
+                   	登记的旅客数与入住的旅客数是否相同：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info2" class="aui-text-info">
@@ -82,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	入侵报警装置、周界报警装置是否正常运作：
+                   	是否在规定时间内上传旅客信息：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info3" class="aui-text-info">
@@ -96,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	是否配置两只以上大型犬（注：是否需要照相上传功能）：
+                   	入住旅客信息是否登记完善：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info4" class="aui-text-info">
@@ -110,7 +99,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	大型犬是否正常、健康：
+                   	当天的开房数是（），与实际上传数是否相符：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info5" class="aui-text-info">
@@ -127,7 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	库房值班记录本是否如实记录本班发生的事项：
+                   	有无“黄赌毒”等违法犯罪现象：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info6" class="aui-text-info">
@@ -142,7 +131,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-					消防水池储水量是否大于15立方米或设高位水池：
+					《特种行业许可证》在上年度是否通过年检：
                    </div>
                 <div class="aui-text-right">
                 	<label id="info7" class="aui-text-info">
@@ -157,7 +146,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-				库房内杂物是否清理干净：
+				客房门是否结实牢固、安全有效：
                    </div>
                 <div class="aui-text-right">
                 	<label id="info8" class="aui-text-info">
@@ -172,7 +161,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	领用、发放、清退等级台账是否如实、齐全：
+                   	疏散通道和出口是否设置明显指示标示，易于寻找方便疏散：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info9" class="aui-text-info">
@@ -187,7 +176,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	变质和过期失效的民爆物品，是否及时上报并清退出库，予以销毁：
+                   	疏散通道是否上锁、堵塞，封死等隐患：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info10" class="aui-text-info">
@@ -198,41 +187,83 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                </div>
            </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	灭火器材，消防设施是否齐全有效：
+                </div>
+                <div class="aui-text-right">
+                	<label id="info11" class="aui-text-info">
+                	${request.report.item11}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}" onclick="openDialog(this)"> 否</label>
+                </div>
+               </div>
+           </li>
+           
 	    	<li class="aui-list-item">
           		<div class="aui-list-item-inner">
                   	<div class="aui-list-item-input">
-                      	<div class="aui-list-item-text">
-                      	备注
+                      	<div class="aui-list-item-text" style="font-size: 16px">
+                      	备注：${request.report.rem}
                 		</div>
-                    	<textarea placeholder="这里输入备注信息" id="rem" name="rem"
-                    		 class="aui-border-gray padding-5px" >${request.report.rem}</textarea>
                		</div>
              	</div>
           	</li>
-          	<li class="aui-list-item">
+          	<!-- <li class="aui-list-item">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="saveButton" class="aui-btn aui-btn-primary aui-btn-block aui-btn-height-50px"
+                    <div id="saveButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
                     	onclick="saveReport()">保存表单</div>
                 </div>
-            </li>
-            <li class="aui-list-item">
+            </li> -->
+            <%-- <li class="aui-list-item">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="chooseUserBtn" style="overflow: scroll;text-align: center;"
-                    	 onclick="chooseUser()">
-                    	选择目标人员<s:property value="#request.report.targets.split('##')[0].substring(1)"/>
-                    </div>
+                    <div id="chooseUserBtn" class="aui-btn" style="overflow: scroll;text-align: center;width: 100%;">
+                    	目标人员 ${request.report.targets.split("##")[0]}
+				    </div>
+				    <select id="sel" multiple="multiple" class="hiddenSel" onchange="onActivityResult(this)">
+					   	<s:iterator value="#request.users" id='item' status="st">
+					   		<option value="${item.userId}">${item.name}</option>
+					   	</s:iterator>
+				    </select>
+				    <style type="text/css">
+				    .hiddenSel{width:100%;height:100%;position:absolute;
+				    border:1px solid;left:-8px;top:-1px;opacity:0;}
+				    </style>
                 </div>
-            </li>
-            <li class="aui-list-item">
+            </li> --%>
+            <!-- <li class="aui-list-item">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
                     <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
                     	onclick="noticeView()">通知目标人员查看</div>
                 </div>
-            </li>
+            </li> -->
+             <%-- <li class="aui-list-item">
+                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+                    	onclick="reply('${request.report.sid}','${request.report.userId}')">展开回复</div>
+                </div>
+             </li> --%>
 		</ul>
-	</div>
-	<input type="hidden" id="thisReport" value="${request.report.sid}"/>
+		<%@include file="reply.jsp"%>
+		<input type="hidden" id="thisReport" value="${request.report.sid}"/>
 </body>
+<%-- <script type="text/javascript">
+var interceptStete = true;
+setInterval(function(){
+	var b = document.documentElement.scrollTop == 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+    if (b == 0) {
+    	android.interceptScroll(false);
+    	interceptStete = false;
+    } else {
+    	if(interceptStete == false) {
+    		android.interceptScroll(true);
+    		interceptStete = true;
+    	}
+    }
+}, 100);
+</script> --%>
 <script type="text/javascript" src="../script/api.js" ></script>
 <script type="text/javascript" src="../script/aui-dialog.js" ></script>
 <script type="text/javascript">
@@ -270,21 +301,62 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     var userChoosed = '${request.report.targets}';
     function chooseUser() {
-    	startUrl('PageAction!loadUserChoosePage#withDisabled', ['notitle','gesture','norefresh'], userChoosed);
+    	startUrl('PageAction!loadUserChoosePage', ['notitle','gesture','norefresh'], userChoosed);
     };
     
-    function onActivityResult(result) {
+    initUserChoosed();
+    function initUserChoosed() {
+    	var users = userChoosed.split(",");
+    	for(var i = 0 ;i<sel.options.length;i++) {
+    		if(users.contains(sel.options[i].value)) {
+    			sel.options[i].selected = "selected";
+    		}
+    	}
+    }
+    var times = 0;
+    function onActivityResult(sel_obj) {
+    	if(++times%2==1) {initUserChoosed();}
+    	var result_ids = '';
+    	var result_names = '';
+    	for(var i = 0 ;i<sel_obj.options.length;i++) {
+    	    if(sel_obj.options[i].selected) {
+	    	    result_ids += "," + sel_obj.options[i].value;
+	    	    result_names += "," + sel_obj.options[i].text;
+    	    }
+    	}
+    	var result = result_names + "##" + result_ids;
     	userChoosed = result;
-    	var ss = userChoosed.split("##")[0].substring(1);
-    	chooseUserBtn.innerText = "已选择：" + ss.replaceAll(",", "，");
+    	chooseUserBtn.innerText = "已选择：" + result_names.substring(1).replaceAll(",","，");
     }
     
     String.prototype.replaceAll = function(s1,s2){
    		return this.replace(new RegExp(s1,"gm"),s2);
    	};
     
+    /* function submitReport1() {
+    	ajax({
+    		type:"post",
+    		url:"AjaxAction!submitReport",
+    		dataType:"json",
+    		data:{
+    			items: itemArray,
+    			type:"",
+    			rem:escape(rem.value),
+    			targets:escape(userChoosed.split("##")[1])
+    		},
+    		success:function(r) {
+    			if(r['result'] == 'success') {
+    				submited();
+    			}
+    		}
+    	});
+    } */
+    
+    function submited() {//at=create,at=history,at=view
+    	//pushButton.innerText = "已通知";
+		//pushButton.setAttribute("onclick", "alert('今日表单已推送过，请勿重复推送')");
+    }
 </script>
-
 <script type="text/javascript">
 //初始化每个input的id, name属性
 var lists = document.getElementsByClassName("aui-text-right");
@@ -296,8 +368,11 @@ for(var i=0;i<lists.length;i++) {
 		if(tmp[j].id==tmp[j].value) {
 			tmp[j].setAttribute("checked", "checked");
 		}*/
+		//edits
+		tmp[j].disabled = "disabled";
 		if(j+1==tmp[j].value) {
 			tmp[j].setAttribute("checked", "checked");
+			tmp[j].removeAttribute("disabled");
 		}
 	}
 }
@@ -315,29 +390,24 @@ function saveReport() {
 		}
 		the_choices += k==""?"0":k;
 	}
-	var saves = true;
 	var url0 = "AjaxAction!saveReport";
 	if(thisReport.value!=null && thisReport.value != '') {
 		url0 = "AjaxAction!updateReport";
-		saves = false;
 	}
 	ajax({
 		type: "post",
 		url: url0,
 		dataType: "json",
-		data:{
+		data: {
 			"report.sid": thisReport.value,
 			"report.choices": the_choices,
 			"items": getItemRems(),
-			"report.type": "ExplosiveReport",
+			"report.type": "HotalReport",
 			"report.rem": escape(rem.value),
-			"report.targets": escape(userChoosed),
-			"report.time": datetime.innerText
+			"report.targets": escape(userChoosed)
 		}, success:function(r) {
 			if(r['result'] == 'success' || !isNaN(r['result'])) {
-				if(saves) {
-					thisReport.value = r['result'];
-				}
+				thisReport.value = r['result'];
 				saveButton.innerText = "已保存,表单ID:" + thisReport.value;
 				alert('保存成功');
 			} else {
@@ -356,7 +426,6 @@ function getItemRems() {
 	return rems;
 }
 
-var noticeId = null;
 function noticeView() {
 	if(thisReport.value=="") {
 		alert("请先保存表单");
@@ -372,43 +441,28 @@ function noticeView() {
 		url: "AjaxAction!noticeOthers",
 		dataType: "json",
 		data:{
-			"notice.sid": noticeId,
-			"notice.ref": thisReport.value,
-			"notice.type": "ExplosiveReport",
-			"notice.targetIds": escape(userChoosed.split("##")[1]),
+			"notice.ref": thisReport.value,//report.sid
+			"notice.type": "HotalReport",
+			"notice.targetIds": escape(userChoosed),
 			"notice.title": escape(""),
 			"notice.content": escape(""),
 			"notice.impts": "",
 		}, success:function(r) {
-			if(r['result'] == "fail") {
-				alert("通知失败！");
-			} else {
-				noticeId = r['result'];
+			if(r['result'] != 'fail') {
 				alert('已通知给' + userChoosed.split("##")[0]);
 			}
 		}
 	});
 }
-</script>
 
-
-<!-- DatePicker -->
-<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
-<script id="dtjs1" src="../js/mui.min.js"></script>
-<script id="dtjs2" src="../js/mui.picker.min.js"></script>
-<script id="dtjs3" src="js/loadDateTimePicker.js"></script>
-<%-- <script type="text/javascript">
-function loadDateTimePickerLib() {
-	var js1 = "../js/mui.min.js";
-	var js2 = "../js/mui.picker.min.js";
-	var js3 = "js/loadDateTimePicker.js";
-	var t = dtjs1.src=="";
-	if(t) {
-		dtjs1.setAttribute("src", js1);
-		dtjs2.setAttribute("src", js2);
-		dtjs3.setAttribute("src", js3);
-		alert("加载完成，请再点一下");
-	}
+function reply(ref, userId) {
+	ajaxPost("AjaxAction!reply", function(r) {
+		alert(r);
+	}, {
+		"reply.ref": ref,
+		"reply.targetId": userId,
+		"reply.content": escape("回复的内容")
+	});
 }
-</script> --%>
+</script>
 </html>

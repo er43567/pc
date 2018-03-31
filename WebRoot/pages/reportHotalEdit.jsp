@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>修改：民爆行业质检表单</title>
+    <title>修改：旅馆行业质检表单</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
     
@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body >
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
-       <li class="aui-list-header">民爆行业质检表单 
+       <li class="aui-list-header">旅馆行业质检表单 
        <s:if test="#session.user.userId==#request.report.userId">
 	       <div id='datetime' data-options='{"type":"date"}' class="sm-info-btn"
 	       		 onclick="loadDateTimePickerLib();">
@@ -54,7 +54,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	守库人员是否到岗：
+                   	是否实名登记旅客信息：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info1" class="aui-text-info">
@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	安全员、库管员是否持证上岗：
+                   	登记的旅客数与入住的旅客数是否相同：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info2" class="aui-text-info">
@@ -82,7 +82,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	入侵报警装置、周界报警装置是否正常运作：
+                   	是否在规定时间内上传旅客信息：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info3" class="aui-text-info">
@@ -96,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	是否配置两只以上大型犬（注：是否需要照相上传功能）：
+                   	入住旅客信息是否登记完善：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info4" class="aui-text-info">
@@ -110,7 +110,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	大型犬是否正常、健康：
+                   	当天的开房数是（），与实际上传数是否相符：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info5" class="aui-text-info">
@@ -127,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	库房值班记录本是否如实记录本班发生的事项：
+                   	有无“黄赌毒”等违法犯罪现象：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info6" class="aui-text-info">
@@ -142,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-					消防水池储水量是否大于15立方米或设高位水池：
+					《特种行业许可证》在上年度是否通过年检：
                    </div>
                 <div class="aui-text-right">
                 	<label id="info7" class="aui-text-info">
@@ -157,7 +157,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-				库房内杂物是否清理干净：
+				客房门是否结实牢固、安全有效：
                    </div>
                 <div class="aui-text-right">
                 	<label id="info8" class="aui-text-info">
@@ -172,7 +172,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	领用、发放、清退等级台账是否如实、齐全：
+                   	疏散通道和出口是否设置明显指示标示，易于寻找方便疏散：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info9" class="aui-text-info">
@@ -187,7 +187,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	变质和过期失效的民爆物品，是否及时上报并清退出库，予以销毁：
+                   	疏散通道是否上锁、堵塞，封死等隐患：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info10" class="aui-text-info">
@@ -195,6 +195,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	</label>
                 	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}"> 是</label>
                		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}" onclick="openDialog(this)"> 否</label>
+                </div>
+               </div>
+           </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	灭火器材，消防设施是否齐全有效：
+                </div>
+                <div class="aui-text-right">
+                	<label id="info11" class="aui-text-info">
+                	${request.report.item11}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}" onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -329,7 +343,7 @@ function saveReport() {
 			"report.sid": thisReport.value,
 			"report.choices": the_choices,
 			"items": getItemRems(),
-			"report.type": "ExplosiveReport",
+			"report.type": "HotalReport",
 			"report.rem": escape(rem.value),
 			"report.targets": escape(userChoosed),
 			"report.time": datetime.innerText
@@ -374,7 +388,7 @@ function noticeView() {
 		data:{
 			"notice.sid": noticeId,
 			"notice.ref": thisReport.value,
-			"notice.type": "ExplosiveReport",
+			"notice.type": "HotalReport",
 			"notice.targetIds": escape(userChoosed.split("##")[1]),
 			"notice.title": escape(""),
 			"notice.content": escape(""),

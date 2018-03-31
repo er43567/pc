@@ -21,4 +21,7 @@ public class Conf {
 	public static final int important_normal= 0;
 	public static final int important_important = 1;
 	public static final int important_urgent = 2;
+	
+	public static final String scope_安源公安分局 = "安源公安分局";
+	
 }

@@ -10,7 +10,6 @@ function getParam(name) {
     var r = window.location.search.substr(1).match(reg);
     if(r!=null) return unescape(r[2]); return null;
 }
-
 isWebView = false;
 function startUrl(url) {
 	startUrl(url, null, null);
@@ -38,7 +37,10 @@ function startUrl(url, attrs, param) {
 function startReportHistory(url) {
 	if(isWebView) {
 		var s_url = "http://" +  location.host + "/unclezhang/pages/" + url;
-		android.startReportActivity(s_url);
+		android.updateHistoryColorDatas();
+		setTimeout(function() {
+			android.startReportActivity(s_url);
+		}, 25);
 	} else {
 		startUrl(url);
 	}
@@ -90,7 +92,9 @@ Array.prototype.remove = function (obj) {
 };
 
 function getSource() {
-	return "<html>" + document.getElementsByTagName("html")[0].innerHTML + "</html>";
+	var source = "<html>" + document.getElementsByTagName("html")[0].innerHTML + "</html>";
+	android.show(source)
+	//return escape(source);
 }
 
 function ajaxPost(url, callback, params) {
@@ -119,10 +123,11 @@ function ajax(options) {
             return obj;
         }
     };
+    
     var opt = {
         url: '', //请求地址
         sync: true, //true，异步 | false　同步，会锁死浏览器，并且open方法会报浏览器警告
-        method: 'GET', //提交方法
+        method: 'POST', //提交方法
         data: null, //提交数据
         username: null, //账号
         password: null, //密码

@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>修改：民爆行业质检表单</title>
+    <title>修改：三级消防质检表单</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
     
@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body >
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
-       <li class="aui-list-header">民爆行业质检表单 
+       <li class="aui-list-header">三级消防质检表单 
        <s:if test="#session.user.userId==#request.report.userId">
 	       <div id='datetime' data-options='{"type":"date"}' class="sm-info-btn"
 	       		 onclick="loadDateTimePickerLib();">
@@ -54,63 +54,66 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	守库人员是否到岗：
+                   	消防安全制度：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info1" class="aui-text-info">
                 	${request.report.item1}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(0,1)}"> 是</label>
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(0,1)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(0,1)}"> 有</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(0,1)}" > 无</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(0,1)}" > 不全</label>
                 </div>
                </div>
            </li>
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	安全员、库管员是否持证上岗：
+                   	员工安全教育培训：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info2" class="aui-text-info">
                 	${request.report.item2}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(1,2)}"> 是</label>
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(1,2)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(1,2)}"> 组织开展</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(1,2)}" > 未组织开展</label>
                 </div>
                </div>
            </li>
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	入侵报警装置、周界报警装置是否正常运作：
+                   	防火检查：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info3" class="aui-text-info">
                 	${request.report.item3}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(2,3)}"> 是</label>
-               		<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(2,3)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(2,3)}"> 组织开展</label>
+               		<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(2,3)}" > 未组织开展</label>
                 </div>
                </div>
            </li>
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	是否配置两只以上大型犬（注：是否需要照相上传功能）：
+                   	灭火和应急疏散预案：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info4" class="aui-text-info">
                 	${request.report.item4}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(3,4)}"> 是</label>
-               		<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(3,4)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(3,4)}"> 有，且组织演练</label>
+               		<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(3,4)}" > 有，未演练</label>
+                	<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(3,4)}" > 无，组织演练</label>
+                	<label><input class="aui-radio" type="radio"  value="${request.report.choices.substring(3,4)}" > 无且未演练</label>
                 </div>
                </div>
            </li>
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	大型犬是否正常、健康：
+                   	生产、存储、经营易燃易爆危险品的场所与居住场所设置在同一建筑内：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info5" class="aui-text-info">
@@ -119,7 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <!--	<input class="aui-text-center" type="text" name="text1" style="border:1px solid gray; width: 40px; height: 25px; float:left; margin-left:190px ;" /></label>-->
                 	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(4,5)}"> 是</label>
                 	<!-- ${"asdfasd".substring(5,6)=="s"?"checked":""} value="1" -->
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(4,5)}" onclick="openDialog(this)"> 否</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(4,5)}" > 否</label>
                 </div>
                </div>
            </li>
@@ -127,14 +130,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	库房值班记录本是否如实记录本班发生的事项：
+                   	疏散通道、安全出口：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info6" class="aui-text-info">
                 	${request.report.item6}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(5,6)}"> 是</label>
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(5,6)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(5,6)}"> 畅通</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(5,6)}" > 堵塞</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(5,6)}" > 锁闭</label>
                 </div>
                </div>
            </li>
@@ -142,14 +146,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-					消防水池储水量是否大于15立方米或设高位水池：
+				防火门：
                    </div>
                 <div class="aui-text-right">
                 	<label id="info7" class="aui-text-info">
                 	${request.report.item7}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(6,7)}"> 是</label>
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(6,7)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(6,7)}"> 完好有效</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(6,7)}" > 常闭式防火门</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(6,7)}" > 损坏</label>
                 </div>
                </div>
            </li>
@@ -157,14 +162,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-				库房内杂物是否清理干净：
+				疏指示标志：
                    </div>
                 <div class="aui-text-right">
                 	<label id="info8" class="aui-text-info">
                 	${request.report.item8}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(7,8)}"> 是</label>
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(7,8)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(7,8)}"> 完好有效</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(7,8)}" > 损坏</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(7,8)}" > 缺少</label>
                 </div>
                </div>
            </li>
@@ -172,14 +178,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	领用、发放、清退等级台账是否如实、齐全：
+                   	应急照明：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info9" class="aui-text-info">
                 	${request.report.item9}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(8,9)}"> 是</label>
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(8,9)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(8,9)}"> 完好有效</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(8,9)}" > 损坏</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(8,9)}" > 缺少</label>
                 </div>
                </div>
            </li>
@@ -187,14 +194,89 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	变质和过期失效的民爆物品，是否及时上报并清退出库，予以销毁：
+                   	室内消防栓：
                 </div>
                 <div class="aui-text-right">
                 	<label id="info10" class="aui-text-info">
                 	${request.report.item10}<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}"> 是</label>
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}" > 完好有效</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}"> 未设置</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}" > 损坏</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}" > 无水</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(9,10)}" > 配件不齐</label>
+                </div>
+               </div>
+           </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	灭火器：
+                </div>
+                <div class="aui-text-right">
+                	<label id="info11" class="aui-text-info">
+                	${request.report.item11}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}" > 完好</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}"> 未配置</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}" > 有，但失效</label>
+                </div>
+               </div>
+           </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	消防安全管理人：
+                </div>
+                <div class="aui-text-right">
+                	<label id="info12" class="aui-text-info">
+                	${request.report.item12}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(11,12)}"> 确定</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(11,12)}" > 未确定</label>
+                </div>
+               </div>
+           </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	消防安全管理人：
+                </div>
+                <div class="aui-text-right">
+                	<label id="info13" class="aui-text-info">
+                	${request.report.item13}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(12,13)}"> 确定</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(12,13)}" > 未确定</label>
+                </div>
+               </div>
+           </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	消防安全工作制度：
+                </div>
+                <div class="aui-text-right">
+                	<label id="info14" class="aui-text-info">
+                	${request.report.item14}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(13,14)}"> 有</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(13,14)}" > 无</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(13,14)}" > 不全</label>
+                </div>
+               </div>
+           </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	防火安全检查：
+                </div>
+                <div class="aui-text-right">
+                	<label id="info15" class="aui-text-info">
+                	${request.report.item15}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(14,15)}"> 开展</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(14,15)}" > 未开展</label>
                 </div>
                </div>
            </li>
@@ -329,7 +411,7 @@ function saveReport() {
 			"report.sid": thisReport.value,
 			"report.choices": the_choices,
 			"items": getItemRems(),
-			"report.type": "ExplosiveReport",
+			"report.type": "FirefightingReport",
 			"report.rem": escape(rem.value),
 			"report.targets": escape(userChoosed),
 			"report.time": datetime.innerText
@@ -374,7 +456,7 @@ function noticeView() {
 		data:{
 			"notice.sid": noticeId,
 			"notice.ref": thisReport.value,
-			"notice.type": "ExplosiveReport",
+			"notice.type": "FirefightingReport",
 			"notice.targetIds": escape(userChoosed.split("##")[1]),
 			"notice.title": escape(""),
 			"notice.content": escape(""),

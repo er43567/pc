@@ -1,6 +1,7 @@
 package cn.unclezhang.service;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Reply;
@@ -13,7 +14,7 @@ public interface IService {
 	List<User> loadAllUsers();
 	
 	int saveReport(String userId, String type, String targets, 
-			String[] items, String choices, String rem, String time);
+			String[] items, String choices, String rem, String time, String scope);
 
 	Report findTypeReportByDate(String type, String date);
 
@@ -38,5 +39,7 @@ public interface IService {
 	boolean saveReply(int ref, String userId, String targetId, String content);
 
 	List<Reply> loadReplies(int ref, String whoLoad, int from_id, int len);
+
+	List<String> loadHistoryColors();
 	
 }

@@ -28,7 +28,7 @@ public abstract class MyActionSupport {
 		session.removeAttribute("user");
 	}
 	
-	public <T> T getSessionUser() {
+	public <T extends User> T getSessionUser() {
 		return (T) session.getAttribute("user");
 	}
 	

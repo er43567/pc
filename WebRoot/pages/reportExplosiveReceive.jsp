@@ -27,6 +27,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	       	<div style="background-color: #03a9f4;padding:2px;color: white;"
 	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div>
        	</s:if>
+       	<s:else>
+       		<a href="javascript:android.callUp('${request.report.phone}')"
+       			 style="background-color: #03a9f4;padding:2px;color: white;"
+       			 >联系${request.report.userName}</a>
+       	</s:else>
        </li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
            <li class="aui-list-item">
@@ -180,10 +185,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           		<div class="aui-list-item-inner">
                   	<div class="aui-list-item-input">
                       	<div class="aui-list-item-text">
-                      	备注
+                      	备注 ${request.report.rem}
                 		</div>
-                    	<textarea placeholder="这里输入备注信息" id="rem" name="rem"
-                    		 class="aui-border-gray padding-5px" >${request.report.rem}</textarea>
                		</div>
              	</div>
           	</li>
@@ -375,5 +378,4 @@ function noticeView() {
 	});
 }
 </script>
-
 </html>

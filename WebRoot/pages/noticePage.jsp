@@ -147,7 +147,7 @@ function loadMore() {
 			var list = result['notices'];
 			for(var i=0;i<list.length;i++) {
 				var item = list[i];
-				timeline.innerHTML += getItem(item.type, item.time.substring(0,10)
+				timeline.innerHTML += getItem(item.type, item.time/* .substring(0,10) */
 						, item.userId, item.userName, item.ref, item.readState, item.content);
 				hasNext = true;
 			}
@@ -165,14 +165,14 @@ var oldTime = null;
 var count = 0;
 function getItem(type, time, userId, userName, refId, readState, content) {
 	var timeDiv = "<div class='aui-timeline-item-header'>"+time+"</div>";
-	if(time == oldTime) {
+	/* if(time == oldTime) {
 		time = "";
 		timeDiv = "";
 	} else {
 		oldTime = time;
-	}
+	} */
 	var readStateSrc = readState==1?"img/已读.png":"img/未读.png";
-	var itemTitle = "来自"+userName+"的" + time + (type.indexOf("Report")>=0?"日表单":"回复消息：" + content);
+	var itemTitle = "来自"+userName + (type.indexOf("Report")>=0?"表单":"回复消息：" + content);
 	var itemContent = "回复消息";
 	switch(type) {
 	case "ExplosiveReport":
@@ -186,9 +186,9 @@ function getItem(type, time, userId, userName, refId, readState, content) {
 		break;
 	}
 	var colorful = ["aui-bg-danger","aui-bg-warning","aui-bg-info"];
-	var colorStyle = colorful[count%colorful.length];
-	var impts = ["紧急","重要","普通"];
-	var impt = impts[count%colorful.length];
+	var colorStyle = colorful[(type=='Reply')?2:1];
+	var impts = ["","表单","回复"];//["紧急","重要","普通"];
+	var impt = impts[(type=='Reply')?2:1];
 	count++;
 	var itemHtml = 
 		  timeDiv
@@ -209,5 +209,10 @@ function getItem(type, time, userId, userName, refId, readState, content) {
 	return itemHtml;
 }
 
+</script>
+<script type="text/javascript">
+function onReceivedNotice() {
+	location.reload();
+}
 </script>
 </html>

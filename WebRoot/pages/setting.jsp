@@ -325,7 +325,7 @@ html,body {
 			})
 			break;
 		case "clear":
-
+			android.cleanAppCache();
 			break;
 		//注销
 		case "logout":

@@ -89,15 +89,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</script>
 	
 	<script type="text/javascript">
+	
+	onChooseDate(getNowFormatDate());
+	
 	var date;
 	function onChooseDate(t) {
 		date = t;
 		if(currentTab == 1) {
-			explosiveFrame.src = "PageAction!loadReportsByDate?report.type=ExplosiveReport&report.time=" + escape(t);
+			document.getElementById('explosiveFrame').src = "PageAction!loadReportsByDate?report.type=ExplosiveReport&report.time=" + escape(t);
 		} else if(currentTab == 2) {
-			hotalFrame.src = "PageAction!loadReportsByDate?report.type=HotalReport&report.time=" + escape(t);
+			document.getElementById('hotalFrame').src = "PageAction!loadReportsByDate?report.type=HotalReport&report.time=" + escape(t);
 		} else if(currentTab == 3) {
-			firefightingFrame.src = "PageAction!loadReportsByDate?report.type=FirefightingReport&report.time=" + escape(t);
+			document.getElementById('firefightingFrame').src = "PageAction!loadReportsByDate?report.type=FirefightingReport&report.time=" + escape(t);
 		}
 	}
 	

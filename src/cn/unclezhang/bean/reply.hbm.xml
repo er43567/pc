@@ -20,7 +20,6 @@
 		<property name="headImg" formula="(select tb.headImg from user_tb tb where tb.userId=userId)"></property>
 		<property name="userName" formula="(select tb.name from user_tb tb where tb.userId=userId)"></property>
 		<property name="position" formula="(select tb.position from user_tb tb where tb.userId=userId)"></property>
-		
 	</class>
 	
 </hibernate-mapping>

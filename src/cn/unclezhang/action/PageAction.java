@@ -66,11 +66,12 @@ public class PageAction extends MyActionSupport {
 		if (report.getTime() == null) {
 			report.setTime(Tool.time());
 		}
-		System.out.println(report.getType());
+		
 		reports = service.loadReportsByDate(report.getType(), report.getTime());
 		if (reports == null || reports.size() == 0) {
 			return "emptyReport";
 		}
+		System.out.println(report.getType());
 		report = reports.get(0);
 		//users = service.loadAllUsers();
 		return report.getType() + "History";
