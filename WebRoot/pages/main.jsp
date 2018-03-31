@@ -152,6 +152,9 @@ function onActivityResult(result) {
 function onResume() {
 	updateBadgeNumber();
 }
+function onReceivedNotice() {
+	updateBadgeNumber();
+}
 updateBadgeNumber();
 function updateBadgeNumber() {
 	ajaxPost('AjaxAction!loadIndexDatas',

@@ -31,6 +31,9 @@ public class Notice {
 			HttpSession session = ServletActionContext.getRequest().getSession();
 			sessionUser = (User) session.getAttribute("user");
 		}
+		if (sessionUser == null) {
+			return null;
+		}
 		return sessionUser.getUserId();
 	}
 	public int getRef() {

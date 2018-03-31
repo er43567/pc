@@ -59,11 +59,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          	<iframe id="explosiveFrame" src="" style="width: 100%;height:100%;border: none;" ></iframe>
 		</div>
 		<div id="tab-content-2" class="aui-hide tab-content">
-			<!--=====旅馆业折叠 Start=======-->
+			<!--=====旅馆业折叠 Start=======-->2
 			<iframe id="hotalFrame" src="" style="width: 100%;height:100%;border: none;" ></iframe>
 		</div>
 		<div id="tab-content-3" class="aui-hide tab-content">
-			<!--=====三级消防折叠 Start=======-->
+			<!--=====三级消防折叠 Start=======-->3
 			<iframe id="firefightingFrame" src="" style="width: 100%;height:100%;border: none;" ></iframe>
 		</div>
 	</div>
@@ -89,15 +89,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</script>
 	
 	<script type="text/javascript">
+	
+	onChooseDate(getNowFormatDate());
+	
 	var date;
 	function onChooseDate(t) {
 		date = t;
 		if(currentTab == 1) {
-			explosiveFrame.src = "PageAction!loadReportsByDate?report.type=ExplosiveReport&report.time=" + escape(t);
+			document.getElementById('explosiveFrame').src = "PageAction!loadReportsByDate?report.type=ExplosiveReport&report.time=" + escape(t);
 		} else if(currentTab == 2) {
-			hotalFrame.src = "PageAction!loadReportsByDate?report.type=HotalReport&report.time=" + escape(t);
+			document.getElementById('hotalFrame').src = "PageAction!loadReportsByDate?report.type=HotalReport&report.time=" + escape(t);
 		} else if(currentTab == 3) {
-			firefightingFrame.src = "PageAction!loadReportsByDate?report.type=FirefightingReport&report.time=" + escape(t);
+			document.getElementById('firefightingFrame').src = "PageAction!loadReportsByDate?report.type=FirefightingReport&report.time=" + escape(t);
 		}
 	}
 	

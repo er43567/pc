@@ -1,7 +1,10 @@
 package cn.unclezhang.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
@@ -45,7 +48,7 @@ public class AjaxAction extends MyActionSupport {
 			return aa;
 		}*/
 		User tmp = service.findUserById(user.getUserId());
-		System.out.println(tmp.getPsw() + "," + user.getPsw());
+		//System.out.println(tmp.getPsw() + "," + user.getPsw());
 		if (tmp == null) {
 			setResult("账号错误");
 			System.out.println("账号错误");
@@ -76,6 +79,10 @@ public class AjaxAction extends MyActionSupport {
 	}
 	/*===========首页===========*/
 	public String loadIndexDatas() {
+		if (!isLogin()) {
+			setResult("did not login");
+			return aa;
+		}
 		JSONObject jo = new JSONObject();
 		jo.put("reportCount", "0");
 		//service.loadReportCount();
@@ -204,13 +211,17 @@ public class AjaxAction extends MyActionSupport {
 		this.replies = replies;
 	}
 	public String submitReply() {
+		if (!isLogin()) {
+			setResult("did not login");
+			return aa;
+		}
 		boolean bo = service.saveReply(reply.getRef(), getSessionUserId()
-				, reply.getTargetId(), reply.getContent());
+				, reply.getTargetId(), Tool.unescape(reply.getContent()));
 		if (!bo) {
 			setResult("fail");
 		} else {
 			service.saveNotice(getSessionUserId(), reply.getRef()
-					, Conf.notice_回复, reply.getTargetId(), "回复", reply.getContent()
+					, Conf.notice_回复, reply.getTargetId(), "回复", Tool.unescape(reply.getContent())
 					, Conf.important_normal);
 		}
 		return aa;
@@ -228,17 +239,15 @@ public class AjaxAction extends MyActionSupport {
 	
 	
 	/**
-	 * History Page API For Android 
+	 * API of History Page For Android 
 	 */
-	List<Integer> states;
-	public List<Integer> getStates() {
-		return states;
-	}
-	public void setStates(List<Integer> states) {
-		this.states = states;
-	}
-	public String loadHistoryStates() {
-		
+	public String loadHistoryColors() {
+		List<String> li = service.loadHistoryColors();
+		if (li == null || li.size() == 0) {
+			setResult("fail");
+			return aa;
+		}
+		setResult(Arrays.toString(li.toArray()));
 		return aa;
 	}
 	

@@ -1,6 +1,7 @@
 package test;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -133,5 +134,15 @@ public class TestSpring extends TestCase {
 		List li = dao.findBySql("SELECT LOCATE( 'Peter', 'Peter Steve Tom' )");
 		BigInteger bi = (BigInteger) li.get(0);
 		System.out.println(bi.intValue());
+	}
+	
+	public void testColors() {
+		try {
+			List<String> li = dao.findBySql("select concat(time,'=',(locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0))"
+					+ " from report_tb");
+			System.out.println(Arrays.toString(li.toArray()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

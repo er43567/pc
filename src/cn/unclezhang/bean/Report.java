@@ -10,7 +10,8 @@ public class Report {
 		item21,item22,item23,item24,item25;
 	int noticed;
 	String userName;
-	
+	String phone;
+	String wholeName;
 	public void setItems(String items[]) throws Exception {
 		System.out.println("item len:" + items.length);
 		if (items.length>=2) item1 = items[1];
@@ -51,6 +52,19 @@ public class Report {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getWholeName() {
+		return wholeName;
+	}
+	public void setWholeName(String wholeName) {
+		this.wholeName = wholeName;
+	}
+	
 	/*public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
 		Report tt = new Report();
 		try {

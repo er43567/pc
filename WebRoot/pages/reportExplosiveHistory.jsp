@@ -25,17 +25,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </style> --%>
 </head>
 <body>
-	
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
        <li class="aui-list-header">
-       	<div>民爆行业质检表单 创建于 ${request.report.time.substring(0,10)}</div>
+       	<div>民爆行业质检表单 - ${request.report.time}</div>
        	<s:if test="#session.user.userId==#request.report.userId">
 	       	<div style="background-color: #03a9f4;padding:2px;color: white;"
 	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div>
        	</s:if>
        	<s:else>
-       		<a href="javascript:void(0)"
+       		<a href="javascript:android.callUp('${request.report.phone}')"
        			 style="background-color: #03a9f4;padding:2px;color: white;"
        			 >联系${request.report.userName}</a>
        	</s:else>
@@ -451,5 +450,4 @@ function reply(ref, userId) {
 	});
 }
 </script>
-
 </html>

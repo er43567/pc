@@ -321,7 +321,7 @@ function saveReport() {
 				}
 				//saveButton.innerText = "已保存,表单ID:" + thisReport.value;
 				saveButton.innerText = "保存更改";
-				alert('保存成功');
+				alert('保存成功，可以选择推送对象了');
 				saveButton.parentNode.parentNode.style.display = "none";
 				showAfterSaved.style.display = "block";
 			} else if('reported'==r['result']) {

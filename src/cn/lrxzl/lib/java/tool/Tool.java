@@ -3,6 +3,8 @@ package cn.lrxzl.lib.java.tool;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class Tool {
 	//test
 	public static String time() {
@@ -10,9 +12,9 @@ public class Tool {
 		return df.format(new Date());
 	}
 	
-	public static String escape(String src) {  
-        int i;  
-        char j;  
+	public static String escape(String src) {
+        int i;
+        char j;
         StringBuffer tmp = new StringBuffer();  
         tmp.ensureCapacity(src.length() * 6);  
         for (i = 0; i < src.length(); i++) {  

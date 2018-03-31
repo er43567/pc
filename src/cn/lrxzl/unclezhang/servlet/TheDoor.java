@@ -16,8 +16,9 @@ public class TheDoor extends StrutsPrepareAndExecuteFilter {
 		
 		HttpServletRequest request = (HttpServletRequest) req;
 		String url = request.getRequestURL().toString();
-		System.out.println(url);
-		
+		if (!(url == null || url.lastIndexOf("loadNoticeCount")>=0)) {
+			System.out.println(url);
+		}
 		super.doFilter(req, res, chain);
 	}
 	
