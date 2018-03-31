@@ -18,17 +18,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <script type="text/javascript" src="js/ext.js"></script>
 	</head>
 	<body>
-		<!-- <header class="aui-bar aui-bar-nav" id="header" style="padding-top:15px; position:fixed;">
+		<header class="aui-bar aui-bar-nav" id="header" style="padding-top:15px; position:fixed;">
 		<div class="aui-pull-left aui-padded-l-0">
-			<a class=" aui-btn aui-iconfont aui-icon-left" tapmode onclick="closeWin();">返回</a>
+			<a class=" aui-btn aui-iconfont aui-icon-left" tapmode onclick="back();">返回</a>
 		</div>
 		<div style="font-weight:bold;" class="aui-title">
 			<font size="+1">推送列表</font>
 		</div>
 		<div class="aui-pull-right">
 		</div>
-	</header> -->
-		<section id='pullrefresh' class="aui-refresh-content">
+	</header>
+		<section id='pullrefresh' class="aui-refresh-content" style="margin-top: 80px;">
 			<div class="aui-content">
 				<div id="demo">
 			        <div class="aui-card-list">
@@ -148,6 +148,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 	function onActivityResult(result) {
 		location.reload();
+	}
+	function back(){
+		window.history.go(-1);
 	}
 	</script>
 </html>
