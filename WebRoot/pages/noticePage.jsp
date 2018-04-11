@@ -7,7 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta charset="utf-8">
 	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
 	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-	<title> </title>
+	<title>我的消息</title>
 <!-- <link rel="stylesheet" href="../css/mui.min.css"> -->
 	<link rel="stylesheet" type="text/css" href="../css/aui.css" />
 	<link rel="stylesheet" href="css/ext.css" />
@@ -29,7 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  	border-bottom: 1px solid #d3d3d3;
 	  	color: gray;
 	  }
-	  #timeline{min-height: 89%}
+	  #timeline{min-height: 26rem}
 	</style>
 	
 	<script>
@@ -115,13 +115,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</section>
 </body>
 <script type="text/javascript">
-function onMsgClicked(_self, reportId, type) {
-	var sharp = "";
-	if(type=='Reply') {
-		sharp = "#nowReviewReply";
+function onMsgClicked(_self, sid, type) {
+	var url = "PageAction!loadReportReceivePage?report.sid="+sid+"&report.type="+type;
+	if(type=="Reply") {
+		url += "#nowReviewReply";
+	} else if(type=="Task") {
+		url = "historyTasks.jsp#" + sid;
+	} else if(type=="Problem") {
+		url = "PageAction!loadProblemList?problem.ref="+sid;
 	}
-	startUrl("PageAction!loadReportReceivePage?report.sid="+reportId+"&report.type="+type + sharp);
-	setTimeout(function(){
+	startUrl(url);
+	setTimeout(function() {
 		_self.getElementsByClassName("state-img")[0].src = "img/已读.png";
 	}, 1000);
 }
@@ -130,10 +134,9 @@ function onPersonClick(uid) {
 	android.show(uid);
 	//startUrl("UserAction!loadUserPage?report.sid="+reportId+"&report.type="+type);
 }
+var nextPage = 1;
 
 loadMore();
-
-var nextPage = 1;
 var hasNext = true;
 function loadMore() {
 	if(hasNext == false) {
@@ -172,23 +175,45 @@ function getItem(type, time, userId, userName, refId, readState, content) {
 		oldTime = time;
 	} */
 	var readStateSrc = readState==1?"img/已读.png":"img/未读.png";
-	var itemTitle = "来自"+userName + (type.indexOf("Report")>=0?"表单":"回复消息：" + content);
-	var itemContent = "回复消息";
+	var itemTitle = "回复消息";
+	var itemContent = "";// = "来自"+userName + (type.indexOf("Report")>=0?"表单":"回复消息：" + content);
+	var point = 0;
 	switch(type) {
 	case "ExplosiveReport":
-		itemContent = "民爆行业质检表单";
+		itemTitle = "民爆行业三查表单";
+		itemContent = "收到来自"+userName +"的表单 " + content;
+		point = 1;
 		break;
 	case "FirefightingReport":
-		itemContent = "三级消防质检表单";
+		itemTitle = "三级消防三查表单";
+		itemContent = "收到来自"+userName +"的表单 " + content;
+		point = 1;
 		break;
 	case "HotalReport":
-		itemContent = "旅馆行业质检表单";
+		itemTitle = "旅馆行业三查表单";
+		itemContent = "收到来自"+userName +"的表单 " + content;
+		point = 1;
+		break;
+	case "Task":
+		itemTitle = "收到一个任务";
+		itemContent = "收到来自"+userName +"的任务 " + content;
+		point = 0;
+		break;
+	case "Reply":
+		itemTitle = "收到一条回复";
+		itemContent = "收到来自"+userName +"的回复 " + content;
+		point = 2;
+		break;
+	case "Problem":
+		itemTitle = "流程管控表单";
+		itemContent = "收到来自" + userName +"的表单 " + content;
+		point = 3;
 		break;
 	}
-	var colorful = ["aui-bg-danger","aui-bg-warning","aui-bg-info"];
-	var colorStyle = colorful[(type=='Reply')?2:1];
-	var impts = ["","表单","回复"];//["紧急","重要","普通"];
-	var impt = impts[(type=='Reply')?2:1];
+	var colorful = ["aui-bg-danger","aui-bg-warning","aui-bg-info","aui-bg-purple"];
+	var colorStyle = colorful[point];
+	var impts = ["任务","表单","回复","表单"];//["紧急","重要","普通"];
+	var impt = impts[point];
 	count++;
 	var itemHtml = 
 		  timeDiv
@@ -197,11 +222,11 @@ function getItem(type, time, userId, userName, refId, readState, content) {
 		+ "	<div class='aui-timeline-item-inner' onclick='onMsgClicked(this,"+refId+", \""+type+"\")'>"
 		+ "		<div class='aui-card-list'>"
 		+ "			<div class='aui-card-list-header aui-border-b'>"
-		+ "				<div class='aui-font-size-16'>"+itemContent+"</div>"
+		+ "				<div class='aui-font-size-16'>"+itemTitle+"</div>"
 		+ "				<img src='"+readStateSrc+"' class='state-img icon-size'>"
 		+ "			</div>"
 		+ "			<div class='aui-card-list-content-padded' style='color: gray;'>"
-		+ "				" + itemTitle
+		+ "				" + itemContent
 		+ "			</div>"
 		+ "		</div>"
 		+ "	</div>"

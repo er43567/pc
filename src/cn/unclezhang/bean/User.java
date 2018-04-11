@@ -5,7 +5,10 @@ import org.apache.struts2.json.annotations.JSON;
 import cn.lrxzl.ssh_base.support.MyActionSupport.Loginable;
 
 public class User implements Loginable {
-	String userId, psw, name, position, headImg, phone, scope, time;
+	public static boolean OPTIMIZED_TRUE = true;
+	public static boolean OPTIMIZED_FALSE = true;
+	String userId, psw, name, position, headImg, phone, scope, time, unit;
+	int rank;
 	
 	public String getUserId() {
 		return userId;
@@ -64,6 +67,20 @@ public class User implements Loginable {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+	
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 	@Override

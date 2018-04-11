@@ -9,14 +9,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>新建：民爆行业质检表单</title>
-    
+    <title>新建：民爆库房三查表单</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
     
     <script type="text/javascript" src="js/ext.js" ></script>
     <script type="text/javascript">
-    window.onload = function(){
+    window.onload = function() {
     	datetime.innerText = getNowFormatDate();
     }
     </script>
@@ -24,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body >
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
-       <li class="aui-list-header">民爆行业质检表单 
+       <li class="aui-list-header">民爆库房三查表单 
        	<div id='datetime' data-options='{"type":"date"}'
         	style="background-color: #03a9f4;padding:2px;color: white;"
        		 onclick="loadDateTimePickerLib();"></div>
@@ -33,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	守库人员是否到岗：
+                   	储存库每班是否有3名以上值班守护人员值守，是否能熟练操作报警和监控器材；值守人员每小时是否携带自卫器具对库区及周围进行巡视；
                 </div>
                 <div class="aui-text-right">
                 	<label id="info1" class="aui-text-info">
@@ -47,7 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	安全员、库管员是否持证上岗：
+                   	值班室的防盗门窗是否完好无损，是否能正常使用配备的自卫器具；
                 </div>
                 <div class="aui-text-right">
                 	<label id="info2" class="aui-text-info">
@@ -61,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	入侵报警装置、周界报警装置是否正常运作：
+                   	储存库房的双层门（内层门是有金属网的通风栅栏门，外层门是防盗门）是否完好无损，两层门是否都向外开启。是否落实双人双锁。仓库窗户是否安装铁栅栏或金属网；在炸药库、雷管库外墙安装的白底黑字警示标志牌是否无破损；
                 </div>
                 <div class="aui-text-right">
                 	<label id="info3" class="aui-text-info">
@@ -75,7 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	是否配置两只以上大型犬（注：是否需要照相上传功能）：
+                   	防雷设施是否能正常使用，每半年是否进行检测，检测是否合格；是否配备足够且有效的灭火器，值守人员是否能熟练使用，消防水池储水量是否有15立方米，围墙外是否有15米防火隔离带；
                 </div>
                 <div class="aui-text-right">
                 	<label id="info4" class="aui-text-info">
@@ -89,8 +88,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	大型犬是否正常、健康：
-                </div>
+                   	 库区及重要通道安装的具有联网报警功能的周界报警、视频监控系统是否能正常使用。库房安装的具有联网报警功能的入侵报警、视频监控系统是否完好；
+                   </div>
                 <div class="aui-text-right">
                 	<label id="info5" class="aui-text-info">
                 	${request.report.item5}<!-- rem -->
@@ -106,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	库房值班记录本是否如实记录本班发生的事项：
+                   	值班室监控终端使用是否正常，是否能多画面或轮回显示所有监控图像，图像是否能保存30天。报警、视频监控是否配有备用电源；
                 </div>
                 <div class="aui-text-right">
                 	<label id="info6" class="aui-text-info">
@@ -121,7 +120,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-				消防水池储水量是否大于15立方米或设高位水池：
+				雷管、炸药是否混存或不入库，堆放是否符合要求；
                    </div>
                 <div class="aui-text-right">
                 	<label id="info7" class="aui-text-info">
@@ -136,7 +135,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-				库房内杂物是否清理干净：
+				库区是否配备2条以上大型看护犬,犬只是否健康；
                    </div>
                 <div class="aui-text-right">
                 	<label id="info8" class="aui-text-info">
@@ -151,7 +150,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	领用、发放、清退等级台账是否如实、齐全：
+                   	库房值班登记本是否如实登记录出入库人员和车辆；
                 </div>
                 <div class="aui-text-right">
                 	<label id="info9" class="aui-text-info">
@@ -166,7 +165,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	变质和过期失效的民爆物品，是否及时上报并清退出库，予以销毁：
+                   	围墙是否有破损，围墙顶的防攀越措施是否完好；
                 </div>
                 <div class="aui-text-right">
                 	<label id="info10" class="aui-text-info">
@@ -177,6 +176,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                </div>
            </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	民爆物品各项管理制度是否健全且上墙；
+                </div>
+                <div class="aui-text-right">
+                	<label id="info11" class="aui-text-info">
+                	${request.report.item11}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(10,11)}" onclick="openDialog(this)"> 否</label>
+                </div>
+               </div>
+           </li>
+           <li class="aui-list-item">
+               <div class="aui-list-item-inner">
+                   <div class="aui-list-item-text">
+                   	是否制定防盗窃、防抢劫、防破坏、防火灾爆炸事故的应急处置预案并进行演练。
+                </div>
+                <div class="aui-text-right">
+                	<label id="info12" class="aui-text-info">
+                	${request.report.item12}<!-- rem -->
+                	</label>
+                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(11,12)}"> 是</label>
+               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(11,12)}" onclick="openDialog(this)"> 否</label>
+                </div>
+               </div>
+           </li>
+           
 	    	<li class="aui-list-item">
           		<div class="aui-list-item-inner">
                   	<div class="aui-list-item-input">
@@ -194,7 +222,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	onclick="saveReport()">创建表单</div>
                 </div>
             </li>
-            <div id="showAfterSaved" style="display: none;">
+            <%-- <div id="showAfterSaved" style="display: none;">
 	            <li class="aui-list-item">
 	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
 	                    <div id="chooseUserBtn" style="overflow: scroll;text-align: center;"
@@ -205,11 +233,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            </li>
 	            <li class="aui-list-item">
 	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-	                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+	                    <div id="noticeButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
 	                    	onclick="noticeView()">通知目标人员查看</div>
 	                </div>
 	            </li>
-            </div>
+            </div> --%>
 		</ul>
 	</div>
 	<input type="hidden" id="thisReport" value="${request.report.sid}"/>
@@ -283,22 +311,24 @@ for(var i=0;i<lists.length;i++) {
 	}
 }
 
+
+var saving = false;
 function saveReport() {
-	var the_choices = "";
-	for(var i=0;i<lists.length;i++) {
-		var tmp = lists[i].getElementsByTagName("input");
-		var k = "";
-		for(var j=0;j<tmp.length;j++) {
-			tmp[j].name = "item" + (i+1);
-			if(tmp[j].checked) {
-				k = (j+1) + "";
-			}
-		}
-		the_choices += k==""?"0":k;
+	var the_choices = getChoices();
+	var notChoosed = the_choices.indexOf("0");
+	if(notChoosed>=0) {
+		android.show("第" + (notChoosed+1) + "项未选择");
+		return;
 	}
+	//防止一直点
+	if(saving){android.show("正在努力创建中，请君稍候...");return;}
+	saving = true;
+	saveButton.innerText = "创建表单中...";
+	
+	
 	var saves = true;
 	var url0 = "AjaxAction!saveReport";
-	if(thisReport.value!=null && thisReport.value != '') {
+	if(thisReport.value != null && thisReport.value != '') {
 		url0 = "AjaxAction!updateReport";
 		saves = false;
 	}
@@ -315,15 +345,23 @@ function saveReport() {
 			"report.targets": escape(userChoosed),
 			"report.time": datetime.innerText
 		}, success:function(r) {
+			saving = false;
+			saveButton.innerText = "创建表单";
+			
 			if(r['result'] == 'success' || !isNaN(r['result'])) {
 				if(saves) {
 					thisReport.value = r['result'];
 				}
 				//saveButton.innerText = "已保存,表单ID:" + thisReport.value;
-				saveButton.innerText = "保存更改";
-				alert('保存成功，可以选择推送对象了');
-				saveButton.parentNode.parentNode.style.display = "none";
-				showAfterSaved.style.display = "block";
+				//saveButton.innerText = "保存更改";
+				//alert('保存成功，可以选择推送对象了');
+				//saveButton.parentNode.parentNode.style.display = "none";
+				saveButton.innerText = "流程管控";
+				saveButton.onclick = function() {
+					beginProcessControl(thisReport.value, the_choices);
+				};
+				alert("创建成功，已将表单推送给相关人员");
+				//showAfterSaved.style.display = "block";
 			} else if('reported'==r['result']) {
 				alert(datetime.innerText + '日已发布此类型表单，请更换日期');
 			} else {
@@ -332,6 +370,7 @@ function saveReport() {
 		}
 	});
 }
+
 
 function getItemRems() {
 	var textInfos = document.getElementsByClassName("aui-text-info");
@@ -343,6 +382,7 @@ function getItemRems() {
 }
 
 var noticeId = null;
+var noticing = false;
 function noticeView() {
 	if(thisReport.value=="") {
 		alert("请先保存表单");
@@ -353,11 +393,19 @@ function noticeView() {
 			return;
 		}
 	}
+	
+	if(!noticing) {
+		noticing = true;noticeButton.innerText="通知中...";
+	} else {
+		android.show("通知中");
+		return;
+	}
+	
 	ajax({
 		type: "post",
 		url: "AjaxAction!noticeOthers",
 		dataType: "json",
-		data:{
+		data: {
 			"notice.sid": noticeId,
 			"notice.ref": thisReport.value,
 			"notice.type": "ExplosiveReport",
@@ -366,18 +414,42 @@ function noticeView() {
 			"notice.content": escape(""),
 			"notice.impts": "",
 		}, success:function(r) {
+			noticing = false;
 			if(r['result'] == "fail") {
 				alert("通知失败！");
+				noticeButton.innerText = "通知目标人员查看";
 			} else {
 				noticeId = r['result'];
 				alert('已通知给' + userChoosed.split("##")[0]);
+				noticeButton.innerText = "已通知";
 			}
 		}
 	});
 }
 </script>
-
-
+<!-- 流程管控 -->
+<script type="text/javascript">
+function getChoices() {
+	var the_choices = "";
+	for(var i=0;i<lists.length;i++) {
+		var tmp = lists[i].getElementsByTagName("input");
+		var k = "";
+		for(var j=0;j<tmp.length;j++) {
+			tmp[j].name = "item" + (i+1);
+			if(tmp[j].checked) {
+				k = (j+1) + "";
+			}
+		}
+		the_choices += k==""?"0":k;
+	}
+	return the_choices;
+}
+//触发流程管控
+function beginProcessControl() {
+	startUrlWithoutResult("PageAction!loadProblemList?problem.choices="+getChoices()
+			+ "&problem.ref=" + thisReport.value);
+}
+</script>
 <!-- DatePicker -->
 <link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
 <script id="dtjs1" src="../js/mui.min.js"></script>

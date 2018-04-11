@@ -11,7 +11,6 @@ public class Tool {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return df.format(new Date());
 	}
-	
 	public static String escape(String src) {
         int i;
         char j;

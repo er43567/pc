@@ -2,9 +2,7 @@ package cn.unclezhang.action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.sf.json.JSONObject;
 
@@ -13,10 +11,13 @@ import org.apache.struts2.json.annotations.JSON;
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
 import cn.unclezhang.bean.Notice;
+import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
+import cn.unclezhang.bean.Task;
 import cn.unclezhang.bean.User;
 import cn.unclezhang.conf.Conf;
+import cn.unclezhang.relatives.RelativeHelper;
 
 public class AjaxAction extends MyActionSupport {
 	int from_id, page, count_per_page = 10;
@@ -95,9 +96,41 @@ public class AjaxAction extends MyActionSupport {
 	}
 	
 	/*===========用户设置页面===========*/
-	public String updateField() {
-		//[^a-zA-Z0-9\_]
-		service.updateUserFiled(getSessionUserId(), field, value);
+	public String updateHeadImg() {
+		boolean bo = service.updateUserFiled(getSessionUserId(), "headImg", user.getHeadImg());
+		if (!bo) {
+			setResult("fail");
+		} else {
+			getSessionUser().setHeadImg(user.getHeadImg());
+		}
+		return aa;
+	}
+	
+	public String updatePhone() {
+		boolean bo = service.updateUserFiled(getSessionUserId(), "phone", user.getPhone());
+		if (!bo) {
+			setResult("fail");
+		} else {
+			getSessionUser().setPhone(user.getPhone());
+		}
+		return aa;
+	}
+	String newPsw;
+	public String getNewPsw() {
+		return newPsw;
+	}
+	public void setNewPsw(String newPsw) {
+		this.newPsw = newPsw;
+	}
+	public String updatePsw() {
+		if (getSessionUser().getPsw().equals(user.getPsw())) {
+			boolean bo = service.updateUserFiled(getSessionUserId(), "psw", newPsw);
+			if(!bo) {
+				setResult("修改密码失败");
+			}
+		} else {
+			setResult("旧密码错误");
+		}
 		return aa;
 	}
 	/*===========表单提交页面===========*/
@@ -134,6 +167,10 @@ public class AjaxAction extends MyActionSupport {
 				, Tool.unescape(report.getTargets()+""), Tool.unescape(items+"").split(",")
 				, report.getChoices(), Tool.unescape(report.getRem()+""), report.getTime()
 				, getSessionUser().getScope());
+		
+		//创建所有问题
+		service.createProblems(report.getSid(), report.getChoices());
+		
 		setResult(sid + "");
 		return aa;
 	}
@@ -165,8 +202,7 @@ public class AjaxAction extends MyActionSupport {
 			setResult("未登录");
 			return aa;
 		}
-		System.out.println(Tool.unescape(notice.getTargetIds()));
-		
+		//System.out.println(Tool.unescape(notice.getTargetIds()));
 		String noticeSid = service.saveNotice(getSessionUserId(), notice.getRef()
 				, Tool.unescape(notice.getType()), Tool.unescape(notice.getTargetIds())
 				, Tool.unescape(notice.getTitle()), Tool.unescape(notice.getContent())
@@ -184,16 +220,53 @@ public class AjaxAction extends MyActionSupport {
 		this.notices = notices;
 	}
 	public String loadNoticeList() {
-		//notices = service.loadNoticeList(getSessionUserId(), from_id, count_per_page);
-		List<Notice> li1 = service.loadNoticeList(getSessionUserId(), 0, 0, 0);
-		List<Notice> li2 = service.loadNoticeList(getSessionUserId(), from_id, count_per_page, 1);
-		List<Notice> li = new ArrayList<Notice>();
-		li.addAll(li1);
-		li.addAll(li2);
-		notices = li;
+		if (page == 1) {
+			notices = service.loadNoticeList(getSessionUserId(), 0, 0, Conf.not_read_yet);
+			List<Notice> li = service.loadNoticeList(getSessionUserId(), from_id, count_per_page, Conf.has_read);
+			notices.addAll(li);
+		} else if (page != 1) {
+			notices = service.loadNoticeList(getSessionUserId(), from_id, count_per_page, Conf.has_read);
+		}
 		return aa;
 	}
 	
+	public String loadNoticeList1() {
+		if(page == 1) {
+			session.removeAttribute(getSessionUserId() + "_oldsize");
+		}
+		Object o = session.getAttribute(getSessionUserId() + "_oldsize");
+		int oldSize = 0;
+		if(o != null) oldSize = (Integer) o;
+		List<Notice> li = new ArrayList<Notice>();
+		List<Notice> li1 = null;
+		boolean hasNotReads = false;
+		System.out.println(page);
+		if (page == 1) {
+			li1 = service.loadNoticeList(getSessionUserId(), 0, 0, Conf.not_read_yet);
+			System.out.println("li1.size = " + li1.size() + "," + oldSize);
+			if (li1 != null && li1.size() != oldSize) {
+				li.addAll(li1);
+				oldSize = li1.size();
+				session.setAttribute(getSessionUserId() + "_oldsize", oldSize);
+				hasNotReads = true;
+			}
+		} else {
+			if(hasNotReads)
+				setPage(page-1);
+			List<Notice> li2 = service.loadNoticeList(getSessionUserId(), from_id, count_per_page, Conf.has_read);
+			li.addAll(li2);
+		}
+		
+		/*if (li1 == null || li1.size() == 0) {
+			if(hasNotReads)
+				setPage(page-1);
+			List<Notice> li2 = service.loadNoticeList(getSessionUserId(), from_id, count_per_page, Conf.has_read);
+			li.addAll(li2);
+		}*/
+		
+		notices = li;
+		return aa;
+	}
 	/**
 	 * ===========Reply===========
 	 */
@@ -222,8 +295,8 @@ public class AjaxAction extends MyActionSupport {
 			setResult("fail");
 		} else {
 			service.saveNotice(getSessionUserId(), reply.getRef()
-					, Conf.notice_回复, reply.getTargetId(), "回复", Tool.unescape(reply.getContent())
-					, Conf.important_normal);
+					, Notice.notice_回复, reply.getTargetId(), "回复", Tool.unescape(reply.getContent())
+					, Notice.important_normal);
 		}
 		return aa;
 	}
@@ -233,17 +306,16 @@ public class AjaxAction extends MyActionSupport {
 		if (replies == null) {
 			setResult("fail");
 		} else {
-			service.readNotice(reply.getRef(), getSessionUserId(), Conf.notice_回复);
+			service.readNotice(reply.getRef(), getSessionUserId(), Notice.notice_回复);
 		}
 		return aa;
 	}
-	
 	
 	/**
 	 * API of History Page For Android 
 	 */
 	public String loadHistoryColors() {
-		List<String> li = service.loadHistoryColors();
+		List<String> li = service.loadHistoryColors(report.getUserId());
 		if (li == null || li.size() == 0) {
 			setResult("fail");
 			return aa;
@@ -251,8 +323,162 @@ public class AjaxAction extends MyActionSupport {
 		setResult(Arrays.toString(li.toArray()));
 		return aa;
 	}
+	String date;
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	public String loadTypeStatesByDate() {
+		String rst = service.loadTypeStates(date, report.getUserId());
+		if (rst == null) {
+			setResult("fail");
+		}
+		setResult(rst);
+		return aa;
+	}
+	
+	/**
+	 * History Report
+	 */
+	List<User> users;
+	public List<User> getUsers() {
+		return users;
+	}
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+	public String loadMyReportCheckableUsers() {
+		users = service.loadReportRelativedUsers();
+		for (int i = 0; i < users.size(); i++) {
+			User u = users.get(i);
+			u.setHeadImg(null);
+		}
+		return aa;
+	}
+	
+	/**
+	 * Task
+	 */
+	Task task;
+	List<Task> tasks;
+	String headImg;
+	public Task getTask() {
+		return task;
+	}
+	public void setTask(Task task) {
+		this.task = task;
+	}
+	public List<Task> getTasks() {
+		return tasks;
+	}
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
+	}
+	public String getHeadImg() {
+		return headImg;
+	}
+	public String publishTask() {
+		if (!isLogin()) {
+			setResult("fail");
+			return aa;
+		}
+		int taskSid = service.saveTask(Tool.unescape(task.getTitle()), Tool.unescape(task.getContent())
+				, Tool.unescape(task.getTargetIds()), task.getImpt());
+		if (taskSid == -1) {
+			setResult("fail");
+		} else {
+			service.saveNotice(getSessionUserId()
+					, taskSid
+					, Notice.notice_任务
+					, Tool.unescape(task.getTargetIds())
+					, Tool.unescape(task.getTitle())
+					, Tool.unescape(task.getContent())
+					, task.getImpt());
+		}
+		return aa;
+	}
+	
+	public String loadLatestTask() {
+		task = service.loadLatestTask();
+		if (task == null) {
+			return aa;
+		}
+		headImg = service.findUserById(task.getUserId()).getHeadImg();
+		service.readNotice(task.getSid(), getSessionUserId(), Notice.notice_任务);
+		return aa;
+	}
+	
+	public String loadTasks() {
+		tasks = service.loadTasks(from_id, count_per_page);
+		service.readNotice(-1, getSessionUserId(), Notice.notice_任务);
+		return aa;
+	}
+	/**
+	 * 流程管控 processCtrl problem
+	 */
+	Problem problem;
+	public Problem getProblem() {
+		return problem;
+	}
+	public void setProblem(Problem problem) {
+		this.problem = problem;
+	}
+	public String firstUpdateAndNoticeProblem() {
+		boolean bo = service.firstUpdateAndNoticeProblem(problem.getSid()
+				, problem.getRisk()
+				, Tool.unescape(problem.getMeasure())
+				, Tool.unescape(problem.getExpire())
+				, problem.getFunctionary());
+		if (bo == false) {
+			setResult("fail");
+		}
+		return aa;
+	}
+	
+	public String addProblemResult() {
+		boolean bo = service.updateProblemFiled(problem.getSid() , "results", Tool.unescape(problem.getResults()));
+		if (!bo) {
+			setResult("fail");
+		}
+		return aa;
+	}
+	
+	public String confirmProblem() {
+		problem = service.loadProblem(problem.getSid());
+		try {
+			if (problem.getTargetIds().contains(getSessionUserId())) {
+				
+				service.updateProblemFiled(problem.getSid(), "acceptedIds"
+						, problem.getAcceptedIds()+","+getSessionUserId());
+				problem.setAcceptedIds(problem.getAcceptedIds()+","+getSessionUserId());
+				//检测问题是否完成
+				String targetIds = problem.getTargetIds();
+				if (targetIds != null) {
+					String acceptedIds[] = problem.getAcceptedIds().split(",");
+					System.out.println("getAcceptedIds:" + problem.getAcceptedIds());
+					for (int i = 0; i < acceptedIds.length; i++) {
+						targetIds = targetIds.replaceAll(acceptedIds[i], "");
+					}
+					targetIds = targetIds.replaceAll(",", "");
+					System.out.println("targetIds:" + targetIds);
+					if (targetIds.trim().equals("")) {
+						problem.setState(Problem.STATE_FINISHED);
+						service.updateProblemFiled(problem.getSid(), "state", Problem.STATE_FINISHED);
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			setResult("fail");
+		}
+		return aa;
+	}
 	
 	public String getResult() {
 		return result;
 	}
+	
 }

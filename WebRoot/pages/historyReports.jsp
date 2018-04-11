@@ -40,9 +40,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	
 	<div class="aui-tab" id="tab">
-		<div class="aui-tab-item aui-active">民爆行业</div>
-		<div class="aui-tab-item">旅馆业</div>
-		<div class="aui-tab-item">三级消防</div>
+		<div id="explosiveReport" class="aui-tab-item aui-active">民爆行业
+		</div>
+		<div id="hotalReport" class="aui-tab-item">旅馆行业
+		</div>
+		<div id="firefightingReport" class="aui-tab-item">三级消防
+		</div>
 	</div>
 	<div style="height:45px;"></div>
 	<style>
@@ -69,6 +72,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	<script type="text/javascript" src="../script/api.js"></script>
 	<script type="text/javascript" src="../script/aui-tab.js"></script>
+	
+	<script type="text/javascript">
+	//获取到用户ID
+	var targetUserId = getParam("userId");
+	</script>
+	
 	<script type="text/javascript">
 		apiready = function() {
 			api.parseTapmode();
@@ -84,23 +93,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var o = document.getElementById("tab-content-" + ret.index);
 			o.className = o.className.replace("aui-hide","aui-show");
 			currentTab = ret.index;
-			onChooseDate(date);
+			changeUrl(date);
 		});
 	</script>
-	
 	<script type="text/javascript">
-	
-	onChooseDate(getNowFormatDate());
-	
+	var loaded1 = false, loaded2 = false, loaded3 = false;
 	var date;
+	onChooseDate(getNowFormatDate());
 	function onChooseDate(t) {
 		date = t;
-		if(currentTab == 1) {
-			document.getElementById('explosiveFrame').src = "PageAction!loadReportsByDate?report.type=ExplosiveReport&report.time=" + escape(t);
-		} else if(currentTab == 2) {
-			document.getElementById('hotalFrame').src = "PageAction!loadReportsByDate?report.type=HotalReport&report.time=" + escape(t);
-		} else if(currentTab == 3) {
-			document.getElementById('firefightingFrame').src = "PageAction!loadReportsByDate?report.type=FirefightingReport&report.time=" + escape(t);
+		loaded1 = false;
+		loaded2 = false;
+		loaded3 = false;
+		changeUrl(t);
+		loadStates(date);
+	}
+	
+	function changeUrl(t) {
+		if(currentTab == 1 && !loaded1) {
+			document.getElementById('explosiveFrame').src = "PageAction!loadReportsByDate?report.type=ExplosiveReport&report.userId="+targetUserId+"&report.time=" + escape(t);
+			loaded1 = true;
+		} else if(currentTab == 2 && !loaded2) {
+			document.getElementById('hotalFrame').src = "PageAction!loadReportsByDate?report.type=HotalReport&report.userId="+targetUserId+"&report.time=" + escape(t);
+			loaded2 = true;
+		} else if(currentTab == 3 && !loaded3) {
+			document.getElementById('firefightingFrame').src = "PageAction!loadReportsByDate?report.type=FirefightingReport&report.userId="+targetUserId+"&report.time=" + escape(t);
+			loaded3 = true;
 		}
 	}
 	
@@ -118,6 +136,52 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    }
 	    var currentdate = year + seperator1 + month + seperator1 + strDate;
 	    return currentdate;
+	}
+	
+	
+	function loadStates(dateTime) {
+		ajaxPost("AjaxAction!loadTypeStatesByDate", function(r) {
+			var res = eval("("+r+")");
+			var result = res['result'];
+			if(result.indexOf("ExplosiveReport=2")>=0) {
+				explosiveReport.innerHTML = "民爆行业<font color='orange'>√</font>";
+				explosiveReport.click();
+			} else if(result.indexOf("ExplosiveReport=0")>=0) {
+				explosiveReport.innerHTML = "民爆行业<font color='green'>√</font>";
+				explosiveReport.click();
+			} else if(result.indexOf("ExplosiveReport=1")>=0) {
+				explosiveReport.innerHTML = "民爆行业<font color='red'>◉</font>";
+				explosiveReport.click();
+			} else {
+				explosiveReport.innerHTML = "民爆行业";
+			}
+			
+			if(result.indexOf("FirefightingReport=2")>=0) {
+				firefightingReport.innerHTML = "三级消防<font color='green'>√</font>";
+				firefightingReport.click();
+			} else if(result.indexOf("FirefightingReport=0")>=0) {
+				firefightingReport.innerHTML = "三级消防<font color='green'>√</font>";
+				firefightingReport.click();
+			} else if(result.indexOf("FirefightingReport=1")>=0) {
+				firefightingReport.innerHTML = "三级消防<font color='red'>◉</font>";
+				firefightingReport.click();
+			} else {
+				firefightingReport.innerHTML = "三级消防";
+			}
+			
+			if(result.indexOf("HotalReport=2")>=0) {
+				hotalReport.innerHTML = "旅馆行业<font color='green'>√</font>";
+				hotalReport.click();
+			} else if(result.indexOf("HotalReport=0")>=0) {
+				hotalReport.innerHTML = "旅馆行业<font color='green'>√</font>";
+				hotalReport.click();
+			} else if(result.indexOf("HotalReport=1")>=0) {
+				hotalReport.innerHTML = "旅馆行业<font color='red'>◉</font>";
+				hotalReport.click();
+			} else {
+				hotalReport.innerHTML = "旅馆行业";
+			}
+		}, {"date": dateTime, "report.userId":targetUserId});
 	}
 	//android.setChoosedTime("2018-03-25");
  	/* startUrl("login.jsp");

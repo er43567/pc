@@ -18,6 +18,7 @@ public class NotificationAction extends MyActionSupport {
 			JSONObject jo = new JSONObject();
 			jo.put("url", "noticePage.jsp");
 			jo.put("content", "收到" + count + "条信息");
+			jo.put("count", count);
 			setResult(jo.toString());
 		}
 		return aa;

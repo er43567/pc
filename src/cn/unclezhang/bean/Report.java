@@ -1,8 +1,13 @@
 package cn.unclezhang.bean;
 
 public class Report {
+	public static final String report_民爆 = "ExplosiveReport";
+	public static final String report_消防 = "FirefightingReport";
+	public static final String report_旅馆 = "HotalReport";
+	
 	int sid, state;
 	String type, userId, scope, targets, choices, rem, time;
+	String choices0;
 	String item1,item2,item3,item4,item5,
 		item6,item7,item8,item9,item10,
 		item11,item12,item13,item14,item15,
@@ -12,6 +17,15 @@ public class Report {
 	String userName;
 	String phone;
 	String wholeName;
+	public String[] getItems() {
+		return new String[]{
+				item1,item2,item3,item4,item5,
+				item6,item7,item8,item9,item10,
+				item11,item12,item13,item14,item15,
+				item16,item17,item18,item19,item20,
+				item21,item22,item23,item24,item25
+		};
+	}
 	public void setItems(String items[]) throws Exception {
 		System.out.println("item len:" + items.length);
 		if (items.length>=2) item1 = items[1];
@@ -292,6 +306,13 @@ public class Report {
 	public void setItem25(String item25) {
 		this.item25 = item25;
 	}
+	public String getChoices0() {
+		return choices0;
+	}
+	public void setChoices0(String choices0) {
+		this.choices0 = choices0;
+	}
+	
 	@Override
 	public String toString() {
 		return "Report [sid=" + sid + ", state=" + state + ", type=" + type

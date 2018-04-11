@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping  >
+	<class name="cn.unclezhang.bean.Task" table="task_tb" lazy="false">
+		<id name="sid">
+			<generator class="identity"></generator> 
+		</id>
+		<property name="userId"></property>
+		<property name="targetIds"></property>
+		<property name="title"></property>
+		<property name="content"></property>
+		<property name="impt"></property>
+		<property name="time"></property>
+		<property name="scope"></property>
+		<property name="position" formula="(select tb.position from user_tb tb where tb.userId=userId)"></property>
+		<property name="userName" formula="(select tb.name from user_tb tb where tb.userId=userId)"></property>
+	</class>
+</hibernate-mapping>

@@ -13,7 +13,9 @@
 		<property name="headImg"></property>
 		<property name="phone"></property>
 		<property name="scope"></property>
+		<property name="rank"></property>
 		<property name="time"></property>
+		<property name="unit"></property>
 	</class>
 	
 </hibernate-mapping>

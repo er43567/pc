@@ -19,6 +19,12 @@ public class TheDoor extends StrutsPrepareAndExecuteFilter {
 		if (!(url == null || url.lastIndexOf("loadNoticeCount")>=0)) {
 			System.out.println(url);
 		}
+		
+		/*if (request.getSession().getAttribute("user") == null) {
+			if (!url.contains("login.jsp") && !url.contains("AjaxAction!login")) {
+				return;
+			}
+		}*/
 		super.doFilter(req, res, chain);
 	}
 	
