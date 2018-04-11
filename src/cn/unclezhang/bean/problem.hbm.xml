@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping  >
+	<class name="cn.unclezhang.bean.Problem" table="problem_tb" lazy="false">
+		<id name="sid">
+			<generator class="identity"></generator> 
+		</id>
+		<property name="userId"></property>
+		<property name="ref"></property>
+		<property name="whichItem"></property>
+		<property name="risk"></property>
+		<property name="choices"></property>
+		<property name="title"></property>
+		<property name="measure"></property>
+		<property name="expire"></property>
+		<property name="functionary"></property>
+		<property name="targetIds"></property>
+		<property name="acceptedIds"></property>
+		<property name="results"></property>
+		<property name="state"></property>
+		<property name="time"></property>
+	</class>
+</hibernate-mapping>

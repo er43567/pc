@@ -26,7 +26,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <s:iterator value="#request.users" id='item' status="st">
             <li id="${st.index}" class="aui-list-item">
                 <div class="aui-list-item-inner">
-                    <div id="${item.userId}" class="aui-list-item-title">${item.name}</div>
+                    <div id="${item.userId}" class="aui-list-item-title">${item.unit} ${item.name}</div>
                     <div class="aui-list-item-right">
                         <input id="ckbox${st.index}" type="checkbox" class="aui-checkbox" onclick="clicked('${st.index}')">
                     </div>

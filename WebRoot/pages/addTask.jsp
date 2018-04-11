@@ -20,8 +20,8 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"
-				href="javascript:alert(1)"></a>
+			<a class="mui-icon mui-icon-left-nav "
+				href="javascript:android.closeActivity()"></a>
 			<button id="submit" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right"
 				onclick="publish()">发布</button>
 			<h1 class="mui-title">任务发布</h1>
@@ -54,15 +54,16 @@
 			</div>
 			<div class="mui-inline">任务标题</div>
 			<div class="mui-input-row">
-				<input id='contact' type="text" class="mui-input-clear contact" placeholder="填写任务标题" />
+				<input id='title' type="text" class="mui-input-clear contact" placeholder="填写任务标题" />
 			</div>
 			<div class="mui-inline">任务内容</div>
 			<div class="row mui-input-row">
-				<textarea id='question' class="mui-input-clear question" placeholder="填写任务内容"></textarea>
+				<textarea id='content' class="mui-input-clear question" placeholder="填写任务内容"></textarea>
 			</div>
-			<div class="mui-inline" style="margin-top: 10px">选择可见人员</div>
-			<div class="row mui-input-row">
-				<div style="padding: 10px;font-size: 45px;color: grey;" onclick="startUrl('PageAction!loadUserChoosePage', ['notitle','nogesture','norefresh'], this.innerText)">+</div>
+			<div class="mui-inline" style="margin-top: 10px">选择目标人员</div>
+			<div class="row mui-input-row" style="height: 75px !important;overflow: scroll;">
+				<div style="padding: 10px;font-size: 45px;color: grey;" 
+					onclick="startUrl('PageAction!loadUserChoosePage', ['notitle','nogesture','norefresh'], userChoosed)">+</div>
 				<div id='resultDiv' style="position: absolute;left:40px;top:10px;color: gray;"></div>
 			</div>
 			<div class="mui-inline" style="margin-top: 10px">任务重要度</div>
@@ -70,15 +71,15 @@
 			<div class="mui-input-group">
 					<div class="mui-input-row mui-radio">
 						<label style="color: gray;">普通任务</label>
-						<input name="style" type="radio" checked="" value="main-move">
+						<input name="impt" type="radio" checked="" onclick="imptClicked(0)" value="main-move">
 					</div>
 					<div class="mui-input-row mui-radio">
 						<label style="color: gray;">重要任务</label>
-						<input name="style" type="radio" value="menu-move">
+						<input name="impt" type="radio" onclick="imptClicked(1)" value="menu-move">
 					</div>
 					<div class="mui-input-row mui-radio" id="move-togger">
 						<label style="color: gray;">紧急任务</label>
-						<input name="style" type="radio" value="all-move">
+						<input name="impt" type="radio" onclick="imptClicked(2)" value="all-move">
 					</div>
 				</div>
 				<!-- <div style="position: absolute; width:300px; top: 360px; left: 80px;">
@@ -94,23 +95,36 @@
 							 </font>
 				</div> -->
 		</div>
-		<script src="../js/mui.min.js"></script>
-		<script src=" ../js/feedback.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			mui.init();
-			mui('.mui-scroll-wrapper').scroll();
-		</script>
-		
-		<script type="text/javascript">
-		var userIds;//选中的用户ID集合
+		var userChoosed;//选中的用户ID集合
 		function onActivityResult(result) {
-			resultDiv.innerText = result.split("##")[0];
-			userIds = result.split("##")[1];
+			resultDiv.innerText = result.split("##")[0].replace('undefined',"");
+			userChoosed = result;
+		}
+		var impt = 0;
+		function imptClicked(n) {
+			impt = n;
 		}
 		function publish() {
-			android.closeActivity('refresh');
+			ajaxPost("AjaxAction!publishTask", function(r) {
+				var res = eval("("+r+")");
+				var result = res['result'];
+				if("success" == result) {
+					android.closeActivity('refresh');
+				} else {
+					alert("发布失败");
+				}
+			}, {
+				"task.title":escape(title.value),
+				"task.content":escape(content.value),
+				"task.targetIds":escape(userChoosed),
+				"task.impt":escape(impt)
+			});
 		}
+		//Tool.unescape(task.getTitle()), Tool.unescape(task.getContent())
+				//, Tool.unescape(task.getTargetIds()), task.getImpt()
 		</script>
+		
 	</body>
 
 </html>

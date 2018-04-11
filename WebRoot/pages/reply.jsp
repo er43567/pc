@@ -38,7 +38,7 @@
 						        </div>
 						        <div class='aui-chat-item aui-chat-right'>
 						            <div class='aui-chat-media'>
-						                <img src='${session.user.headImg}' />
+						                <img src='${session.user.headImg}'/>
 						            </div>
 						            <div class='aui-chat-inner'>
 						                <div class='aui-chat-name'>asd</div>
@@ -71,6 +71,11 @@
       </ul>
       <div id="bottomSpace"></div>
   </body>
+  <style type="text/css">
+  .aui-chat-media img {
+  	width:2rem;height: 2rem;
+  }
+  </style>
   <script type="text/javascript">
   content.addEventListener("keyup", function() {
 	  if(this.value.indexOf("@"+targetUserName+":")!=0) {

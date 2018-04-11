@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>修改：旅馆行业质检表单</title>
+    <title>修改：旅馆行业三查表单</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
     
@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body >
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
-       <li class="aui-list-header">旅馆行业质检表单 
+       <li class="aui-list-header">旅馆行业三查表单 
        <s:if test="#session.user.userId==#request.report.userId">
 	       <div id='datetime' data-options='{"type":"date"}' class="sm-info-btn"
 	       		 onclick="loadDateTimePickerLib();">

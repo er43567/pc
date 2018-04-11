@@ -3,15 +3,18 @@ package cn.unclezhang.service;
 import java.util.List;
 import java.util.Map;
 
+import cn.lrxzl.ssh_base.support.MyActionSupport.ISessionUserReceivable;
 import cn.unclezhang.bean.Notice;
+import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
+import cn.unclezhang.bean.Task;
 import cn.unclezhang.bean.User;
 
-public interface IService {
-	void updateUserFiled(String userId, String field, String value);
+public interface IService extends ISessionUserReceivable {
+	boolean updateUserFiled(String userId, String field, String value);
 
-	List<User> loadAllUsers();
+	List<User> loadAllUsers(boolean optimized);
 	
 	int saveReport(String userId, String type, String targets, 
 			String[] items, String choices, String rem, String time, String scope);
@@ -21,7 +24,13 @@ public interface IService {
 	void updateReport(int sid, String userId, String targets,
 			String[] items, String choices, String rem);
 
-	List<Report> loadReportsByDate(String type, String time);
+	/**
+	 * @param type
+	 * @param time
+	 * @param userId 可为null，为null时加载全部
+	 * @return
+	 */
+	List<Report> loadReportsByDate(String type, String time, String userId);
 
 	String saveNotice(String userId, int ref, String type, String targetIds, String title,
 			String content, int impts);
@@ -40,6 +49,42 @@ public interface IService {
 
 	List<Reply> loadReplies(int ref, String whoLoad, int from_id, int len);
 
-	List<String> loadHistoryColors();
+	/**
+	 * @param userId Nullable, load whole data while null
+	 * @return
+	 */
+	List<String> loadHistoryColors(String userId);
+	/**
+	 * @param date
+	 * @param userId 可为null，为null时加载所有的
+	 * @return
+	 */
+	String loadTypeStates(String date, String userId);
+
+	int saveTask(String title, String content, String targetIds, int impt);
+
+	Task loadLatestTask();
+	
+	List<Task> loadTasks(int from_id, int len);
+
+	List<User> loadReportRelativedUsers();
+
+	/*void updateAndNoticeProblem(String sessionUserId, int sid, int risk
+			, int ref, int whichItem, String measure,
+			String expire, String targetIds, String functionary);*/
+	boolean firstUpdateAndNoticeProblem(int sid, int risk,
+			String measure, String expire, String functionary);
+	
+	Problem loadProblem(int ref, int whichItem);
+
+	List<Problem> loadProblemsByRef(int ref);
+	List<Problem> createProblems(int ref, String choices);
+
+	boolean updateProblemFiled(int sid, String field, String value);
+
+	Problem loadProblem(int sid);
+	
+	List<Problem> loadMyProblemList();
+
 	
 }

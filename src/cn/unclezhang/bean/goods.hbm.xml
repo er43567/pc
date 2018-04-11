@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping  >
+	<class name="cn.unclezhang.bean.Goods" table="good_tb" lazy="false">
+		<id name="sid">
+			<generator class="identity"></generator> 
+		</id>
+		
+		<property name="unitDefined"></property>
+		<property name="yesterdayGained"></property>
+		<property name="todayGained"></property>
+		<property name="todayUse"></property>
+		<property name="todayReturn"></property>
+		<property name="todayStock"></property>
+		<property name="type"></property>
+		<property name="unit"></property>
+		<property name="userId"></property>
+		<property name="targetIds"></property>
+		<property name="acceptedIds"></property>
+		
+	</class>
+	
+</hibernate-mapping>

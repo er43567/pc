@@ -36,6 +36,8 @@
         	
         	<!-- 方言 -->
         	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        	<!-- <property name="dialect">cn.lrxzl.dialect.mysql.MySqlDialect</property>
+        	<property name="hibernate.query.substitutions">true=1,false=false</property> -->
         	
         	<!--显示sql语句-->
 	     	<property name="show_sql">false</property>
@@ -45,6 +47,8 @@
 		<mapping resource="cn/unclezhang/bean/report.hbm.xml"/>
 		<mapping resource="cn/unclezhang/bean/notice.hbm.xml"/>
 		<mapping resource="cn/unclezhang/bean/reply.hbm.xml"/>
-		
+		<mapping resource="cn/unclezhang/bean/task.hbm.xml"/>
+		<mapping resource="cn/unclezhang/bean/problem.hbm.xml"/>
+		<mapping resource="cn/unclezhang/bean/goods.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

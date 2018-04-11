@@ -1,6 +1,7 @@
 package cn.unclezhang.service.impl;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,13 +10,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import cn.lrxzl.lib.java.tool.Tool;
+import cn.lrxzl.ssh_base.support.MyActionSupport.ISessionUserReceivable;
 import cn.unclezhang.bean.Notice;
+import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
+import cn.unclezhang.bean.Task;
 import cn.unclezhang.bean.User;
 import cn.unclezhang.conf.Conf;
 import cn.unclezhang.dao.IDao;
+import cn.unclezhang.relatives.RelativeHelper;
+import cn.unclezhang.relatives.Relatives;
 import cn.unclezhang.service.IService;
 
 public class ServiceImpl implements IService {
@@ -24,20 +32,35 @@ public class ServiceImpl implements IService {
 		this.dao = dao;
 	}
 	
+	User user;
 	@Override
-	public void updateUserFiled(String userId, String field, String value) {
+	public void receiveSessionUser(User user) {
+		this.user = user;
+	}
+	
+	@Override
+	public boolean updateUserFiled(String userId, String field, String value) {
 		try {
-			dao.updateBySql("update user_tb set " + field + "=? where userId=?"
+			field = StringEscapeUtils.escapeSql(field);
+			dao.updateBySql("update user_tb set " + field + "=? where userId=?" 
 					, new Object[]{ value, userId});
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
 	@Override
-	public List<User> loadAllUsers() {
+	public List<User> loadAllUsers(boolean optimized) {
 		try {
-			return dao.findByHql("from User");
+			List<User> li = dao.findByHql("from User");
+			if(optimized) {
+				for (int i = 0; i < li.size(); i++) {
+					li.get(i).setHeadImg("");
+				}
+			}
+			return li;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -65,6 +88,9 @@ public class ServiceImpl implements IService {
 	public int saveReport(String userId, String type, String targets
 			, String[] items, String choices, String rem, String time, String scope) {
 		try {
+			RelativeHelper rh = new RelativeHelper(dao, this);
+			targets = rh.getReportNoticeUserIds(user.getUnit());
+			
 			Report r = new Report();
 			r.setUserId(userId);
 			r.setType(type);
@@ -74,7 +100,12 @@ public class ServiceImpl implements IService {
 			r.setRem(rem);
 			r.setTime(time);
 			r.setScope(scope);
-			return (Integer) dao.saveEntity(r);
+			r.setChoices0(choices);
+			int sid = (Integer) dao.saveEntity(r);
+			
+			saveNotice(userId, sid, type, targets, "", "", Notice.important_normal);
+			
+			return sid;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,12 +144,17 @@ public class ServiceImpl implements IService {
 	}
 
 	@Override
-	public List<Report> loadReportsByDate(String type, String time) {
+	public List<Report> loadReportsByDate(String type, String time, String userId) {
 		time = time.length()>10?time.substring(0,10):time;
 		try {
 			System.out.println(time);
-			return dao.findByHql("from Report where type=? and locate(?, time)>0"
-					, new Object[]{type, time});
+			if (userId == null) {
+				return dao.findByHql("from Report where type=? and locate(?, time)>0"
+						, new Object[]{type, time});
+			} else {
+				return dao.findByHql("from Report where type=? and locate(?, time)>0 and userId=?"
+						, new Object[]{type, time, userId});
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -140,7 +176,7 @@ public class ServiceImpl implements IService {
 		 * 如果是回复类型，则添加回复Notice
 		 * 如果不是回复类型，则更新Notice
 		 */
-		if (notice == null || Conf.notice_回复.equals(type)) {
+		if (notice == null || Notice.notice_回复.equals(type)) {
 			notice = new Notice();
 			notice.setRef(ref);
 			notice.setUserId(userId);
@@ -191,7 +227,6 @@ public class ServiceImpl implements IService {
 	@Override
 	public int loadNoticeCount(String userId) {
 		try {
-			System.out.println(userId);
 			List<BigInteger> li = dao.findBySql("select count(*) from notice_tb"
 					+ " where locate(?, targetIds)>0 and (readIds is null or locate(?, readIds)=0)"
 					, new Object[]{userId, userId});
@@ -235,23 +270,21 @@ public class ServiceImpl implements IService {
 	
 	@Override
 	public void readNotice(int ref, String userId, String type) {
-		/*try {
-			Notice notice = dao.findOneByHql("from Notice where ref=?", new Object[]{ref});
-			if(notice.getReadIds()==null || "".equals(notice.getReadIds())
-					|| notice.getReadIds().contains(userId) == false) {
-				notice.setReadIds(notice.getReadIds() + "," + userId);
-				dao.updateEntity(notice);
-			}
-		} catch (Exception e) {
-			//e.printStackTrace();
-			System.out.println("read notice exception but never mind.");
-		}*/
 		try {
-			System.out.println(userId + " read notice " + ref);
-			dao.updateBySql("update notice_tb set readIds=concat(ifnull(readIds, ''),',',?)"
-					+ " where ref=? and (readIds is NULL or locate(?, readIds)<1)"
-					+ " and locate(?, targetIds)>0 and type=?"
-					, new Object[]{userId, ref, userId, userId, type});
+			System.out.println("notice read " + ref + "," + userId + "," + type);
+			if (ref == -1) {
+				//for Task
+				dao.updateBySql("update notice_tb set readIds=concat(ifnull(readIds, ''),',',?)"
+						+ " where (readIds is NULL or locate(?, readIds)<1)"
+						+ " and locate(?, targetIds)>0 and type=?"
+						, new Object[]{userId, userId, userId, type});
+			} else {
+				//else
+				dao.updateBySql("update notice_tb set readIds=concat(ifnull(readIds, ''),',',?)"
+						+ " where ref=? and (readIds is NULL or locate(?, readIds)<1)"
+						+ " and locate(?, targetIds)>0 and type=?"
+						, new Object[]{userId, ref, userId, userId, type});
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -301,15 +334,233 @@ public class ServiceImpl implements IService {
 	}
 	
 	@Override
-	public List<String> loadHistoryColors() {
+	public List<String> loadHistoryColors(String userId) {
 		try {
-			List<String> li = dao.findBySql("select concat(time,'=',(locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0))"
-					+ " from report_tb");
+			//String choicesStateSql = "(locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0)";
+			String choicesStateSql = "if((locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0),if((select (count(ptb.state)>0) from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'),1,2),0)";
+			//select concat(time,'=',if((locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0),(select (count(ptb.state)>0)+1 from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'),0)) from report_tb rtb where userId='a11';
+			List<String> li;
+			if (userId == null) {
+				li = dao.findBySql("select concat(time,'=',"+choicesStateSql+")"
+						+ " from report_tb rtb");
+			} else {
+				li = dao.findBySql("select concat(time,'=',"+choicesStateSql+")"
+						+ " from report_tb rtb where userId=?", new Object[]{userId});
+			}
+			System.out.println(Arrays.toString(li.toArray()));
 			return li;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public String loadTypeStates(String date, String userId) {
+		date = date.substring(0, 10);
+		try {
+			//String choicesStateSql = "(locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0)";
+			String choicesStateSql = "if((locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0),if((select (count(ptb.state)>0) from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'),1,2),0)";
+			List<Object[]> li;
+			if (userId == null) {
+				li = dao.findBySql("select type, "+choicesStateSql+" from report_tb rtb where time=?"
+						, new Object[]{date});
+			} else {
+				li = dao.findBySql("select type, "+choicesStateSql+" from report_tb rtb where time=? and userId=?"
+						, new Object[]{date, userId});
+			}
+			String typeStates = "";
+			for (int i = 0; i < li.size(); i++) {
+				typeStates += li.get(i)[0] + "=" + li.get(i)[1]+";";
+			}
+			System.out.println("[" + date + "]" + typeStates);
+			return typeStates;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public int saveTask(String title, String content, String targetIds, int impt) {
+		Task task = new Task();
+		task.setUserId(user.getUserId());
+		task.setTime(Tool.time());
+		task.setContent(content);
+		task.setTitle(title);
+		task.setTargetIds(targetIds);
+		task.setImpt(impt);
+		task.setScope(user.getScope());
+		try {
+			return (Integer) dao.saveEntity(task);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
+	@Override
+	public Task loadLatestTask() {
+		try {
+			return dao.findOneByHql("from Task order by sid desc");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Task> loadTasks(int from_id, int len) {
+		try {
+			return dao.findByHql("from Task order by sid desc", from_id, len);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public List<User> loadReportRelativedUsers() {
+		try {
+			RelativeHelper rh = new RelativeHelper(dao, this);
+			String userIds = rh.getReportCheckableUserIds(user.getUnit());
+			System.out.println(user.getUnit() + ":" + userIds);
+			if (userIds!=null) {
+				if (userIds.startsWith(",")) {
+					userIds = userIds.substring(1);
+				}
+				String uids[] = userIds.split(",");
+				StringBuilder hql = new StringBuilder("from User where userId=?");
+				for (int i = 1; i < uids.length; i++) {
+					hql.append(" or userId=?");
+				}
+				return dao.findByHql(hql.toString(), uids);
+			}
+			//return dao.findByHql("from User where rank<=?", new Object[]{rank});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean firstUpdateAndNoticeProblem(int sid, int risk
+			, String measure, String expire, String functionary) {
+		
+		Problem p = loadProblem(sid);
+		p.setSid(sid);
+		p.setRisk(risk);
+		p.setUserId(user.getUserId());
+		p.setMeasure(measure);
+		p.setExpire(expire);
+		p.setFunctionary(functionary);
+		p.setTime(Tool.time());
+		p.setState(Problem.STATE_DEALING);
+		
+		RelativeHelper rh = new RelativeHelper(dao, this);
+		
+		try {
+			p.setTargetIds(rh.getProblemNoticeUserIds(user.getRank(), user.getUnit()));
+			dao.updateEntity(p);
+			//推送
+			saveNotice(user.getUserId(), p.getRef(), Notice.TYPE_PROBLEM
+					, p.getTargetIds() + "," + p.getFunctionary()
+					, "", "", Notice.important_important);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public Problem loadProblem(int ref, int whichItem) {
+		try {
+			return dao.findOneByHql("from Problem where ref=? and whichItem=?"
+					, new Object[]{ref, whichItem});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Override
+	public Problem loadProblem(int sid) {
+		try {
+			Problem p = dao.findOneByHql("from Problem where sid=?"
+					, new Object[]{sid});
+			readNotice(p.getSid(), user.getUserId(), Notice.TYPE_PROBLEM);
+			
+			RelativeHelper rh = new RelativeHelper(dao, this);
+			//注入用户名字
+			p.setAcceptedUserName(rh.getUserNamesByUserIds(p.getAcceptedIds()));
+			p.setAcceptingUserName(rh.getUserNamesByUserIds(p.getTargetIds()));
+			p.setFunctionaryName(rh.getUserNamesByUserIds(p.getFunctionary()));
+			
+			return p;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@Override
+	public List<Problem> loadProblemsByRef(int ref) {
+		try {
+			List<Problem> li = dao.findByHql("from Problem where ref=?"
+					, new Object[]{ref});
+			return li;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Problem> createProblems(int ref, String choices) {
+		try {
+			List<Problem> li = new ArrayList<Problem>();
+			for (int i = 0; i < choices.length(); i++) {
+				char c = choices.charAt(i);
+				if (c != '1') {
+					Problem p = new Problem();
+					p.setRef(ref);
+					p.setUserId(user.getUserId());
+					p.setTime(Tool.time());
+					p.setChoices(choices);
+					p.setWhichItem(i);
+					p.setState(Problem.STATE_INITIAL);
+					dao.saveEntity(p);
+					li.add(p);
+				}
+			}
+			return li;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateProblemFiled(int sid, String field, String value) {
+		try {
+			dao.updateBySql("update problem_tb set "+field+"=? where sid=?"
+					, new Object[]{value, sid});
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public List<Problem> loadMyProblemList() {
+		try {
+			return dao.findByHql("from Problem where (userId=? or locate(?, targetIds)>0) and state='dealing'"
+					, new Object[]{user.getUserId(), user.getUserId()});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }

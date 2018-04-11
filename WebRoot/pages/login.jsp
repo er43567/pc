@@ -19,17 +19,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 	
-    <header class="aui-bar aui-bar-nav" id="header" style="padding-top: 20px; position: fixed;">
+    <!-- <header class="aui-bar aui-bar-nav" id="header" style="padding-top: 20px; position: fixed;">
         <div class="aui-title">登录</div>
         <div class="aui-pull-right">
             <a class="aui-btn aui-iconfont aui-icon-refresh" href=""></a>
         </div>
     </header>
-    <div style="margin-top: 40px;"></div>
+    <div style="margin-top: 28px;"></div> -->
     
-    <div class="aui-text-center" id="header-logo">
-        <img src="../image/login_logo.png" />
-    </div>
     <div style="margin-top: 45px;"></div>
     <div class="aui-content-padded aui-margin-b-15">
     	${request.result=='success'?"":request.result}
@@ -58,18 +55,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <p><div class="aui-btn aui-btn-info aui-btn-block aui-btn-sm" onclick="cmdLogin();">登录</div></p>
         <p><div class="aui-btn aui-btn-block aui-btn-sm" onclick="openWin('forget_win');">忘记密码</div></p>
     </div>
-    <div style="text-align: center;margin-top: 30px;">
+    <div style="text-align: center;margin-top: 4rem;">
     	<div><img src="img/gongan.png" width="40%" style="margin-top: 10px"></div>
-    	<!-- <div><img src="img/gajzjxt.png" width="80%" style="margin-top: 10px"></div> -->
-    	<div style="font-family: Microsoft YaHei;color: #03a9f4;font-size: 42px;margin-top: 10px;" >
-    		<b>公安局质检系统</b>
-    	</div>
     </div>
-    
-    <div class="aui-text-center aui-font-size-14" style="position:fixed; bottom:10px; width:100%;">
-        <%-- <a href="#" class="aui-text-info" onclick="openWin('regist_win');">萍乡</a>
-        <span class="aui-text-info">&nbsp;|&nbsp;</span>
-        <a href="#" class="aui-text-info" onclick="openWin('about_win');">公安</a> --%>
+    <div style="position: fixed;bottom:0px;left:5.2rem;">
+    	<div style="font-size:0.7rem;color:grey;float: right;line-height: 1.3rem">
+	    	<img src="img/ic_launcher.png" style="width: 1.2rem;height:1.2rem;margin-bottom:-0.35rem" />
+	    	&nbsp;安源公安局▪治安监管
+    	</div>
     </div>
 </body>
 <%-- <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script> --%>
@@ -144,11 +137,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         });
     }
     android.cleanAppCache();
-   /*  
+    /*  
     var isWebView = false;
     function onFinished(v) {
     	isWebView = true;
     }
-     */
+    */
 </script>
 </html>

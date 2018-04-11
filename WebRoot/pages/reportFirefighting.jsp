@@ -288,7 +288,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            </li>
 	            <li class="aui-list-item">
 	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-	                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+	                    <div id="noticeButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
 	                    	onclick="noticeView()">通知目标人员查看</div>
 	                </div>
 	            </li>
@@ -366,7 +366,13 @@ for(var i=0;i<lists.length;i++) {
 	}
 }
 
+var saving = false;
 function saveReport() {
+	//防止一直点
+	if(saving){android.show("正在努力创建中，请君稍候...");return;}
+	saving = true;
+	saveButton.innerText = "创建表单中...";
+	
 	var the_choices = "";
 	for(var i=0;i<lists.length;i++) {
 		var tmp = lists[i].getElementsByTagName("input");
@@ -398,6 +404,9 @@ function saveReport() {
 			"report.targets": escape(userChoosed),
 			"report.time": datetime.innerText
 		}, success:function(r) {
+			saving = false;
+			saveButton.innerText = "创建表单";
+			
 			if(r['result'] == 'success' || !isNaN(r['result'])) {
 				if(saves) {
 					thisReport.value = r['result'];
@@ -426,6 +435,7 @@ function getItemRems() {
 }
 
 var noticeId = null;
+var noticing = false;
 function noticeView() {
 	if(thisReport.value=="") {
 		alert("请先保存表单");
@@ -436,6 +446,10 @@ function noticeView() {
 			return;
 		}
 	}
+	
+	if(!noticing) {noticing = true;noticeButton.innerText="通知中...";
+	 android.show("正在通知，请君稍候...");return;}
+	
 	ajax({
 		type: "post",
 		url: "AjaxAction!noticeOthers",
@@ -449,11 +463,14 @@ function noticeView() {
 			"notice.content": escape(""),
 			"notice.impts": "",
 		}, success:function(r) {
+			noticing = false;
 			if(r['result'] == "fail") {
 				alert("通知失败！");
+				noticeButton.innerText = "通知目标人员查看";
 			} else {
 				noticeId = r['result'];
 				alert('已通知给' + userChoosed.split("##")[0]);
+				noticeButton.innerText = "已通知";
 			}
 		}
 	});

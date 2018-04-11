@@ -34,13 +34,10 @@ function startUrl(url, attrs, param) {
 	//android.startWebViewActivity(s, "hideTitleBar nongesture");
 }
 
-function startReportHistory(url) {
+function startReportHistory(url, userId) {
 	if(isWebView) {
 		var s_url = "http://" +  location.host + "/unclezhang/pages/" + url;
-		android.updateHistoryColorDatas();
-		setTimeout(function() {
-			android.startReportActivity(s_url);
-		}, 25);
+		android.startHistoryReportsActivity(s_url + "?userId=" + userId, userId);
 	} else {
 		startUrl(url);
 	}
@@ -104,6 +101,22 @@ function ajaxPost(url, callback, params) {
         data : params,
         success : callback
 	});
+}
+/**
+ * main.jsp页面中
+ */
+function ajaxPostWithEval(url, callback, params) {
+	ajax({
+        type : 'POST',
+        url : url,
+        data : params,
+        success : function(r) {
+        	var res = eval("("+r+")");
+        	var result = res['result'];
+        	callback(res, result);
+        }
+	});
+	
 }
 
 function ajax(options) {

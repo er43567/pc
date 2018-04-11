@@ -8,6 +8,23 @@ public class Notice {
 	public static final int READ = 1;
 	public static final int UNREAD = 0;
 	
+	public static final String TYPE_ExplosiveReport = "ExplosiveReport";
+	public static final String TYPE_FirefightingReport = "FirefightingReport";
+	public static final String TYPE_HotalReport = "HotalReport";
+	public static final String TYPE_REPLY = "Reply";
+	public static final String TYPE_TASK = "Task";
+	public static final String TYPE_PROBLEM = "Problem";
+	
+	public static final int important_normal= 0;
+	public static final int important_important = 1;
+	public static final int important_urgent = 2;
+	
+	public String notice_民爆 = Report.report_民爆;
+	public String notice_消防 = Report.report_消防;
+	public String notice_旅馆 = Report.report_旅馆;
+	public static String notice_回复 = "Reply";
+	public static String notice_任务 = "Task";
+	
 	int sid,ref,impts;
 	String userId,type,targetIds,title,content,readIds,readNames,time;
 	

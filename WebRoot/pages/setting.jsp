@@ -15,6 +15,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" href="../css/mui.min.css">
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/aui-dialog.js"></script>
+<script type="text/javascript" src="js/ext.js"></script>
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <style>
 html,body {
 }
@@ -155,6 +157,9 @@ html,body {
 }
 
 .head-img {
+	position: absolute;
+	bottom: 10px;
+	right: 40px;
 	width: 40px;
 	height: 40px;
 }
@@ -203,6 +208,8 @@ html,body {
 /*问题反馈在setting页面单独的css==end*/
 </style>
 <link rel="stylesheet" type="text/css" href="../css/feedback.css" />
+<script type="text/javascript">
+ </script>
 </head>
 <body>
 	<!--单页面结束-->
@@ -221,15 +228,15 @@ html,body {
 							<a id="head" class="mui-navigate-right" href="#picture">
 								头像 
 								<span class="mui-pull-right head"> 
-									<img class="head-img mui-action-preview" id="head-img1" src="${session.user.headImg }" />
+									<img class="head-img mui-action-preview" id="head-img" src="${session.user.headImg}" />
 								</span>
 							</a>
 							<!-- <input id="file_input" accept="image/gif,image/jpeg,image/png,image/*" type="file"/>
 							<div id="file_input_div" onclick="file_input.click()">阿斯蒂芬</div> -->
 						</li>
 						<input id="file_input" accept="image/gif,image/jpeg,image/png,image/*" 
-							type="file" class="input-file" onchange="alert(this)"/>
-		        		<div id="file_input_div"></div>
+							type="file" class="input-file"/>
+		        		<!-- <div id="file_input_div"></div> -->
 					</ul>
 
 					<ul class="mui-table-view">
@@ -239,10 +246,12 @@ html,body {
 								class="mui-pull-right">${session.user.name}</span></a></li>
 						<li class="mui-table-view-cell"><a>职位<span
 								class="mui-pull-right">${session.user.position}</span></a></li>
+						<li class="mui-table-view-cell"><a>所属<span
+								class="mui-pull-right">${session.user.scope}</span></a></li>
 					</ul>
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell" tapmode
-							onclick="openDialog('phone')"><a>手机号<span
+							onclick="openDialog('phone')"><a>手机号<span id="phoneNum"
 								class="mui-pull-right">${session.user.phone}</span></a></li>
 						<li class="mui-table-view-cell" tapmode
 							onclick="openDialog('password')"><a>修改密码<span
@@ -283,7 +292,7 @@ html,body {
 	apiready = function() {
 		api.parseTapmode();
 	}
-	var dialog = new auiDialog();
+	var dialog;
 	function openDialog(type) {
 		switch (type) {
 		//头像
@@ -292,6 +301,7 @@ html,body {
 			break;
 		//修改手机
 		case "phone":
+			dialog = new auiDialog();
 			dialog.prompt({
 				title : "修改手机号",
 				text : '请输入手机号',
@@ -299,36 +309,61 @@ html,body {
 				buttons : [ '取消', '确定' ]
 			}, function(ret) {
 				if (ret.buttonIndex == 2) {
-					dialog.alert({
-						title : "提示",
-						msg : "修改成功！",
-						buttons : [ '确定' ]
-					});
+					ajaxPost("AjaxAction!updatePhone", function(r) {
+						var res = eval("("+r+")");
+						var result = res['result'];
+						if("fail"==result) {
+							alert(result);
+						} else {
+							phoneNum.innerText = ret.text;
+						}
+					}, {"user.phone":ret.text});
 				}
 			});
 			break;
 		//修改密码
 		case "password":
+			var oldPsw = "";
+			var newPsw = "";
+			dialog = new auiDialog();
 			dialog.prompt({
-				title : "修改密码",
-				text : '请输入新密码',
+				title : "旧密码",
+				text : '请输入旧密码',
 				type : 'number',
 				buttons : [ '取消', '确定' ]
 			}, function(ret) {
 				if (ret.buttonIndex == 2) {
-					dialog.alert({
-						title : "提示",
-						msg : "修改成功！",
-						buttons : [ '确定' ]
+					oldPsw = ret.text;
+					dialog = new auiDialog();
+					dialog.prompt({
+						title : "新密码",
+						text : '请输入新密码',
+						type : 'number',
+						buttons : [ '取消', '确定' ]
+					}, function(ret1) {
+						if (ret1.buttonIndex == 2) {
+							newPsw = ret1.text;
+							ajaxPost("AjaxAction!updatePsw", function(r) {
+								var res = eval("("+r+")");
+								var result = res['result'];
+								if("success"!=result) {
+									alert(result);
+								} else {
+									alert("修改成功！");
+									
+								}
+							}, {"user.psw":oldPsw,"newPsw":newPsw});
+						}
 					});
 				}
-			})
+			});
 			break;
 		case "clear":
 			android.cleanAppCache();
 			break;
 		//注销
 		case "logout":
+			dialog = new auiDialog();
 			dialog.alert({
 				title : "提示",
 				msg : '是否注销账号',
@@ -369,6 +404,33 @@ html,body {
 		//关闭actionsheet
 		mui('#' + parent.id).popover('toggle');
 		info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
-	})
+	});
+</script>
+
+<script src="js/dist/lrz.bundle.js"></script>
+<script type="text/javascript">
+document.getElementById('file_input').addEventListener('change', function () {
+	var that = this;
+	lrz(that.files[0], {
+	    width: 200
+	}).then(function (rst) {
+		var img = document.getElementById('head-img');
+	    $.ajax({
+	        type : 'POST',
+	        url : 'AjaxAction!updateHeadImg',
+	        data : {"user.headImg":rst.base64},  
+	        success : function(r) {
+	        	var res=eval("("+r+")");
+	        	var result = res['result'];
+	        	if("fail" == result) {
+		    		alert("头像更新失败");
+		    	} else {
+		    	    img.src = rst.base64;
+		    	}
+	        }
+	    });
+	    return rst;
+	});
+});
 </script>
 </html>

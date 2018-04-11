@@ -18,6 +18,7 @@ public abstract class MyActionSupport {
 	protected IService service;
 	public void setService(IService service) {
 		this.service = service;
+		service.receiveSessionUser(getSessionUser());
 	}
 	
 	public void login(Loginable logger) {
@@ -55,4 +56,16 @@ public abstract class MyActionSupport {
 		this.result = result;
 	}
 	public abstract String getResult();
+	
+	
+	public interface ISessionUserReceivable {
+		/**
+		 * 给数据库语句 
+		 * 用于添加筛选条件  scope 以及 rank 字段
+		 * @param user
+		 */
+		public void receiveSessionUser(User user);
+	}
+	
 }
+

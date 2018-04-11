@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>旅馆行业质检表单</title>
+    <title>旅馆行业三查表单</title>
     
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
@@ -22,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
        <li class="aui-list-header">
-       	<div>旅馆行业质检表单 [创建于:${request.report.time.substring(0,10)}]</div>
+       	<div>旅馆行业三查表单 [创建于:${request.report.time.substring(0,10)}]</div>
        	<s:if test="#session.user.userId==#request.report.userId">
 	       	<div style="background-color: #03a9f4;padding:2px;color: white;"
 	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div>

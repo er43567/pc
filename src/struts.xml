@@ -37,6 +37,9 @@
 			<result name="FirefightingReportReceive">/pages/reportFirefightingReceive.jsp</result>
 			<result name="HotalReportReceive">/pages/reportHotalReceive.jsp</result>
 			
+			<result name="explosiveProblemList">/pages/explosiveProblemList.jsp</result>
+			<result name="explosiveProblem">/pages/explosiveProblem.jsp</result>
+			<result name="explosiveProblemReview">/pages/explosiveProblemReview.jsp</result>
 			<result name="emptyReport">/pages/emptyReport.jsp</result>
 		</action>
 	</package>
