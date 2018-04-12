@@ -4,6 +4,7 @@ import java.util.List;
 
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
+import cn.unclezhang.bean.Goods;
 import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Report;
@@ -155,6 +156,29 @@ public class PageAction extends MyActionSupport {
 		return "explosiveProblemList";
 	}
 	
+	Goods goods;
+	List<Goods> goodsList;
+	public Goods getGoods() {
+		return goods;
+	}
+	public void setGoods(Goods goods) {
+		this.goods = goods;
+	}
+	public List<Goods> getGoodsList() {
+		return goodsList;
+	}
+	public void setGoodsList(List<Goods> goodsList) {
+		this.goodsList = goodsList;
+	}
+	//get set
+	public String loadGoodsList() {
+		//1time userId
+		//2time userId
+		//3time userId
+		//4time userId
+		goodsList = service.loadAllGoods();
+		return "goodsList";
+	}
 	@Override
 	public String getResult() {
 		return result;

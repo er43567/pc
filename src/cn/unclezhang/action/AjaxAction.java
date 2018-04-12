@@ -10,6 +10,7 @@ import org.apache.struts2.json.annotations.JSON;
 
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
+import cn.unclezhang.bean.Goods;
 import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Reply;
@@ -474,6 +475,13 @@ public class AjaxAction extends MyActionSupport {
 			e.printStackTrace();
 			setResult("fail");
 		}
+		return aa;
+	}
+	//
+	Goods goods;
+	//get set
+	public String saveGoods() {
+		service.saveGoods(goods);
 		return aa;
 	}
 	

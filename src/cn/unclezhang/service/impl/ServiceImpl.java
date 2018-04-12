@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport.ISessionUserReceivable;
+import cn.unclezhang.bean.Goods;
 import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Reply;
@@ -557,6 +558,27 @@ public class ServiceImpl implements IService {
 		try {
 			return dao.findByHql("from Problem where (userId=? or locate(?, targetIds)>0) and state='dealing'"
 					, new Object[]{user.getUserId(), user.getUserId()});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public void saveGoods(Goods goods) {
+		//goods.setTime(Tool.time());
+		try {
+			dao.saveEntity(goods);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public List<Goods> loadAllGoods() {
+		try {
+			return dao.findByHql("from Goods order by time desc");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

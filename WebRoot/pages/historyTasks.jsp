@@ -48,94 +48,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		<div class="aui-pull-right">
 		</div>
-<<<<<<< HEAD
+
 	</header>
-		<section id='pullrefresh' class="aui-refresh-content" style="margin-top: 80px;">
-			<div class="aui-content">
-				<div id="demo">
-			        <div class="aui-card-list">
-			            <div class="aui-card-list-header">
-			                任务标题
-			            </div>
-			            <div class="aui-card-list-content-padded">
-			                任务内容。。。。
-			            </div>
-			            <div class="aui-card-list-footer">
-			                2018-01-26
-			            </div>
-			        </div>
-			        <div class="aui-card-list">
-			            <div class="aui-card-list-header">
-			                任务标题
-			            </div>
-			            <div class="aui-card-list-content-padded">
-			                任务内容。。。。
-			            </div>
-			            <div class="aui-card-list-footer">
-			                2018-01-26
-			            </div>
-			        </div>
-			        <div class="aui-card-list">
-			            <div class="aui-card-list-header">
-			                任务标题
-			            </div>
-			            <div class="aui-card-list-content-padded">
-			                任务内容。。。。
-			            </div>
-			            <div class="aui-card-list-footer">
-			                2018-01-26
-			            </div>
-			        </div>
-			        <div class="aui-card-list">
-			            <div class="aui-card-list-header">
-			                任务标题
-			            </div>
-			            <div class="aui-card-list-content-padded">
-			                任务内容。。。。
-			            </div>
-			            <div class="aui-card-list-footer">
-			                2018-01-26
-			            </div>
-			        </div>
-			        <div class="aui-card-list">
-			            <div class="aui-card-list-header">
-			                任务标题
-			            </div>
-			            <div class="aui-card-list-content-padded">
-			                任务内容。。。。
-			            </div>
-			            <div class="aui-card-list-footer">
-			                2018-01-26
-			            </div>
-			        </div>
-			        <div class="aui-card-list">
-			            <div class="aui-card-list-header">
-			                任务标题
-			            </div>
-			            <div class="aui-card-list-content-padded">
-			                任务内容。。。。
-			            </div>
-			            <div class="aui-card-list-footer">
-			                2018-01-26
-			            </div>
-			        </div>
-			        <div class="aui-card-list">
-			            <div class="aui-card-list-header">
-			                任务标题
-			            </div>
-			            <div class="aui-card-list-content-padded">
-			                任务内容。。。。
-			            </div>
-			            <div class="aui-card-list-footer">
-			                2018-01-26
-			            </div>
-			        </div>
-		        </div>
-	        </div>
-	    </section>
-	    <img id="float-btn" class="float-img" src="images/加号.png" width="50" height="50" onclick="startUrl('addTask.jsp',['notitle', 'refresh', 'gesture'])"/>
-=======
-	</header> -->
 	<div id="taskList" class="aui-content">
         <!-- <div class="aui-card-list">
             <div class="aui-card-list-header">
@@ -153,7 +67,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 	<img id="float-btn" class="float-img" src="images/加号.png" width="50" height="50" onclick="startUrl('addTask.jsp',['notitle', 'refresh', 'gesture'])"/>
 	 </s:if>
 	 <div id="loadMoreBtn" class="loadMoreBtn" onclick="loadMore()">加载更多</div>
->>>>>>> lrx-branch
+
 	</body>
 	
 	<script src="../script/api.js"></script>
@@ -161,10 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function onActivityResult(result) {
 		location.reload();
 	}
-<<<<<<< HEAD
-	function back(){
-		window.history.go(-1);
-=======
+
 	var nextPage = 1;
 	var hasNext = true;
 	function loadMore() {
@@ -221,7 +132,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			+"</div>"
 			+"</div>";
 		return itemHtml;
->>>>>>> lrx-branch
+
 	}
 	</script>
 </html>
