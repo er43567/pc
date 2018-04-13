@@ -179,6 +179,7 @@ public class DaoImpl implements IDao {
 	public void updateByHql(String hql) throws Exception {
 		updateByHql(hql, null);
 	}
+
 	public void updateBySql(String sql) throws Exception {
 		updateBySql(sql, null);
 	}

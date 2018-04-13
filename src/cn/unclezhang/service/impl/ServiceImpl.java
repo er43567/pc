@@ -3,17 +3,11 @@ package cn.unclezhang.service.impl;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
 import cn.lrxzl.lib.java.tool.Tool;
-import cn.lrxzl.ssh_base.support.MyActionSupport.ISessionUserReceivable;
 import cn.unclezhang.bean.Goods;
 import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Problem;
@@ -21,10 +15,8 @@ import cn.unclezhang.bean.Reply;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.Task;
 import cn.unclezhang.bean.User;
-import cn.unclezhang.conf.Conf;
 import cn.unclezhang.dao.IDao;
 import cn.unclezhang.relatives.RelativeHelper;
-import cn.unclezhang.relatives.Relatives;
 import cn.unclezhang.service.IService;
 
 public class ServiceImpl implements IService {
@@ -584,5 +576,17 @@ public class ServiceImpl implements IService {
 			return null;
 		}
 	}
+	@Override
+	public List<Goods> setAllGoods(Goods goods){
+		try {
+			return dao.updateBySql("update goods_db");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+ 	
 	
 }

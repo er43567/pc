@@ -91,4 +91,8 @@ public interface IService extends ISessionUserReceivable {
 
 	List<Goods> loadAllGoods();
 	
+	List<Goods> setAllGoods();
+
+	List<Goods> setAllGoods(Goods goods);
+	
 }

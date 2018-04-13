@@ -22,35 +22,41 @@ import cn.unclezhang.relatives.RelativeHelper;
 
 public class AjaxAction extends MyActionSupport {
 	int from_id, page, count_per_page = 10;
+
 	public void setPage(int page) {
 		this.page = page;
-		from_id = (page-1)*10;
+		from_id = (page - 1) * 10;
 	}
+
 	User user;
-	@JSON(serialize=false)
+
+	@JSON(serialize = false)
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	String url;
+
 	public String getUrl() {
 		return url;
 	}
+
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	@SuppressWarnings("unused")
 	public String login() {
-		/*if (isLogin()) {
-			System.out.println("already logined");
-			url = "main.jsp";
-			return aa;
-		}*/
+		/*
+		 * if (isLogin()) { System.out.println("already logined"); url =
+		 * "main.jsp"; return aa; }
+		 */
 		User tmp = service.findUserById(user.getUserId());
-		//System.out.println(tmp.getPsw() + "," + user.getPsw());
+		// System.out.println(tmp.getPsw() + "," + user.getPsw());
 		if (tmp == null) {
 			setResult("账号错误");
 			System.out.println("账号错误");
@@ -65,21 +71,26 @@ public class AjaxAction extends MyActionSupport {
 		url = "main.jsp";
 		return aa;
 	}
-	
+
 	String field, value;
+
 	public String getValue() {
 		return value;
 	}
+
 	public void setValue(String value) {
 		this.value = value;
 	}
+
 	public String getField() {
 		return field;
 	}
+
 	public void setField(String field) {
 		this.field = field;
 	}
-	/*===========首页===========*/
+
+	/* ===========首页=========== */
 	public String loadIndexDatas() {
 		if (!isLogin()) {
 			setResult("did not login");
@@ -87,7 +98,7 @@ public class AjaxAction extends MyActionSupport {
 		}
 		JSONObject jo = new JSONObject();
 		jo.put("reportCount", "0");
-		//service.loadReportCount();
+		// service.loadReportCount();
 		System.out.println(getSessionUserId());
 		int ncount = service.loadNoticeCount(getSessionUserId());
 		System.out.println("noticeCount:" + ncount);
@@ -95,8 +106,8 @@ public class AjaxAction extends MyActionSupport {
 		setResult(jo.toString());
 		return aa;
 	}
-	
-	/*===========用户设置页面===========*/
+
+	/* ===========用户设置页面=========== */
 	public String updateHeadImg() {
 		boolean bo = service.updateUserFiled(getSessionUserId(), "headImg", user.getHeadImg());
 		if (!bo) {
@@ -106,7 +117,7 @@ public class AjaxAction extends MyActionSupport {
 		}
 		return aa;
 	}
-	
+
 	public String updatePhone() {
 		boolean bo = service.updateUserFiled(getSessionUserId(), "phone", user.getPhone());
 		if (!bo) {
@@ -116,17 +127,21 @@ public class AjaxAction extends MyActionSupport {
 		}
 		return aa;
 	}
+
 	String newPsw;
+
 	public String getNewPsw() {
 		return newPsw;
 	}
+
 	public void setNewPsw(String newPsw) {
 		this.newPsw = newPsw;
 	}
+
 	public String updatePsw() {
 		if (getSessionUser().getPsw().equals(user.getPsw())) {
 			boolean bo = service.updateUserFiled(getSessionUserId(), "psw", newPsw);
-			if(!bo) {
+			if (!bo) {
 				setResult("修改密码失败");
 			}
 		} else {
@@ -134,92 +149,98 @@ public class AjaxAction extends MyActionSupport {
 		}
 		return aa;
 	}
-	/*===========表单提交页面===========*/
+
+	/* ===========表单提交页面=========== */
 	String items;
 	Report report;
+
 	public String getItems() {
 		return items;
 	}
+
 	public void setItems(String items) {
 		this.items = items;
 	}
+
 	public Report getReport() {
 		return report;
 	}
+
 	public void setReport(Report report) {
 		this.report = report;
 	}
+
 	public String saveReport() {
 		if (notLogin()) {
 			setResult("未登录");
 			return aa;
 		}
-		if (report.getChoices()==null) {
+		if (report.getChoices() == null) {
 			System.out.println("choices = null");
 			return aa;
 		}
 		Report tmpr = null;
-		if((tmpr = service.findTypeReportByDate(report.getType(), report.getTime())) != null) {
+		if ((tmpr = service.findTypeReportByDate(report.getType(), report.getTime())) != null) {
 			setResult("reported");
 			report = tmpr;
 			return aa;
 		}
-		int sid = service.saveReport(getSessionUserId(), Tool.unescape(report.getType()+"")
-				, Tool.unescape(report.getTargets()+""), Tool.unescape(items+"").split(",")
-				, report.getChoices(), Tool.unescape(report.getRem()+""), report.getTime()
-				, getSessionUser().getScope());
-		
-		//创建所有问题
+		int sid = service.saveReport(getSessionUserId(), Tool.unescape(report.getType() + ""),
+				Tool.unescape(report.getTargets() + ""), Tool.unescape(items + "").split(","), report.getChoices(),
+				Tool.unescape(report.getRem() + ""), report.getTime(), getSessionUser().getScope());
+
+		// 创建所有问题
 		service.createProblems(report.getSid(), report.getChoices());
-		
+
 		setResult(sid + "");
 		return aa;
 	}
-	
+
 	public String updateReport() {
-		
-		service.updateReport(report.getSid()
-				, getSessionUserId()
-				, Tool.unescape(report.getTargets()+"")
-				, Tool.unescape(items+"").split(",")
-				, report.getChoices()
-				, Tool.unescape(report.getRem()+""));
-		
+
+		service.updateReport(report.getSid(), getSessionUserId(), Tool.unescape(report.getTargets() + ""),
+				Tool.unescape(items + "").split(","), report.getChoices(), Tool.unescape(report.getRem() + ""));
+
 		return aa;
 	}
-	
+
 	/**
 	 * ============Notice===========
 	 */
 	Notice notice;
+
 	public Notice getNotice() {
 		return notice;
 	}
+
 	public void setNotice(Notice notice) {
 		this.notice = notice;
 	}
+
 	public String noticeOthers() {
 		if (notLogin()) {
 			setResult("未登录");
 			return aa;
 		}
-		//System.out.println(Tool.unescape(notice.getTargetIds()));
-		String noticeSid = service.saveNotice(getSessionUserId(), notice.getRef()
-				, Tool.unescape(notice.getType()), Tool.unescape(notice.getTargetIds())
-				, Tool.unescape(notice.getTitle()), Tool.unescape(notice.getContent())
-				, notice.getImpts());
-		
+		// System.out.println(Tool.unescape(notice.getTargetIds()));
+		String noticeSid = service.saveNotice(getSessionUserId(), notice.getRef(), Tool.unescape(notice.getType()),
+				Tool.unescape(notice.getTargetIds()), Tool.unescape(notice.getTitle()),
+				Tool.unescape(notice.getContent()), notice.getImpts());
+
 		setResult(noticeSid);
 		return aa;
 	}
-	
+
 	List<Notice> notices;
+
 	public List<Notice> getNotices() {
 		return notices;
 	}
+
 	public void setNotices(List<Notice> notices) {
 		this.notices = notices;
 	}
+
 	public String loadNoticeList() {
 		if (page == 1) {
 			notices = service.loadNoticeList(getSessionUserId(), 0, 0, Conf.not_read_yet);
@@ -230,14 +251,15 @@ public class AjaxAction extends MyActionSupport {
 		}
 		return aa;
 	}
-	
+
 	public String loadNoticeList1() {
-		if(page == 1) {
+		if (page == 1) {
 			session.removeAttribute(getSessionUserId() + "_oldsize");
 		}
 		Object o = session.getAttribute(getSessionUserId() + "_oldsize");
 		int oldSize = 0;
-		if(o != null) oldSize = (Integer) o;
+		if (o != null)
+			oldSize = (Integer) o;
 		List<Notice> li = new ArrayList<Notice>();
 		List<Notice> li1 = null;
 		boolean hasNotReads = false;
@@ -252,56 +274,61 @@ public class AjaxAction extends MyActionSupport {
 				hasNotReads = true;
 			}
 		} else {
-			if(hasNotReads)
-				setPage(page-1);
+			if (hasNotReads)
+				setPage(page - 1);
 			List<Notice> li2 = service.loadNoticeList(getSessionUserId(), from_id, count_per_page, Conf.has_read);
 			li.addAll(li2);
 		}
-		
-		/*if (li1 == null || li1.size() == 0) {
-			if(hasNotReads)
-				setPage(page-1);
-			List<Notice> li2 = service.loadNoticeList(getSessionUserId(), from_id, count_per_page, Conf.has_read);
-			li.addAll(li2);
-		}*/
-		
+
+		/*
+		 * if (li1 == null || li1.size() == 0) { if(hasNotReads)
+		 * setPage(page-1); List<Notice> li2 =
+		 * service.loadNoticeList(getSessionUserId(), from_id, count_per_page,
+		 * Conf.has_read); li.addAll(li2); }
+		 */
+
 		notices = li;
 		return aa;
 	}
+
 	/**
 	 * ===========Reply===========
 	 */
 	Reply reply;
 	List<Reply> replies;
+
 	public Reply getReply() {
 		return reply;
 	}
+
 	public void setReply(Reply reply) {
 		this.reply = reply;
 	}
+
 	public List<Reply> getReplies() {
 		return replies;
 	}
+
 	public void setReplies(List<Reply> replies) {
 		this.replies = replies;
 	}
+
 	public String submitReply() {
 		if (!isLogin()) {
 			setResult("did not login");
 			return aa;
 		}
-		boolean bo = service.saveReply(reply.getRef(), getSessionUserId()
-				, reply.getTargetId(), Tool.unescape(reply.getContent()));
+		boolean bo = service.saveReply(reply.getRef(), getSessionUserId(), reply.getTargetId(),
+				Tool.unescape(reply.getContent()));
 		if (!bo) {
 			setResult("fail");
 		} else {
-			service.saveNotice(getSessionUserId(), reply.getRef()
-					, Notice.notice_回复, reply.getTargetId(), "回复", Tool.unescape(reply.getContent())
-					, Notice.important_normal);
+			service.saveNotice(getSessionUserId(), reply.getRef(), Notice.notice_回复, reply.getTargetId(), "回复",
+					Tool.unescape(reply.getContent()), Notice.important_normal);
 		}
 		return aa;
 	}
-	
+
 	public String loadReplyList() {
 		replies = service.loadReplies(reply.getRef(), getSessionUserId(), 0, 0);
 		if (replies == null) {
@@ -311,9 +338,9 @@ public class AjaxAction extends MyActionSupport {
 		}
 		return aa;
 	}
-	
+
 	/**
-	 * API of History Page For Android 
+	 * API of History Page For Android
 	 */
 	public String loadHistoryColors() {
 		List<String> li = service.loadHistoryColors(report.getUserId());
@@ -324,13 +351,17 @@ public class AjaxAction extends MyActionSupport {
 		setResult(Arrays.toString(li.toArray()));
 		return aa;
 	}
+
 	String date;
+
 	public String getDate() {
 		return date;
 	}
+
 	public void setDate(String date) {
 		this.date = date;
 	}
+
 	public String loadTypeStatesByDate() {
 		String rst = service.loadTypeStates(date, report.getUserId());
 		if (rst == null) {
@@ -339,17 +370,20 @@ public class AjaxAction extends MyActionSupport {
 		setResult(rst);
 		return aa;
 	}
-	
+
 	/**
 	 * History Report
 	 */
 	List<User> users;
+
 	public List<User> getUsers() {
 		return users;
 	}
+
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
 	public String loadMyReportCheckableUsers() {
 		users = service.loadReportRelativedUsers();
 		for (int i = 0; i < users.size(); i++) {
@@ -358,49 +392,50 @@ public class AjaxAction extends MyActionSupport {
 		}
 		return aa;
 	}
-	
+
 	/**
 	 * Task
 	 */
 	Task task;
 	List<Task> tasks;
 	String headImg;
+
 	public Task getTask() {
 		return task;
 	}
+
 	public void setTask(Task task) {
 		this.task = task;
 	}
+
 	public List<Task> getTasks() {
 		return tasks;
 	}
+
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
 	}
+
 	public String getHeadImg() {
 		return headImg;
 	}
+
 	public String publishTask() {
 		if (!isLogin()) {
 			setResult("fail");
 			return aa;
 		}
-		int taskSid = service.saveTask(Tool.unescape(task.getTitle()), Tool.unescape(task.getContent())
-				, Tool.unescape(task.getTargetIds()), task.getImpt());
+		int taskSid = service.saveTask(Tool.unescape(task.getTitle()), Tool.unescape(task.getContent()),
+				Tool.unescape(task.getTargetIds()), task.getImpt());
 		if (taskSid == -1) {
 			setResult("fail");
 		} else {
-			service.saveNotice(getSessionUserId()
-					, taskSid
-					, Notice.notice_任务
-					, Tool.unescape(task.getTargetIds())
-					, Tool.unescape(task.getTitle())
-					, Tool.unescape(task.getContent())
-					, task.getImpt());
+			service.saveNotice(getSessionUserId(), taskSid, Notice.notice_任务, Tool.unescape(task.getTargetIds()),
+					Tool.unescape(task.getTitle()), Tool.unescape(task.getContent()), task.getImpt());
 		}
 		return aa;
 	}
-	
+
 	public String loadLatestTask() {
 		task = service.loadLatestTask();
 		if (task == null) {
@@ -410,51 +445,52 @@ public class AjaxAction extends MyActionSupport {
 		service.readNotice(task.getSid(), getSessionUserId(), Notice.notice_任务);
 		return aa;
 	}
-	
+
 	public String loadTasks() {
 		tasks = service.loadTasks(from_id, count_per_page);
 		service.readNotice(-1, getSessionUserId(), Notice.notice_任务);
 		return aa;
 	}
+
 	/**
 	 * 流程管控 processCtrl problem
 	 */
 	Problem problem;
+
 	public Problem getProblem() {
 		return problem;
 	}
+
 	public void setProblem(Problem problem) {
 		this.problem = problem;
 	}
+
 	public String firstUpdateAndNoticeProblem() {
-		boolean bo = service.firstUpdateAndNoticeProblem(problem.getSid()
-				, problem.getRisk()
-				, Tool.unescape(problem.getMeasure())
-				, Tool.unescape(problem.getExpire())
-				, problem.getFunctionary());
+		boolean bo = service.firstUpdateAndNoticeProblem(problem.getSid(), problem.getRisk(),
+				Tool.unescape(problem.getMeasure()), Tool.unescape(problem.getExpire()), problem.getFunctionary());
 		if (bo == false) {
 			setResult("fail");
 		}
 		return aa;
 	}
-	
+
 	public String addProblemResult() {
-		boolean bo = service.updateProblemFiled(problem.getSid() , "results", Tool.unescape(problem.getResults()));
+		boolean bo = service.updateProblemFiled(problem.getSid(), "results", Tool.unescape(problem.getResults()));
 		if (!bo) {
 			setResult("fail");
 		}
 		return aa;
 	}
-	
+
 	public String confirmProblem() {
 		problem = service.loadProblem(problem.getSid());
 		try {
 			if (problem.getTargetIds().contains(getSessionUserId())) {
-				
-				service.updateProblemFiled(problem.getSid(), "acceptedIds"
-						, problem.getAcceptedIds()+","+getSessionUserId());
-				problem.setAcceptedIds(problem.getAcceptedIds()+","+getSessionUserId());
-				//检测问题是否完成
+
+				service.updateProblemFiled(problem.getSid(), "acceptedIds",
+						problem.getAcceptedIds() + "," + getSessionUserId());
+				problem.setAcceptedIds(problem.getAcceptedIds() + "," + getSessionUserId());
+				// 检测问题是否完成
 				String targetIds = problem.getTargetIds();
 				if (targetIds != null) {
 					String acceptedIds[] = problem.getAcceptedIds().split(",");
@@ -470,23 +506,25 @@ public class AjaxAction extends MyActionSupport {
 					}
 				}
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			setResult("fail");
 		}
 		return aa;
 	}
+
 	//
 	Goods goods;
-	//get set
+
+	// get set
 	public String saveGoods() {
 		service.saveGoods(goods);
 		return aa;
 	}
-	
+
 	public String getResult() {
 		return result;
 	}
-	
+
 }
