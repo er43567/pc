@@ -13,9 +13,12 @@ import org.apache.struts2.json.annotations.JSON;
 
 
 
+
+
 import cn.lrxzl.file.FileUtil;
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
+import cn.unclezhang.bean.Goods;
 import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Reply;
@@ -524,6 +527,39 @@ public class AjaxAction extends MyActionSupport {
 			setResult("fail");
 		}
 		return aa;
+	}
+	
+	/**
+	 * 闭环管理
+	 * loopCtrl
+	 */
+	Goods goods;
+	public Goods getGoods() {
+		return goods;
+	}
+	public void setGoods(Goods goods) {
+		this.goods = goods;
+	}
+	
+	public String saveGoods() {
+		int n = service.saveGoods(getSessionUser().getUserId(), goods);
+		if (n == -1) {
+			setResult("fail");
+		}
+		return aa;
+	}
+	
+	List<Goods> goodsList;
+	public List<Goods> getGoodsList() {
+		return goodsList;
+	}
+	public void setGoodsList(List<Goods> goodsList) {
+		this.goodsList = goodsList;
+	}
+	public String loadGoodsList() {
+		goodsList = service.loadGoodsList(from_id, count_per_page);
+		System.out.println();
+		return "goodsList";
 	}
 	
 	public String getResult() {

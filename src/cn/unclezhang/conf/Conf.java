@@ -54,6 +54,7 @@ public class Conf {
 		case 1:
 			return explosive_rank1_contents;
 		case 2:
+		case 3:
 			return explosive_rank2_contents;
 		}
 		return null;

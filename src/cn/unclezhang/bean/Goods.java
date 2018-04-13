@@ -4,7 +4,7 @@ public class Goods {
 	//id,unitDefined 核定药量，yesterdayGained昨日领取，todayGained今日领取，todayUse 今日使用，todayStock今日回库，todayStock进入实际存库量
 	int sid, unitDefined, yesterdayGained, todayGained, todayUse, todayReturn, todayStock;
 	//type 类型：炸药，雷管
-	String type, unit, userId, targetIds, acceptedIds;
+	String type, unit, userId, targetIds, acceptedIds, time;
 	
 	public int getSid() {
 		return sid;
@@ -78,4 +78,11 @@ public class Goods {
 	public void setAcceptedIds(String acceptedIds) {
 		this.acceptedIds = acceptedIds;
 	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	
 }

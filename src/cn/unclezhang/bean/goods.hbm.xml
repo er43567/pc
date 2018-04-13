@@ -3,7 +3,7 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping  >
-	<class name="cn.unclezhang.bean.Goods" table="good_tb" lazy="false">
+	<class name="cn.unclezhang.bean.Goods" table="goods_tb" lazy="false">
 		<id name="sid">
 			<generator class="identity"></generator> 
 		</id>

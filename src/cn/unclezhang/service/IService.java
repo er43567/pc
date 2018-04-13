@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.lrxzl.ssh_base.support.MyActionSupport.ISessionUserReceivable;
+import cn.unclezhang.bean.Goods;
 import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Reply;
@@ -87,5 +88,8 @@ public interface IService extends ISessionUserReceivable {
 	
 	List<Problem> loadMyProblemList();
 
-	
+	int saveGoods(String userId, Goods goods);
+
+	List<Goods> loadGoodsList(int from_id, int len);
+
 }

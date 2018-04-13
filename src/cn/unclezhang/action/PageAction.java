@@ -6,6 +6,7 @@ import java.util.List;
 
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
+import cn.unclezhang.bean.Goods;
 import cn.unclezhang.bean.Notice;
 import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Report;

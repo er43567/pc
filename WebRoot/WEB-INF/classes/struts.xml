@@ -52,6 +52,7 @@
 			<result name="theReportHistory">/pages/theReportHistory.jsp</result>
 			<result name="theReportReceive">/pages/theReportReceive.jsp</result>
 			
+			<result name="goodsList">/pages/goodsList.jsp</result>
 		</action>
 	</package>
 	

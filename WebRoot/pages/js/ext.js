@@ -111,7 +111,6 @@ function ajaxPostWithEval(url, callback, params) {
         	callback(res, result);
         }
 	});
-	
 }
 
 function ajax(options) {

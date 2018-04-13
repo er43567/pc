@@ -99,6 +99,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div id='noticeCount' class="aui-badge" style="position: static;display: none;">99+</div>
                 </div>
             </li>
+            <li class="aui-list-item" onclick="startUrl('loopCtrlList.jsp');">
+                <div class="aui-list-item-label-icon">
+                    <img alt="" src="img/消息.png" style="width: 20px;">
+                </div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    <div class="aui-list-item-title">闭环管理</div>
+                    <div id='noticeCount' class="aui-badge" style="position: static;display: none;">99+</div>
+                </div>
+            </li>
+            
            <!--  <li class="aui-list-item">
                 <div class="aui-list-item-label-icon">
                     <i class="aui-iconfont aui-icon-image aui-text-info"></i>
