@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           		<div class="aui-list-item-inner">
 					<div style="width: 100%;">
 						<input id="file_input" accept="image/gif,image/jpeg,image/png,image/*" 
-							style="width: 100%;position: absolute;opacity:0;z-index: 1" type="file"/>
+							style="width: 100%;height:2.2rem;position: absolute;opacity:0;z-index: 1" type="file"/>
 						<div class="aui-btn aui-btn-block" style="z-index: 0">选择图片</div>
 					</div>
                   	<div id="file_input_div" class="file_input_div"></div>
