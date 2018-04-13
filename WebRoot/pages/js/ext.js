@@ -18,11 +18,6 @@ function startUrl(url) {
 function startUrl(url, attrs, param) {
 	var s = "http://" +  location.host + "/unclezhang/pages/" + url;
 	if(isWebView) {
-		/*if(attrs == null || (''+attrs)=='undefined') {
-			android.startActivity(s, null, param);
-		} else {
-			android.startActivity(s, attrs, param);
-		}*/
 		if(attrs!=null)
 			attrs.push('refresh');
 		else
@@ -34,10 +29,10 @@ function startUrl(url, attrs, param) {
 	//android.startWebViewActivity(s, "hideTitleBar nongesture");
 }
 
-function startReportHistory(url, userId) {
+function startReportHistory(url, unitName) {
 	if(isWebView) {
 		var s_url = "http://" +  location.host + "/unclezhang/pages/" + url;
-		android.startHistoryReportsActivity(s_url + "?userId=" + userId, userId);
+		android.startHistoryReportsActivity(s_url, unitName);
 	} else {
 		startUrl(url);
 	}

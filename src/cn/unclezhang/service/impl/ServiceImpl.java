@@ -86,17 +86,22 @@ public class ServiceImpl implements IService {
 
 	@Override
 	public int saveReport(String userId, String type, String targets
-			, String[] items, String choices, String rem, String time, String scope) {
+			, String[] items, String choices, String rem, String time, String scope, String imgs) {
 		try {
-			RelativeHelper rh = new RelativeHelper(dao, this);
-			targets = rh.getReportNoticeUserIds(user.getUnit());
-			
 			Report r = new Report();
 			r.setUserId(userId);
 			r.setType(type);
+			r.setUnit(user.getUnit());
 			r.setChoices(choices);
 			r.setItems(items);
+			
+			r.setImgs(imgs);
+			
+			RelativeHelper rh = new RelativeHelper(dao, this);
+			targets = rh.getReportNoticeUserIds(user.getUnit());
+			
 			r.setTargets(targets);
+			
 			r.setRem(rem);
 			r.setTime(time);
 			r.setScope(scope);
@@ -144,17 +149,14 @@ public class ServiceImpl implements IService {
 	}
 
 	@Override
-	public List<Report> loadReportsByDate(String type, String time, String userId) {
+	public List<Report> loadUnitDateReports(String type, String time, String unitName) {
 		time = time.length()>10?time.substring(0,10):time;
 		try {
 			System.out.println(time);
-			if (userId == null) {
-				return dao.findByHql("from Report where type=? and locate(?, time)>0"
-						, new Object[]{type, time});
-			} else {
-				return dao.findByHql("from Report where type=? and locate(?, time)>0 and userId=?"
-						, new Object[]{type, time, userId});
-			}
+			
+			return dao.findByHql("from Report where type=? and locate(?, time)>0 and unit=?"
+					, new Object[]{type, time, unitName});
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -268,6 +270,7 @@ public class ServiceImpl implements IService {
 		return null;
 	}
 	
+	
 	@Override
 	public void readNotice(int ref, String userId, String type) {
 		try {
@@ -334,19 +337,11 @@ public class ServiceImpl implements IService {
 	}
 	
 	@Override
-	public List<String> loadHistoryColors(String userId) {
+	public List<String> loadHistoryColors(String unit) {
 		try {
-			//String choicesStateSql = "(locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0)";
 			String choicesStateSql = "if((locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0),if((select (count(ptb.state)>0) from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'),1,2),0)";
-			//select concat(time,'=',if((locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0),(select (count(ptb.state)>0)+1 from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'),0)) from report_tb rtb where userId='a11';
-			List<String> li;
-			if (userId == null) {
-				li = dao.findBySql("select concat(time,'=',"+choicesStateSql+")"
-						+ " from report_tb rtb");
-			} else {
-				li = dao.findBySql("select concat(time,'=',"+choicesStateSql+")"
-						+ " from report_tb rtb where userId=?", new Object[]{userId});
-			}
+			List<String> li = dao.findBySql("select concat(time,'=',"+choicesStateSql+")"
+					+ " from report_tb rtb where unit=?", new Object[]{unit});
 			System.out.println(Arrays.toString(li.toArray()));
 			return li;
 		} catch (Exception e) {
@@ -356,18 +351,18 @@ public class ServiceImpl implements IService {
 	}
 	
 	@Override
-	public String loadTypeStates(String date, String userId) {
+	public String loadTypeStates(String date, String unitName) {
 		date = date.substring(0, 10);
 		try {
 			//String choicesStateSql = "(locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0)";
 			String choicesStateSql = "if((locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0),if((select (count(ptb.state)>0) from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'),1,2),0)";
 			List<Object[]> li;
-			if (userId == null) {
+			if (unitName == null) {
 				li = dao.findBySql("select type, "+choicesStateSql+" from report_tb rtb where time=?"
 						, new Object[]{date});
 			} else {
-				li = dao.findBySql("select type, "+choicesStateSql+" from report_tb rtb where time=? and userId=?"
-						, new Object[]{date, userId});
+				li = dao.findBySql("select type, "+choicesStateSql+" from report_tb rtb where time=? and unit=?"
+						, new Object[]{date, unitName});
 			}
 			String typeStates = "";
 			for (int i = 0; i < li.size(); i++) {
@@ -458,9 +453,9 @@ public class ServiceImpl implements IService {
 		p.setState(Problem.STATE_DEALING);
 		
 		RelativeHelper rh = new RelativeHelper(dao, this);
-		
+		//rh.getProblemNoticeUserIds(user.getRank(), user.getUnit())
 		try {
-			p.setTargetIds(rh.getProblemNoticeUserIds(user.getRank(), user.getUnit()));
+			p.setTargetIds(rh.getProblemTargetIdsByRisk(risk, user.getUnit()));
 			dao.updateEntity(p);
 			//推送
 			saveNotice(user.getUserId(), p.getRef(), Notice.TYPE_PROBLEM
@@ -504,10 +499,10 @@ public class ServiceImpl implements IService {
 		return null;
 	}
 	@Override
-	public List<Problem> loadProblemsByRef(int ref) {
+	public List<Problem> loadProblemsByRef(int ref, String userId) {
 		try {
-			List<Problem> li = dao.findByHql("from Problem where ref=?"
-					, new Object[]{ref});
+			List<Problem> li = dao.findByHql("from Problem where ref=? and userId=? order by sid desc"
+					, new Object[]{ref, userId});
 			return li;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -516,7 +511,7 @@ public class ServiceImpl implements IService {
 	}
 
 	@Override
-	public List<Problem> createProblems(int ref, String choices) {
+	public List<Problem> createProblems(int ref, String choices, String items[]) {
 		try {
 			List<Problem> li = new ArrayList<Problem>();
 			for (int i = 0; i < choices.length(); i++) {
@@ -528,6 +523,7 @@ public class ServiceImpl implements IService {
 					p.setTime(Tool.time());
 					p.setChoices(choices);
 					p.setWhichItem(i);
+					p.setRem(items[i]);//,,,,, 从第1个开始
 					p.setState(Problem.STATE_INITIAL);
 					dao.saveEntity(p);
 					li.add(p);
@@ -555,12 +551,12 @@ public class ServiceImpl implements IService {
 	@Override
 	public List<Problem> loadMyProblemList() {
 		try {
-			return dao.findByHql("from Problem where (userId=? or locate(?, targetIds)>0) and state='dealing'"
+			return dao.findByHql("from Problem where (userId=? or locate(?, targetIds)>0) and state!='finished' order by sid desc"
 					, new Object[]{user.getUserId(), user.getUserId()});
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 }

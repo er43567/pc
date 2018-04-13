@@ -32,19 +32,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="aui-content aui-margin-b-15">
         <ul class="aui-list aui-form-list">
             <li class="aui-list-header" style="color: gray;">
-            	${request.problem.title}
-	            <s:if test="#request.problem.state=='dealing'">
-				处理中
-				</s:if>
-				<s:elseif test="#request.problem.state=='finished'">
-				完成
-				</s:elseif>
+            	${request.problem.rem}
 				<div>
 					${request.problem.time}
 					<span onclick="startList()" class="aui-label-info" style="padding:2px">查看原表单</span>
 					<script type="text/javascript">
 					function startList() {
-						startUrl("PageAction!loadReportPage?report.sid=${request.problem.ref}");
+						startUrl("PageAction!loadReportReceivePage?report.sid=${request.problem.ref}");
 					}
 					</script>
 				 </div>
@@ -108,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         	待验收
                     </div>
                     <div id="accepting-div" class="aui-list-item-input">
-                    ${request.problem.acceptingUserName==null?"":request.problem.acceptingUserName.substring(1)}
+                    ${request.problem.acceptingUserName}
                     </div>
                 </div>
             </li>
@@ -119,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         	已验收
                     </div>
                     <div id="accepted-div" class="aui-list-item-input">
-                    ${request.problem.acceptedUserName==null?"":request.problem.acceptedUserName.substring(1)}
+                    ${request.problem.acceptedUserName}
                     </div>
                 </div>
             </li>

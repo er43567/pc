@@ -15,6 +15,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" href="css/ext.css" />
     
     <script type="text/javascript" src="js/ext.js" ></script>
+    <style type="text/css">
+    .message {
+	    font-size: 16px;
+	    margin-top: 20px;
+	    color: #666;
+	    text-align: center;
+	}
+    </style>
    <%--  <script type="text/javascript">
 	var interceptStete = true;
 	setInterval(function(){
