@@ -1,13 +1,19 @@
+
 package cn.unclezhang.action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.json.JSONObject;
 
+import org.apache.http.util.TextUtils;
 import org.apache.struts2.json.annotations.JSON;
 
+
+
+import cn.lrxzl.file.FileUtil;
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
 import cn.unclezhang.bean.Goods;
@@ -162,6 +168,7 @@ public class AjaxAction extends MyActionSupport {
 		this.items = items;
 	}
 
+	
 	public Report getReport() {
 		return report;
 	}
@@ -179,18 +186,58 @@ public class AjaxAction extends MyActionSupport {
 			System.out.println("choices = null");
 			return aa;
 		}
-		Report tmpr = null;
-		if ((tmpr = service.findTypeReportByDate(report.getType(), report.getTime())) != null) {
+
+		List<Report> tmprs = null;
+		if((tmprs = service.loadUnitDateReports(report.getType(), report.getTime(), getSessionUser().getUnit())) != null) {
+			if (tmprs.size() != 0) {
+				setResult("reported");
+				return aa;
+			}
+			//report = tmprs.get(0);
+		}
+		/*if((tmpr = service.findTypeReportByDate(report.getType(), report.getTime())) != null) {
+
 			setResult("reported");
 			report = tmpr;
 			return aa;
+		}*/
+		
+		/**
+		 * 处理图片
+		 */
+		String tmp_htext = new String();
+		String upload_path = request.getServletContext().getRealPath("/pages/upload");
+		String files[] = report.getFiles();
+		if (files != null) {
+			System.out.println("files len " + files.length);
+			System.out.println(Arrays.toString(files));
+		} else {
+			System.out.println("files null");
 		}
-		int sid = service.saveReport(getSessionUserId(), Tool.unescape(report.getType() + ""),
-				Tool.unescape(report.getTargets() + ""), Tool.unescape(items + "").split(","), report.getChoices(),
-				Tool.unescape(report.getRem() + ""), report.getTime(), getSessionUser().getScope());
+		for(int i=0;i<files.length;i++) {
+			if(TextUtils.isEmpty(files[i]))continue;
+			//files[i] = Tool.(files[i]);
+			System.out.println(files[i]);
+			String NewFileName = new Date().getTime()+""+((char)((Math.random()*26)+97))+((char)((Math.random()*26)+97));
+			System.out.println(files[i].substring(0,100));
+			String Ext = FileUtil.getImageExtFromBase64(files[i]);
+			FileUtil.generateImage(files[i],upload_path,NewFileName,Ext);
+			tmp_htext += NewFileName+"."+Ext+(i<files.length-1?";":"");
+		}
 
-		// 创建所有问题
-		service.createProblems(report.getSid(), report.getChoices());
+		
+		report.setImgs(tmp_htext);
+		int sid = service.saveReport(getSessionUserId(), Tool.unescape(report.getType()+"")
+				, Tool.unescape(report.getTargets()+""), Tool.unescape(items+"").split(",")
+				, report.getChoices(), Tool.unescape(report.getRem()+""), report.getTime()
+				, getSessionUser().getScope(), report.getImgs());
+		
+		//创建所有问题
+		if (items.startsWith(",")) {
+			items = items.substring(1);
+		}
+		service.createProblems(sid, report.getChoices(), Tool.unescape(items+"").split(","));
+		
 
 		setResult(sid + "");
 		return aa;
@@ -343,7 +390,7 @@ public class AjaxAction extends MyActionSupport {
 	 * API of History Page For Android
 	 */
 	public String loadHistoryColors() {
-		List<String> li = service.loadHistoryColors(report.getUserId());
+		List<String> li = service.loadHistoryColors(report.getUnit());
 		if (li == null || li.size() == 0) {
 			setResult("fail");
 			return aa;
@@ -363,7 +410,7 @@ public class AjaxAction extends MyActionSupport {
 	}
 
 	public String loadTypeStatesByDate() {
-		String rst = service.loadTypeStates(date, report.getUserId());
+		String rst = service.loadTypeStates(date, report.getUnit());
 		if (rst == null) {
 			setResult("fail");
 		}
@@ -374,7 +421,8 @@ public class AjaxAction extends MyActionSupport {
 	/**
 	 * History Report
 	 */
-	List<User> users;
+
+	/*List<User> users;
 
 	public List<User> getUsers() {
 		return users;
@@ -382,14 +430,22 @@ public class AjaxAction extends MyActionSupport {
 
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}*/
+	List<String> units;
+	public List<String> getUnits() {
+		return units;
 	}
 
-	public String loadMyReportCheckableUsers() {
-		users = service.loadReportRelativedUsers();
+	public void setUnits(List<String> units) {
+		this.units = units;
+	}
+	public String loadMyRelativesUnits() {
+		/*users = service.loadReportRelativedUsers();
 		for (int i = 0; i < users.size(); i++) {
 			User u = users.get(i);
 			u.setHeadImg(null);
-		}
+		}*/
+		units = Arrays.asList(RelativeHelper.getRelativeUnits(getSessionUser().getUnit()));
 		return aa;
 	}
 
@@ -506,7 +562,6 @@ public class AjaxAction extends MyActionSupport {
 					}
 				}
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			setResult("fail");

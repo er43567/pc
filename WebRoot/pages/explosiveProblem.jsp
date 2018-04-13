@@ -18,7 +18,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     function showDetails() {
         android.showListDialog(["A：由民爆单位安全负责人、法人代表确认整改到位后验收。"
                                 ,"B：由辖区派出所监管民警、分管副大队长、所长确认整改到位后验收。"
-                                ,"C：由分局监管民警、分管副大队长、大队长、局领导确认整改到位后验收。"]
+                                ,"C：由分局监管民警、分管副大队长、大队长、局领导确认整改到位后验收。"
+                                ,"D：预留"]
         , "onChoose");
     }
     function onChoose(n) {
@@ -29,17 +30,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
     <div class="aui-content aui-margin-b-15">
         <ul class="aui-list aui-form-list">
-            <li class="aui-list-header" style="color: gray;"></li>
+            <li class="aui-list-header" style="color: gray;">
+            ${request.problem.rem}
+            </li>
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         	风险等级
                     </div>
-                    <div class="aui-list-item-input">
+                    <div class="aui-list-item-input" style="">
                         <label><input id="risk1" class="aui-radio" type="radio" name="risk" checked onclick="riskChecked(1)"> A</label>
                         <label><input id="risk2" class="aui-radio" type="radio" name="risk" onclick="riskChecked(2)"> B</label>
                         <label><input id="risk3" class="aui-radio" type="radio" name="risk" onclick="riskChecked(3)"> C</label>
-                        <!-- <label><input class="aui-radio" type="radio" name="danger"> D</label> -->
+                        <label><input id="risk4" class="aui-radio" type="radio" name="risk" disabled="disabled" onclick="riskChecked(4)"> D</label>
                     </div>
                     <!-- <div onclick="showDetails()" class="aui-btn-info" 
                     	style="padding-left:3px;margin: 3px;width: 3rem">详细</div> -->
@@ -84,29 +87,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
             </li>
-            
-            <li class="aui-list-item" id="itemCreate">
-                <div class="aui-list-item-inner" style="height: 3rem">
-                    <div class="aui-list-item-input">
-                        <div class="aui-btn aui-btn-block aui-btn-sm"
-                        	onclick="updateAndNoticeProblem()">创建表单并推送</div>
-                    </div>
-                </div>
-            </li>
+            <s:if test="#session.user.userId==#request.problem.userId">
+	            <li class="aui-list-item" id="itemCreate">
+	                <div class="aui-list-item-inner" style="height: 3rem">
+	                    <div class="aui-list-item-input">
+	                        <div class="aui-btn aui-btn-block aui-btn-sm"
+	                        	onclick="updateAndNoticeProblem()">创建表单并推送</div>
+	                    </div>
+	                </div>
+	            </li>
+            </s:if>
         </ul>
     </div>
 </body>
 <script type="text/javascript">
 var risk = 1;
-function riskChecked(rsk) {
-	risk = rsk;
+function riskChecked(n) {
+	if(n!=4)
+		risk = n;
 }
 
 function updateAndNoticeProblem() {
 	android.showProgressDialog("请稍候...");
 	ajaxPostWithEval("AjaxAction!firstUpdateAndNoticeProblem", function(res, result) {
 		if(result!='fail') {
-			itemCreate.style.display='none';
+			itemCreate.style.display = 'none';
 			android.show("成功");
 			location.reload();
 		}

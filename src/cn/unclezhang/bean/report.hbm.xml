@@ -9,12 +9,14 @@
 		</id>
 		<property name="state"></property>
 		<property name="type"></property>
+		<property name="unit"></property>
 		<property name="userId"></property>
 		<property name="scope"></property>
 		<property name="choices"></property>
 		<property name="choices0"></property>
 		<property name="rem"></property>
 		<property name="time"></property>
+		<property name="imgs"></property>
 		<property name="item1"></property>
 		<property name="item2"></property>
 		<property name="item3"></property>

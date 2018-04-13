@@ -12,10 +12,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     
     <script type="text/javascript" src="js/ext.js" ></script>
-    
+    <style>
+    .aui-list-item{height:5rem}
+    </style>
 </head>
 <body>
 	
+	<ul class="aui-list aui-collapse aui-border">
+        	<li class="aui-list-item" style="display: block;">
+                <div class="aui-media-list-item-inner">
+                    <div class="aui-list-item-media">
+                        <img src="../image/demo1.png">
+                    </div>
+                    <div class="aui-list-item-inner aui-padded-t-10 aui-padded-b-10" style="display: block;">
+                        <div class="aui-list-item-text">
+                            <div class="aui-list-item-title">带有媒体的列表二</div>
+                            <div class="aui-list-item-right">08:00</div>
+                        </div>
+                        <div class="aui-list-item-text">
+                            <div class="aui-ellipsis-2">这里是内容区域，新版中的列表布局可以很轻松的帮助开发者完成常见列表样式。</div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+	<%-- 
     <div class="aui-content aui-margin-b-1-5">
         <ul id="items" class="aui-list aui-list-in">
             <li class="aui-list-header" style="position:fixed;left: 0px;top: 0px;width: 100%;z-index: 99">
@@ -33,10 +54,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
             </li>
             </s:iterator>
-            <!---->
         </ul>
     </div>
-    
+     --%>
 </body>
 
 <script>

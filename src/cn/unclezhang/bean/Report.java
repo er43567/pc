@@ -1,12 +1,16 @@
 package cn.unclezhang.bean;
 
+import java.util.List;
+
+import org.apache.struts2.json.annotations.JSON;
+
 public class Report {
 	public static final String report_民爆 = "ExplosiveReport";
 	public static final String report_消防 = "FirefightingReport";
 	public static final String report_旅馆 = "HotalReport";
 	
 	int sid, state;
-	String type, userId, scope, targets, choices, rem, time;
+	String type, userId, unit, scope, targets, choices, rem, time, imgs;
 	String choices0;
 	String item1,item2,item3,item4,item5,
 		item6,item7,item8,item9,item10,
@@ -18,7 +22,7 @@ public class Report {
 	String phone;
 	String wholeName;
 	public String[] getItems() {
-		return new String[]{
+		return new String[] {
 				item1,item2,item3,item4,item5,
 				item6,item7,item8,item9,item10,
 				item11,item12,item13,item14,item15,
@@ -97,6 +101,12 @@ public class Report {
 	}
 	public void setSid(int sid) {
 		this.sid = sid;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	public int getState() {
 		return state;
@@ -321,5 +331,76 @@ public class Report {
 				+ time + ", noticed=" + noticed + ", userName=" + userName
 				+ ", phone=" + phone + ", wholeName=" + wholeName + "]";
 	}
+	
+	String files[] = new String[9];
+	@JSON(serialize=false)
+	public String[] getFiles() {
+		return files;
+	}
+	public void setFiles(String[] files) {
+		this.files = files;
+	}
+	public void setFile0(String file0) {
+		this.files[0] = file0;
+	}
+	public void setFile1(String file1) {
+		this.files[1] = file1;
+	}
+	public void setFile2(String file2) {
+		this.files[2] = file2;
+	}
+	public void setFile3(String file3) {
+		this.files[3] = file3;
+	}
+	public void setFile4(String file4) {
+		this.files[4] = file4;
+	}
+	public void setFile5(String file5) {
+		this.files[5] = file5;
+	}
+	public void setFile6(String file6) {
+		this.files[6] = file6;
+	}
+	public void setFile7(String file7) {
+		this.files[7] = file7;
+	}
+	public void setFile8(String file8) {
+		this.files[8] = file8;
+	}
+	public String getImgs() {
+		return imgs;
+	}
+	public void setImgs(String imgs) {
+		this.imgs = imgs;
+	}
+	
+	public static String toChineseTypeName(String type) {
+		if (type==null) {
+			return "";
+		}
+		if (type.equals(report_民爆)) {
+			return "民爆库房";
+		} else if (type.equals(report_消防)) {
+			return "三级消防";
+		} else if (type.equals(report_旅馆)) {
+			return "旅馆行业";
+		}
+		return "";
+	}
+	
+	public String getChineseType() {
+		return toChineseTypeName(type);
+	}
+	
+	
+	List<String> reportItems;
+	@JSON(serialize=false)
+	public List<String> getReportItems() {
+		return reportItems;
+	}
+	public void setReportItems(List<String> reportItems) {
+		this.reportItems = reportItems;
+	}
+	
 	
 }

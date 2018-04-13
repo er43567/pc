@@ -9,38 +9,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>民爆库房三查表单</title>
-    
+    <title>新建：民爆库房三查表单</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
     
     <script type="text/javascript" src="js/ext.js" ></script>
-    <%-- <style type="text/css">
-    .aui-list-item-text {
-    	font-size: 16px !important;
-    	color: black !important;
+    <script type="text/javascript">
+    window.onload = function() {
+    	datetime.innerText = getNowFormatDate();
     }
-    label {font-size: 18px !important;
-    	color: gray !important;}
-    </style> --%>
+    </script>
 </head>
-<body>
+<body >
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
-       <li class="aui-list-header">
-       	<div>民爆行业质检表单 - ${request.report.time}</div>
-       	<s:if test="#session.user.userId==#request.report.userId">
-	       	<div style="background-color: #03a9f4;padding:2px;color: white;"
-	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div>
-       	</s:if>
-       	<s:else>
-       		<a href="javascript:android.callUp('${request.report.phone}')"
-       			 style="background-color: #03a9f4;padding:2px;color: white;"
-       			 >联系${request.report.userName}</a>
-       	</s:else>
+       <li class="aui-list-header">民爆库房三查表单 
+       	<div id='datetime' data-options='{"type":"date"}'
+        	style="background-color: #03a9f4;padding:2px;color: white;"
+       		 onclick="loadDateTimePickerLib();"></div>
        </li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
-            <li class="aui-list-item">
+           <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
                    	储存库每班是否有3名以上值班守护人员值守，是否能熟练操作报警和监控器材；值守人员每小时是否携带自卫器具对库区及周围进行巡视；
@@ -215,76 +204,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                </div>
            </li>
-            
+           
 	    	<li class="aui-list-item">
           		<div class="aui-list-item-inner">
                   	<div class="aui-list-item-input">
-                      	<div class="aui-list-item-text" style="font-size: 16px">
-                      	备注：${request.report.rem}
+                      	<div class="aui-list-item-text">
+                      	备注
                 		</div>
+                    	<textarea placeholder="这里输入备注信息" id="rem" name="rem"
+                    		 class="aui-border-gray padding-5px" >${request.report.rem}</textarea>
                		</div>
              	</div>
           	</li>
-          	
-          	<s:if test="#request.reports.size()>1">
-          		有 ${request.reports.size()}
-          	</s:if>
-          	
-          	<s:if test="#request.report.choices.replaceAll('1','')!=''">
-	          	<li class="aui-list-item">
+          	<li class="aui-list-item">
+                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+                    <div id="saveButton" class="aui-btn aui-btn-primary aui-btn-block aui-btn-height-50px"
+                    	onclick="saveReport()">创建表单</div>
+                </div>
+            </li>
+            <%-- <div id="showAfterSaved" style="display: none;">
+	            <li class="aui-list-item">
 	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-	                    <div id="processCtrlBtn" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
-	                    	onclick="beginProcessControl()">流程管控</div>
+	                    <div id="chooseUserBtn" style="overflow: scroll;text-align: center;"
+	                    	 onclick="chooseUser()">
+	                    	选择目标人员<s:property value="#request.report.targets.split('##')[0].substring(1)"/>
+	                    </div>
 	                </div>
 	            </li>
-            </s:if>
-            <%-- <li class="aui-list-item">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="chooseUserBtn" class="aui-btn" style="overflow: scroll;text-align: center;width: 100%;">
-                    	目标人员 ${request.report.targets.split("##")[0]}
-				    </div>
-				    <select id="sel" multiple="multiple" class="hiddenSel" onchange="onActivityResult(this)">
-					   	<s:iterator value="#request.users" id='item' status="st">
-					   		<option value="${item.userId}">${item.name}</option>
-					   	</s:iterator>
-				    </select>
-				    <style type="text/css">
-				    .hiddenSel{width:100%;height:100%;position:absolute;
-				    border:1px solid;left:-8px;top:-1px;opacity:0;}
-				    </style>
-                </div>
-            </li> --%>
-            <!-- <li class="aui-list-item">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
-                    	onclick="noticeView()">通知目标人员查看</div>
-                </div>
-            </li> -->
-             <%-- <li class="aui-list-item">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
-                    	onclick="reply('${request.report.sid}','${request.report.userId}')">展开回复</div>
-                </div>
-             </li> --%>
+	            <li class="aui-list-item">
+	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+	                    <div id="noticeButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+	                    	onclick="noticeView()">通知目标人员查看</div>
+	                </div>
+	            </li>
+            </div> --%>
 		</ul>
-		<%@include file="reply.jsp"%>
-		<input type="hidden" id="thisReport" value="${request.report.sid}"/>
+	</div>
+	<input type="hidden" id="thisReport" value="${request.report.sid}"/>
 </body>
-<%-- <script type="text/javascript">
-var interceptStete = true;
-setInterval(function(){
-	var b = document.documentElement.scrollTop == 0 ? document.body.scrollTop : document.documentElement.scrollTop;
-    if (b == 0) {
-    	android.interceptScroll(false);
-    	interceptStete = false;
-    } else {
-    	if(interceptStete == false) {
-    		android.interceptScroll(true);
-    		interceptStete = true;
-    	}
-    }
-}, 100);
-</script> --%>
 <script type="text/javascript" src="../script/api.js" ></script>
 <script type="text/javascript" src="../script/aui-dialog.js" ></script>
 <script type="text/javascript">
@@ -325,59 +282,18 @@ setInterval(function(){
     	startUrl('PageAction!loadUserChoosePage', ['notitle','gesture','norefresh'], userChoosed);
     };
     
-    initUserChoosed();
-    function initUserChoosed() {
-    	var users = userChoosed.split(",");
-    	for(var i = 0 ;i<sel.options.length;i++) {
-    		if(users.contains(sel.options[i].value)) {
-    			sel.options[i].selected = "selected";
-    		}
-    	}
-    }
-    var times = 0;
-    function onActivityResult(sel_obj) {
-    	if(++times%2==1) {initUserChoosed();}
-    	var result_ids = '';
-    	var result_names = '';
-    	for(var i = 0 ;i<sel_obj.options.length;i++) {
-    	    if(sel_obj.options[i].selected) {
-	    	    result_ids += "," + sel_obj.options[i].value;
-	    	    result_names += "," + sel_obj.options[i].text;
-    	    }
-    	}
-    	var result = result_names + "##" + result_ids;
+    function onActivityResult(result) {
     	userChoosed = result;
-    	chooseUserBtn.innerText = "已选择：" + result_names.substring(1).replaceAll(",","，");
+    	var ss = userChoosed.split("##")[0].substring(1);
+    	chooseUserBtn.innerText = "已选择：" + ss.replaceAll(",", "，");
     }
     
     String.prototype.replaceAll = function(s1,s2){
    		return this.replace(new RegExp(s1,"gm"),s2);
    	};
     
-    /* function submitReport1() {
-    	ajax({
-    		type:"post",
-    		url:"AjaxAction!submitReport",
-    		dataType:"json",
-    		data:{
-    			items: itemArray,
-    			type:"",
-    			rem:escape(rem.value),
-    			targets:escape(userChoosed.split("##")[1])
-    		},
-    		success:function(r) {
-    			if(r['result'] == 'success') {
-    				submited();
-    			}
-    		}
-    	});
-    } */
-    
-    function submited() {//at=create,at=history,at=view
-    	//pushButton.innerText = "已通知";
-		//pushButton.setAttribute("onclick", "alert('今日表单已推送过，请勿重复推送')");
-    }
 </script>
+
 <script type="text/javascript">
 //初始化每个input的id, name属性
 var lists = document.getElementsByClassName("aui-text-right");
@@ -389,43 +305,72 @@ for(var i=0;i<lists.length;i++) {
 		if(tmp[j].id==tmp[j].value) {
 			tmp[j].setAttribute("checked", "checked");
 		}*/
-		//edits
-		tmp[j].disabled = "disabled";
 		if(j+1==tmp[j].value) {
 			tmp[j].setAttribute("checked", "checked");
-			tmp[j].removeAttribute("disabled");
 		}
 	}
 }
 
+
+var saving = false;
 function saveReport() {
 	var the_choices = getChoices();
+	var notChoosed = the_choices.indexOf("0");
+	if(notChoosed>=0) {
+		android.show("第" + (notChoosed+1) + "项未选择");
+		return;
+	}
+	//防止一直点
+	if(saving){android.show("正在努力创建中，请君稍候...");return;}
+	saving = true;
+	saveButton.innerText = "创建表单中...";
+	
+	
+	var saves = true;
 	var url0 = "AjaxAction!saveReport";
-	if(thisReport.value!=null && thisReport.value != '') {
+	if(thisReport.value != null && thisReport.value != '') {
 		url0 = "AjaxAction!updateReport";
+		saves = false;
 	}
 	ajax({
 		type: "post",
 		url: url0,
 		dataType: "json",
-		data: {
+		data:{
 			"report.sid": thisReport.value,
 			"report.choices": the_choices,
 			"items": getItemRems(),
 			"report.type": "ExplosiveReport",
 			"report.rem": escape(rem.value),
-			"report.targets": escape(userChoosed)
+			"report.targets": escape(userChoosed),
+			"report.time": datetime.innerText
 		}, success:function(r) {
+			saving = false;
+			saveButton.innerText = "创建表单";
+			
 			if(r['result'] == 'success' || !isNaN(r['result'])) {
-				thisReport.value = r['result'];
-				saveButton.innerText = "已保存,表单ID:" + thisReport.value;
-				alert('保存成功');
+				if(saves) {
+					thisReport.value = r['result'];
+				}
+				//saveButton.innerText = "已保存,表单ID:" + thisReport.value;
+				//saveButton.innerText = "保存更改";
+				//alert('保存成功，可以选择推送对象了');
+				//saveButton.parentNode.parentNode.style.display = "none";
+				saveButton.innerText = "流程管控";
+				saveButton.onclick = function() {
+					beginProcessControl(thisReport.value, the_choices);
+				};
+				alert("创建成功，已将表单推送给相关人员");
+				//showAfterSaved.style.display = "block";
+			} else if('reported'==r['result']) {
+				alert(datetime.innerText + '日已发布此类型表单，请更换日期');
 			} else {
-				alert(r['result']);
+				android.show(r['result']);
 			}
 		}
 	});
 }
+
 
 function getItemRems() {
 	var textInfos = document.getElementsByClassName("aui-text-info");
@@ -436,6 +381,8 @@ function getItemRems() {
 	return rems;
 }
 
+var noticeId = null;
+var noticing = false;
 function noticeView() {
 	if(thisReport.value=="") {
 		alert("请先保存表单");
@@ -446,35 +393,41 @@ function noticeView() {
 			return;
 		}
 	}
+	
+	if(!noticing) {
+		noticing = true;noticeButton.innerText="通知中...";
+	} else {
+		android.show("通知中");
+		return;
+	}
+	
 	ajax({
 		type: "post",
 		url: "AjaxAction!noticeOthers",
 		dataType: "json",
-		data:{
-			"notice.ref": thisReport.value,//report.sid
+		data: {
+			"notice.sid": noticeId,
+			"notice.ref": thisReport.value,
 			"notice.type": "ExplosiveReport",
 			"notice.targetIds": escape(userChoosed),
 			"notice.title": escape(""),
 			"notice.content": escape(""),
 			"notice.impts": "",
 		}, success:function(r) {
-			if(r['result'] != 'fail') {
+			noticing = false;
+			if(r['result'] == "fail") {
+				alert("通知失败！");
+				noticeButton.innerText = "通知目标人员查看";
+			} else {
+				noticeId = r['result'];
 				alert('已通知给' + userChoosed.split("##")[0]);
+				noticeButton.innerText = "已通知";
 			}
 		}
 	});
 }
-
-function reply(ref, userId) {
-	ajaxPost("AjaxAction!reply", function(r) {
-		alert(r);
-	}, {
-		"reply.ref": ref,
-		"reply.targetId": userId,
-		"reply.content": escape("回复的内容")
-	});
-}
 </script>
+<!-- 流程管控 -->
 <script type="text/javascript">
 function getChoices() {
 	var the_choices = "";
@@ -494,7 +447,26 @@ function getChoices() {
 //触发流程管控
 function beginProcessControl() {
 	startUrlWithoutResult("PageAction!loadProblemList?problem.choices="+getChoices()
-			+ "&problem.ref=" + ${request.report.sid});
+			+ "&problem.ref=" + thisReport.value);
 }
 </script>
+<!-- DatePicker -->
+<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
+<script id="dtjs1" src="../js/mui.min.js"></script>
+<script id="dtjs2" src="../js/mui.picker.min.js"></script>
+<script id="dtjs3" src="js/loadDateTimePicker.js"></script>
+<%-- <script type="text/javascript">
+function loadDateTimePickerLib() {
+	var js1 = "../js/mui.min.js";
+	var js2 = "../js/mui.picker.min.js";
+	var js3 = "js/loadDateTimePicker.js";
+	var t = dtjs1.src=="";
+	if(t) {
+		dtjs1.setAttribute("src", js1);
+		dtjs2.setAttribute("src", js2);
+		dtjs3.setAttribute("src", js3);
+		alert("加载完成，请再点一下");
+	}
+}
+</script> --%>
 </html>

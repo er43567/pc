@@ -29,7 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        		 onclick="loadDateTimePickerLib();"></div>
        </li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
-           <li class="aui-list-item">
+       	<li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
                    	储存库每班是否有3名以上值班守护人员值守，是否能熟练操作报警和监控器材；值守人员每小时是否携带自卫器具对库区及周围进行巡视；
@@ -216,6 +216,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                		</div>
              	</div>
           	</li>
+          	
+          	<li class="aui-list-item">
+          		<div class="aui-list-item-inner">
+                  	<div class="aui-list-item-input">
+                      	<div class="aui-list-item-text">
+                      	备注
+                		</div>
+                    	<textarea placeholder="这里输入备注信息" id="rem" name="rem"
+                    		 class="aui-border-gray padding-5px" >${request.report.rem}</textarea>
+               		</div>
+             	</div>
+          	</li>
+          	
           	<li class="aui-list-item">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
                     <div id="saveButton" class="aui-btn aui-btn-primary aui-btn-block aui-btn-height-50px"
@@ -357,6 +370,7 @@ function saveReport() {
 				//alert('保存成功，可以选择推送对象了');
 				//saveButton.parentNode.parentNode.style.display = "none";
 				saveButton.innerText = "流程管控";
+				saveButton.className = saveButton.className.replace("aui-btn-primary","aui-btn-info");
 				saveButton.onclick = function() {
 					beginProcessControl(thisReport.value, the_choices);
 				};

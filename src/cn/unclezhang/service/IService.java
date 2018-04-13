@@ -18,7 +18,7 @@ public interface IService extends ISessionUserReceivable {
 	List<User> loadAllUsers(boolean optimized);
 	
 	int saveReport(String userId, String type, String targets, 
-			String[] items, String choices, String rem, String time, String scope);
+			String[] items, String choices, String rem, String time, String scope, String imgs);
 
 	Report findTypeReportByDate(String type, String date);
 
@@ -31,7 +31,7 @@ public interface IService extends ISessionUserReceivable {
 	 * @param userId 可为null，为null时加载全部
 	 * @return
 	 */
-	List<Report> loadReportsByDate(String type, String time, String userId);
+	List<Report> loadUnitDateReports(String type, String time, String unitName);
 
 	String saveNotice(String userId, int ref, String type, String targetIds, String title,
 			String content, int impts);
@@ -41,7 +41,7 @@ public interface IService extends ISessionUserReceivable {
 	List<Notice> loadNoticeList(String userId, int from_id, int count_per_page, int readState);
 
 	Report findReportById(int sid);
-
+	
 	void readNotice(int ref, String userId, String type);
 
 	User findUserById(String userId);
@@ -78,8 +78,9 @@ public interface IService extends ISessionUserReceivable {
 	
 	Problem loadProblem(int ref, int whichItem);
 
-	List<Problem> loadProblemsByRef(int ref);
-	List<Problem> createProblems(int ref, String choices);
+	List<Problem> loadProblemsByRef(int ref, String userId);
+	
+	List<Problem> createProblems(int ref, String choices, String[] items);
 
 	boolean updateProblemFiled(int sid, String field, String value);
 

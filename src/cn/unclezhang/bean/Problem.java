@@ -4,10 +4,12 @@ public class Problem {
 	public static final String STATE_DEALING = "dealing";
 	public static final String STATE_FINISHED = "finished";
 	int sid, ref, whichItem, risk;
-	String userId, choices, title, measure, expire, targetIds, functionary, acceptedIds, results, state;
+	String userId, choices, title, measure, expire, targetIds, functionary, acceptedIds, results, state,rem;
 	String time;
 	
 	String acceptingUserName, acceptedUserName, functionaryName;
+	String reportType;
+	String text;
 	public String getAcceptingUserName() {
 		return acceptingUserName;
 	}
@@ -26,6 +28,12 @@ public class Problem {
 	public void setFunctionaryName(String functionaryName) {
 		this.functionaryName = functionaryName;
 	}
+	/*public String getReportType() {
+		return reportType;
+	}
+	public void setReportType(String reportType) {
+		this.reportType = reportType;
+	}*/
 	
 	public int getSid() {
 		return sid;
@@ -117,7 +125,8 @@ public class Problem {
 	public void setState(String state) {
 		this.state = state;
 	}
-	String text,rem;
+	
+	
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -130,4 +139,18 @@ public class Problem {
 	public String getRem() {
 		return rem;
 	}
+	@Override
+	public String toString() {
+		return "Problem [sid=" + sid + ", ref=" + ref + ", whichItem="
+				+ whichItem + ", risk=" + risk + ", userId=" + userId
+				+ ", choices=" + choices + ", title=" + title + ", measure="
+				+ measure + ", expire=" + expire + ", targetIds=" + targetIds
+				+ ", functionary=" + functionary + ", acceptedIds="
+				+ acceptedIds + ", results=" + results + ", state=" + state
+				+ ", time=" + time + ", acceptingUserName=" + acceptingUserName
+				+ ", acceptedUserName=" + acceptedUserName
+				+ ", functionaryName=" + functionaryName +
+				", text=" + text + ", rem=" + rem + "]";
+	}
+	
 }

@@ -1,5 +1,7 @@
 package cn.unclezhang.action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.lrxzl.lib.java.tool.Tool;
@@ -10,7 +12,6 @@ import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
 import cn.unclezhang.conf.Conf;
-import cn.unclezhang.relatives.RelativeHelper;
 
 public class PageAction extends MyActionSupport {
 	User user;
@@ -49,28 +50,61 @@ public class PageAction extends MyActionSupport {
 		this.report = report;
 	}
 
+	public String loadReportCreatePage() {
+		report = new Report();
+		report.setReportItems(Arrays.asList(Conf.getExplosives(getSessionUser().getRank())));
+		System.out.println(report);
+		return "theReport";
+	}
+
 	public String loadReportPage() {
+		System.out.println(report);
 		report = service.findReportById(report.getSid());
-		// 标记已读
+
+		System.out.println(report);
+		User u = service.findUserById(report.getUserId());
+		/*String X = u.getRank()>=2?"X":"";
+		X = "X";*/
+		report.setReportItems(Arrays.asList(Conf.getExplosives(u.getRank())));
+		//标记已读
+
 		service.readNotice(report.getSid(), getSessionUserId(), report.getType());
-		return report.getType() + "History";
+		return /*report.getType() + */"theReportHistory";
 	}
 
 	public String loadReportEditPage() {
 		report = service.findReportById(report.getSid());
-		return report.getType() + "Edit";
+		User u = service.findUserById(report.getUserId());
+		/*String X = u.getRank()>=2?"X":"";
+		X = "X";*/
+		report.setReportItems(Arrays.asList(Conf.getExplosives(u.getRank())));
+		return /*report.getType() + X + */"theReportEdit";
 	}
 
 	public String loadReportReceivePage() {
 		System.out.println(report.getSid());
 		report = service.findReportById(report.getSid());
 		System.out.println(report);
-		// 标记已读
+
+		User u = service.findUserById(report.getUserId());
+		/*String X = u.getRank()>=2?"X":"";
+		X = "X";*/
+		report.setReportItems(Arrays.asList(Conf.getExplosives(u.getRank())));
+		
+		//标记已读
+
 		service.readNotice(report.getSid(), getSessionUserId(), report.getType());
-		return report.getType() + "Receive";
+		return /*report.getType() + X + */"theReportReceive";
 	}
 
-	/* ===========历史页面=========== */
+	
+//	public String loadReportItemsPage() {
+//		report.setReportItems(Arrays.asList(Conf.getExplosives(getSessionUser().getRank())));
+//		System.out.println(Arrays.toString(Conf.getExplosives(getSessionUser().getRank())));
+//		return "ExplosiveReport" /*+ getSessionUser().getRank()*/;
+//	}
+	/*===========历史页面===========*/
+
 	List<Report> reports;
 
 	public List<Report> getReports() {
@@ -81,20 +115,26 @@ public class PageAction extends MyActionSupport {
 		this.reports = reports;
 	}
 
-	public String loadReportsByDate() {
+	public String loadUnitDateReports() {
 		if (report.getTime() == null) {
 			report.setTime(Tool.time());
 		}
+		
+		reports = service.loadUnitDateReports(report.getType(), report.getTime(), report.getUnit());
 
-		reports = service.loadReportsByDate(report.getType(), report.getTime(), report.getUserId());
 		if (reports == null || reports.size() == 0) {
 			return "emptyReport";
 		}
 		System.out.println(report.getType());
 		report = reports.get(0);
-		// users = service.loadAllUsers();
-		return report.getType() + "History";
+
+		
+		User u = service.findUserById(report.getUserId());
+		report.setReportItems(Arrays.asList(Conf.getExplosives(u.getRank())));
+		//users = service.loadAllUsers();
+		return /*report.getType() + */"theReportHistory";
 	}
+	
 
 	/**
 	 * 流程管控
@@ -120,18 +160,26 @@ public class PageAction extends MyActionSupport {
 
 	public String loadProblemList() {
 		System.out.println(problem.getRef());
-		problems = service.loadProblemsByRef(problem.getRef());
-		if (problems == null || problems.size() == 0) {
-			// 创建所有问题
-			System.out.println(problem.getRef() + "," + problem.getChoices());
-			problems = service.createProblems(problem.getRef(), problem.getChoices());
-		}
 
 		report = service.findReportById(problem.getRef());
+		
+		problems = service.loadProblemsByRef(report.getSid(), report.getUserId());
+		System.out.println(problem.getRef() + "," + problem.getChoices());
+		System.out.println("size:" + problems.size());
+		/*if (problems == null || problems.size() == 0) {
+			//创建所有问题
+			problems = service.createProblems(problem.getRef(), problem.getChoices());
+		}
+		System.out.println("size:" + problems.size());
+		*/
+		User u = service.findUserById(report.getUserId());
+		System.out.println(Arrays.toString(report.getItems()));
+		for (int i=0;i<problems.size();i++) {
+			System.out.println("rem" + i + report.getItems()[i]);
+			Problem item = problems.get(i);
+			item.setText(Conf.getExplosive(u.getRank(), item.getWhichItem()));
+			//item.setRem(report.getItems()[item.getWhichItem()]);
 
-		for (int i = 0; i < problems.size(); i++) {
-			problems.get(i).setText(Conf.explosive_contents[problems.get(i).getWhichItem()]);
-			problems.get(i).setRem(report.getItems()[i]);
 		}
 		// 读取Problem的 Notice
 		service.readNotice(problem.getRef(), getSessionUserId(), Notice.TYPE_PROBLEM);
@@ -140,13 +188,21 @@ public class PageAction extends MyActionSupport {
 	}
 
 	public String loadProblemPage() {
-		Problem tmp;
-		tmp = service.loadProblem(problem.getSid());
-		if (Problem.STATE_INITIAL.equals(tmp.getState())) {
-			users = service.loadAllUsers(User.OPTIMIZED_TRUE);
+		problem = service.loadProblem(problem.getSid());
+		
+		/*report = service.findReportById(tmp.getRef());
+		tmp.setRem(report.getItems()[tmp.getWhichItem()]);*/
+		
+		if (Problem.STATE_INITIAL.equals(problem.getState())) {
+			List<User> userList = service.loadAllUsers(User.OPTIMIZED_TRUE);
+			users = new ArrayList<User>();
+			for (int i = 0; i < userList.size(); i++) {
+				if (userList.get(i).getUnit().equals(getSessionUser().getUnit())) {
+					users.add(userList.get(i));
+				}
+			}
 			return "explosiveProblem";
 		} else {
-			problem = tmp;
 			if (problem.getResults() != null) {
 				problem.setResults(problem.getResults().replaceAll("\n", "<br/>"));
 			}
@@ -157,19 +213,34 @@ public class PageAction extends MyActionSupport {
 	public String loadMyProblemList() {
 		problems = service.loadMyProblemList();
 
-		for (int i = 0; i < problems.size(); i++) {
-			String choices = problems.get(i).getChoices();
+		for (int i=0; problems!=null && i<problems.size();i++) {
+			//String choices = problems.get(i).getChoices();
+
 			Problem tmpProblem = problems.get(i);
-			for (int j = 0; j < choices.length(); j++) {
+			Report tmpReport = service.findReportById(tmpProblem.getRef());
+			
+			User u = service.findUserById(tmpReport.getUserId());
+			
+			tmpProblem.setText("["+tmpReport.getChineseType()+ " " + tmpProblem.getTime() + "]<br/>" 
+					+ Conf.getExplosive(u.getRank(), tmpProblem.getWhichItem()));
+			//tmpProblem.setRem(tmpReport.getItems()[tmpProblem.getWhichItem()]);
+			/*for (int j = 0; j < choices.length(); j++) {
 				char c = choices.charAt(j);
-				if (c != '1') {
-					tmpProblem.setText(Conf.explosive_contents[j]);
-					// tmpProblem.setRem(report.getItems()[i]);
+
+				if (c!='1') {
+					tmpProblem.setText("["+tmpProblem.getReportType()+ " " + tmpProblem.getTime() + "]<br/>" 
+							+ Conf.explosive_contents[j]);
+					
+					tmpProblem.setRem(tmpReport.getItems()[j]);
+					System.out.println(tmpProblem);
+
 				}
-			}
+			}*/
 		}
 
-		System.out.println(problems.size());
+
+		//去掉标题
+		report.setType("");
 		return "explosiveProblemList";
 	}
 

@@ -19,8 +19,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head> 
 <body>
     <div class="aui-content-padded">
-        <p>流程管控</p>
+        <p>${request.report.chineseType}</p>
     </div>
+    <s:if test="#request.problems.size()==0">
+    	<%@include file="empty.html" %>
+    </s:if>
     <div class="aui-content aui-margin-b-15">
         <ul class="aui-list">
         	<s:iterator id="item" value="#request.problems">
@@ -28,7 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                <div class="aui-list-item-inner">
 	                    <div class="aui-list-item-text">
 							${item.text}
-	                		<%-- <br>(备注：${item.rem}) --%>
+	                		<br>(备注：${item.rem})
 						</div>
 	                    <div class="aui-list-item-right">
 	                    	<s:if test="#item.state=='dealing'">

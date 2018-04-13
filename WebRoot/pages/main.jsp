@@ -49,19 +49,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div id="fragment1" class="fragment">
     <section class="aui-content aui-grid aui-margin-b-15">
         <div class="aui-row">
-            <div class="aui-col-xs-4 aui-border-r" onclick="startUrl('reportExplosive.jsp')">
+            <div class="aui-col-xs-4 aui-border-r" onclick="startUrl('PageAction!loadReportCreatePage',['notitle','nogesture','norefresh'])">
                 <div class="aui-text-warning">
                 <img src="img/安全.png" style="width: 35px;margin: auto;">
                 </div>
                 <div class="aui-gird-lable aui-font-size-14 " style="color: gray;">民爆库房三查</div>
             </div>
-            <div class="aui-col-xs-4 aui-border-r" onclick="startUrl('reportHotal.jsp')">
+            <div class="aui-col-xs-4 aui-border-r" onclick="startUrl('reportHotal.jsp',['notitle','nogesture','norefresh'])">
             	<div class="aui-text-warning">
             	<img src="img/房子.png" style="width: 35px;margin: auto;">
             	</div>
                 <div class="aui-gird-lable aui-font-size-14 " style="color: gray;">旅馆行业三查</div>
             </div>
-            <div class="aui-col-xs-4" onclick="startUrl('reportFirefighting.jsp')">
+            <div class="aui-col-xs-4" onclick="startUrl('reportFirefighting.jsp',['notitle','nogesture','norefresh'])">
             	<div class="aui-text-warning">
             	<img src="img/消防车.png" style="width: 35px;margin: auto;">
             	</div>
@@ -127,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="aui-card-list-footer aui-border-t">
                 <div><!-- <i class="aui-iconfont aui-icon-note"></i>  -->任务指数⭐</div>
                 <div><!-- <i class="aui-iconfont aui-icon-laud"></i> 888 --></div>
-                <div class="aui-btn aui-btn-outlined" style="padding: 2px"  onclick="startUrl('historyTasks.jsp')">
+                <div class="aui-btn aui-btn-outlined" style="padding: 2px" onclick="startUrl('historyTasks.jsp')">
                		<i class="aui-iconfont aui-icon-menu" style="font-size: 14px;margin-left: 2px"> 任务列表</i>
                	</div>
                 <!-- <i class="aui-iconfont aui-icon-menu" style="font-size: 14px"> 打开任务列表</i> --></div>
@@ -209,32 +209,34 @@ function toggleClass(obj,cls){
 }  
 </script>
 <script type="text/javascript">
-var userIds = [];
-var userNames = [];
+var unitList = [];
+//var userNames = [];
 function historyReportClicked() {
 	/* if(Number('${session.user.rank}')<20) {
 		startReportHistory('historyReports.jsp', '${session.user.userId}');
 		return;
 	} */
-	if(userIds.length==0 || userNames.length==0) {
-		ajaxPostWithEval("AjaxAction!loadMyReportCheckableUsers", function(res, result) {
+	if(unitList.length==0) {
+		ajaxPostWithEval("AjaxAction!loadMyRelativesUnits", function(res, result) {
 			if(result == 'success') {
-				var users = res['users'];
-				for(var i=0;i<users.length;i++) {
-					if(users[i].rank<=2) {
-						userIds.push(users[i].userId);
-						userNames.push(/* users[i].name +  */" "+users[i].unit+" "+users[i].position+"");
-					}
-				}
-				android.showListDialog(userNames, "onHistoryReportChoosed");
+				var units = res['units'];
+				//for(var i=0;i<users.length;i++) {
+					//if(users[i].rank<=2) {
+						//unitList.push(units[i]);
+						//userNames.push(/* users[i].name +  */" "+users[i].unit+" "+users[i].position+"");
+					//}
+				//}
+				unitList = units;
+				android.showListDialog(unitList, "onHistoryReportChoosed");
 			}
 		}, null);
 	} else {
-		android.showListDialog(userNames, "onHistoryReportChoosed");
+		android.showListDialog(unitList, "onHistoryReportChoosed");
 	}
 }
 function onHistoryReportChoosed(n) {
-	startReportHistory('historyReports.jsp', userIds[n]);
+	//param1 for unitName, param2 for color 
+	startReportHistory('historyReports.jsp?unitName='+escape(unitList[n]), unitList[n]);
 }
 
 </script>

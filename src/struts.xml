@@ -41,6 +41,17 @@
 			<result name="explosiveProblem">/pages/explosiveProblem.jsp</result>
 			<result name="explosiveProblemReview">/pages/explosiveProblemReview.jsp</result>
 			<result name="emptyReport">/pages/emptyReport.jsp</result>
+			
+			
+			<!-- <result name="ExplosiveReportX">/pages/reportExplosiveX.jsp</result>
+			<result name="ExplosiveReportXEdit">/pages/reportExplosiveXEdit.jsp</result>
+			<result name="ExplosiveReportXHistory">/pages/reportExplosiveXHistory.jsp</result>
+			<result name="ExplosiveReportXReceive">/pages/reportExplosiveXReceive.jsp</result> -->
+			<result name="theReport">/pages/theReport.jsp</result>
+			<result name="theReportEdit">/pages/theReportEdit.jsp</result>
+			<result name="theReportHistory">/pages/theReportHistory.jsp</result>
+			<result name="theReportReceive">/pages/theReportReceive.jsp</result>
+			
 		</action>
 	</package>
 	

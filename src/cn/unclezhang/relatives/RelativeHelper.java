@@ -117,19 +117,36 @@ public class RelativeHelper {
 		relativeUnits.put("安源公安分局", new String[]{"跃进煤矿","潘家冲煤矿","五陂煤矿"
 				,"久安公司","神威公司","安源派出所","五陂派出所","城郊派出所","青山派出所","安源公安分局"});
 	}
+	public static String[] getRelativeUnits(String unitName) {
+		return relativeUnits.get(unitName);
+	}
+	public static String getSQLRelativeUnitSet(String unitName) {
+		String units[] = relativeUnits.get(unitName);
+		StringBuilder sb = new StringBuilder("('" + units[0] + "'");
+		for (int i = 1; i < units.length; i++) {
+			sb.append(",'" + units[i] + "'");
+		}
+		sb.append(")");
+		return sb.toString();
+	}
 	
 	public String getReportNoticeUserIds(String unitName) {
 		return getUserIdsByUnitNames(-1, relativeUnits.get(unitName));
 	}
 	
-	public String getProblemNoticeUserIds(int rank, String unitName) throws Exception {
+	public String getProblemTargetIdsByRisk(int risk, String unitName) throws Exception {
 		List<String> li;
 		String s = "";
 		String userIds = getUserIdsByUnitNames(-1, relativeUnits.get(unitName));
-		switch (rank) {
+		
+		System.out.println("unitname:" + unitName);
+		String sqlUnitSet = getSQLRelativeUnitSet(unitName);
+		System.out.println("sqlUnitSet:" + sqlUnitSet);
+		
+		switch (risk) {
 		case 1:
-			li = dao.findBySql("select userId from user_tb where and unit=? and position=? or position=?"
-					, new Object[]{"安全员", "法人代表"});
+			li = dao.findBySql("select userId from user_tb where unit in "+sqlUnitSet+" and (position=? or position=?)"
+					, new Object[]{"安全负责人", "法人代表"});
 			for (int i = 0; li!=null && i < li.size(); i++) {
 				if (userIds!=null&&userIds.contains(li.get(i))) {
 					s += "," + li.get(i);
@@ -137,7 +154,7 @@ public class RelativeHelper {
 			}
 			break;
 		case 2:
-			li = dao.findBySql("select userId from user_tb where and position=? or position=? or position=?"
+			li = dao.findBySql("select userId from user_tb where unit in "+sqlUnitSet+" and (position=? or position=? or position=?)"
 					, new Object[]{"监管民警", "分管副所长", "所长"});
 			for (int i = 0; li!=null && i < li.size(); i++) {
 				if (userIds!=null&&userIds.contains(li.get(i))) {
@@ -146,7 +163,7 @@ public class RelativeHelper {
 			}
 			break;
 		case 3:
-			li = dao.findBySql("select userId from user_tb where position=? or position=? or  position=? or position=?"
+			li = dao.findBySql("select userId from user_tb where unit in "+sqlUnitSet+" and (position=? or position=? or position=? or position=?)"
 					, new Object[]{"监管民警", "分管副所长","大队长","局领导"});
 			for (int i = 0; li!=null && i < li.size(); i++) {
 				if (userIds!=null&&userIds.contains(li.get(i))) {
@@ -155,6 +172,7 @@ public class RelativeHelper {
 			}
 			break;
 		case 4:
+			
 			break;
 		}
 		return s;

@@ -39,7 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div class="header-bottom"></div>-->
 	
 	
-	<div class="aui-tab" id="tab">
+	<!-- <div class="aui-tab" id="tab">
 		<div id="explosiveReport" class="aui-tab-item aui-active">民爆行业
 		</div>
 		<div id="hotalReport" class="aui-tab-item">旅馆行业
@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div id="firefightingReport" class="aui-tab-item">三级消防
 		</div>
 	</div>
-	<div style="height:45px;"></div>
+	<div style="height:45px;"></div> -->
 	<style>
 	.aui-tab {
 		position: fixed;
@@ -75,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	<script type="text/javascript">
 	//获取到用户ID
-	var targetUserId = getParam("userId");
+	var unitName = getParam("unitName");
 	</script>
 	
 	<script type="text/javascript">
@@ -111,15 +111,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	function changeUrl(t) {
 		if(currentTab == 1 && !loaded1) {
-			document.getElementById('explosiveFrame').src = "PageAction!loadReportsByDate?report.type=ExplosiveReport&report.userId="+targetUserId+"&report.time=" + escape(t);
+			document.getElementById('explosiveFrame').src = "PageAction!loadUnitDateReports?report.type=ExplosiveReport&report.unit="+unitName+"&report.time=" + escape(t);
 			loaded1 = true;
+			showLoadProgress(document.getElementById('explosiveFrame'));
 		} else if(currentTab == 2 && !loaded2) {
-			document.getElementById('hotalFrame').src = "PageAction!loadReportsByDate?report.type=HotalReport&report.userId="+targetUserId+"&report.time=" + escape(t);
+			document.getElementById('hotalFrame').src = "PageAction!loadUnitDateReports?report.type=HotalReport&report.userId="+unitName+"&report.time=" + escape(t);
 			loaded2 = true;
+			showLoadProgress(document.getElementById('hotalFrame'));
 		} else if(currentTab == 3 && !loaded3) {
-			document.getElementById('firefightingFrame').src = "PageAction!loadReportsByDate?report.type=FirefightingReport&report.userId="+targetUserId+"&report.time=" + escape(t);
+			document.getElementById('firefightingFrame').src = "PageAction!loadUnitDateReports?report.type=FirefightingReport&report.userId="+unitName+"&report.time=" + escape(t);
 			loaded3 = true;
+			showLoadProgress(document.getElementById('firefightingFrame'));
 		}
+	}
+	
+	function showLoadProgress(target_iframe) {
+		android.showProgressDialog("正在加载...");
+		target_iframe.onload = function() {
+			android.cancelProgressDialog();
+		};
 	}
 	
 	function getNowFormatDate() {
@@ -181,7 +191,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			} else {
 				hotalReport.innerHTML = "旅馆行业";
 			}
-		}, {"date": dateTime, "report.userId":targetUserId});
+		}, {"date": dateTime, "report.unit":unitName});
 	}
 	//android.setChoosedTime("2018-03-25");
  	/* startUrl("login.jsp");

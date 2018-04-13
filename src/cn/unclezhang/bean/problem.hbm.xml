@@ -21,5 +21,7 @@
 		<property name="results"></property>
 		<property name="state"></property>
 		<property name="time"></property>
+		<property name="rem"></property>
+		<!-- <property name="reportType" formula="(select rtb.type from report_tb rtb where rtb.sid=ref)"></property> -->
 	</class>
 </hibernate-mapping>
