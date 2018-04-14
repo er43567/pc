@@ -9,8 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <script type="text/javascript">
-    </script>
+    <script type="text/javascript" src="js/ext.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <style type="text/css">
     .aui-list-item-text {height: 2rem !important;}
@@ -45,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
 	  <ul id="ulList" class="aui-list aui-media-list">
-	    <li class='aui-list-item aui-list-item-middle'>
+	    <!-- <li class='aui-list-item aui-list-item-middle'>
 			<div class='aui-media-list-item-inner'>
 				<div class='aui-list-item-inner aui-list-item-arrow'>
 					<div class='aui-list-item-text'>
@@ -54,22 +53,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 			</div>
-		</li>
+		</li> -->
 	  </ul>
 	  <div id="loadMoreBtn" class="loadMoreBtn" onclick="loadMore()">加载更多</div>
   </body>
   <script type="text/javascript">
-  loadMore();
-  alert('loadMore执行成功');
-  </script>
-  <script type="text/javascript">
   var page = 1;
   var hasNext = false;
+  loadMore();
   function loadMore() {
-	  ajaxPostWithEval("AjaxAction!loadLoopCtrlList", function(res, result) {
+	  ajaxPostWithEval("AjaxAction!loadGoodsList", function(res, result) {
 		  if(result == 'success') {
 			  var li = res['goodsList'];
-			  alert(li.length);
 			  hasNext = false;
 			  for(var i=0;i<li.length;i++) {
 				  var item = li[i];
@@ -78,6 +73,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			  }
 			  if(hasNext) {
 				  page++;
+				  loadMoreBtn.innerText = "加载更多";
 			  } else {
 				  loadMoreBtn.innerText = "没有更多数据了";
 			  }
@@ -86,6 +82,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  "page":page
 	  });
   }
+  
+  function itemClicked(n) {
+	  alert(n);
+	  //startUrl("PageAction!loadGoodsPage?goods.sid=" + n);
+  }
+  
   </script>
   <script type="text/javascript">
   function getItem(sid, title, time) {

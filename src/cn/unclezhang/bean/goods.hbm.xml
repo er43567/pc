@@ -19,7 +19,7 @@
 		<property name="userId"></property>
 		<property name="targetIds"></property>
 		<property name="acceptedIds"></property>
-		
+		<property name="time"></property>
 	</class>
 	
 </hibernate-mapping>
