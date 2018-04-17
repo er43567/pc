@@ -1,55 +1,86 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>列表</title>
-    <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
-    <script type="text/javascript" src="js/ext.js" ></script>
-    <style type="text/css">
-    .aui-list {display: none;}
-    .aui-list-item .aui-list-item-text {padding: 3px;}
-    </style>
-</head> 
+<meta charset="utf-8">
+<meta name="viewport"
+	content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+<meta name="format-detection"
+	content="telephone=no,email=no,date=no,address=no">
+<title>列表</title>
+<link rel="stylesheet" type="text/css" href="../css/aui.css" />
+<script type="text/javascript" src="js/ext.js"></script>
+<style type="text/css">
+.aui-list {
+	display: none;
+}
+
+.aui-list-item .aui-list-item-text {
+	padding: 3px;
+}
+
+.aui-list-item-text font {
+	float: left;
+}
+</style>
+</head>
 <body>
-    <div class="aui-content-padded">
-        <p>${request.report.chineseType}</p>
-    </div>
-    <s:if test="#request.problems.size()==0">
-    	<%@include file="empty.html" %>
-    </s:if>
-    <div class="aui-content aui-margin-b-15">
-        <ul class="aui-list">
-        	<s:iterator id="item" value="#request.problems">
-	           <li class="aui-list-item" onclick="itemClicked('${item.sid}');">
-	                <div class="aui-list-item-inner">
-	                    <div class="aui-list-item-text">
-							${item.text}
-	                		<br>(备注：${item.rem})
+	<div class="aui-content-padded">
+		<p>${request.report.chineseType}</p>
+	</div>
+	<s:if test="#request.problems.size()==0">
+		<%@include file="empty.html" %>
+	</s:if>
+	<div class="aui-content aui-margin-b-15">
+		<s:iterator id="item" value="#request.problems">
+	 		<ul class="aui-list aui-media-list">
+                  <li class="aui-list-item aui-list-item-middle" onclick="itemClicked('${item.sid}');">
+                        <div class="aui-list-item-inner">
+                            <div class="aui-list-item-text">
+                                <div class="aui-list-item-title aui-font-size-14" style="width: 15.5rem">${item.text}</div>
+                                <div class="aui-list-item-right">
+                                 	<s:if test="#item.state=='dealing'">
+									<div class="aui-label aui-label-info">处理中</div>
+								</s:if>
+								<s:elseif test="#item.state=='finished'">
+									<div class="aui-label aui-label-success">已解决</div>
+								</s:elseif>
+								<s:else>
+									<div class="aui-label aui-label-warning">新问题</div>
+								</s:else>
+                                </div>
+                            </div>
+                            <div class="aui-list-item-text">
+                                	备注：${item.rem}
+                            </div>
+                        </div>
+                  </li>
+			</ul>
+		</s:iterator>
+		
+		<%-- <ul class="aui-list">
+			<s:iterator id="item" value="#request.problems">
+				<li class="aui-list-item" onclick="itemClicked('${item.sid}');">
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-text">${item.text}</div>
+						<div class="aui-list-item-text" style="float:left;width: 100%; ">(备注：${item.rem})</div>
+						<div class="aui-list-item-right" style="float:right;">
+							
 						</div>
-	                    <div class="aui-list-item-right">
-	                    	<s:if test="#item.state=='dealing'">
-	                        	<div class="aui-label aui-label-info">处理中</div>
-	                        </s:if>
-	                        <s:elseif test="#item.state=='finished'">
-	                        	<div class="aui-label aui-label-success">已解决</div>
-	                        </s:elseif>
-	                        <s:else>
-	                        	<div class="aui-label aui-label-warning">新问题</div>
-	                        </s:else>
-	                    </div>
-	                </div>
-	            </li>
-        	</s:iterator>
-        	
-        	
-           <%-- <li id="item1" class="aui-list-item" onclick="itemClicked(this);">
+					</div>
+				</li>
+			</s:iterator> --%>
+
+
+			<%-- <li id="item1" class="aui-list-item" onclick="itemClicked(this);">
                <div class="aui-list-item-inner">
                     <div class="aui-list-item-text">
                    	储存库每班是否有3名以上值班守护人员值守，是否能熟练操作报警和监控器材；值守人员每小时是否携带自卫器具对库区及周围进行巡视；
@@ -150,27 +181,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	</div>
                </div>
            </li> --%>
-        </ul>
-    </div>
+		</ul>
+	</div>
 </body>
 <style type="text/css">
-.aui-list {display: block;}
+.aui-list {
+	display: block;
+}
 </style>
 <script type="text/javascript">
-/* var choices = '${request.problem.choices}';
-var reportId = '${request.problem.ref}';
-var items = document.getElementsByClassName("aui-list-item");
-for(var i=1;i<items.length;i++) {
-	if(choices.substring(i-1,i)=='1') {
-		items[i-1].style.display="none";
+	/* var choices = '${request.problem.choices}';
+	 var reportId = '${request.problem.ref}';
+	 var items = document.getElementsByClassName("aui-list-item");
+	 for(var i=1;i<items.length;i++) {
+	 if(choices.substring(i-1,i)=='1') {
+	 items[i-1].style.display="none";
+	 }
+	 }; */
+	function itemClicked(sid) {
+		startUrl("PageAction!loadProblemPage?problem.sid=" + sid);
 	}
-}; */
-function itemClicked(sid) {
-	startUrl("PageAction!loadProblemPage?problem.sid=" + sid);
-}
 
-function onResume() {
-	location.reload();
-}
+	function onResume() {
+		location.reload();
+	}
 </script>
 </html>

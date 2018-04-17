@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.http.util.TextUtils;
 
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport.ISessionUserReceivable;
@@ -100,7 +101,6 @@ public class ServiceImpl implements IService {
 			
 			RelativeHelper rh = new RelativeHelper(dao, this);
 			targets = rh.getReportNoticeUserIds(user.getUnit());
-			
 			r.setTargets(targets);
 			
 			r.setRem(rem);
@@ -109,6 +109,13 @@ public class ServiceImpl implements IService {
 			r.setChoices0(choices);
 			int sid = (Integer) dao.saveEntity(r);
 			
+			/**
+			 * 推送 
+			 */
+			if(targets!=null) {
+				//去掉自己
+				targets.replace("," + user.getUserId(), "");
+			}
 			saveNotice(userId, sid, type, targets, "", "", Notice.important_normal);
 			
 			return sid;
@@ -340,10 +347,22 @@ public class ServiceImpl implements IService {
 	@Override
 	public List<String> loadHistoryColors(String unit) {
 		try {
-			String choicesStateSql = "if((locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0),if((select (count(ptb.state)>0) from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'),1,2),0)";
+			/**
+			 * 当所有为1的时候 则为绿色
+			 * 当含有2 3 4 5 6 ...的时候 则为红色
+			 * 
+			 * 如果红色解决，则为橙色
+			 * 如果绿色未被安全员确认 则为蓝色
+			 * 
+			 * 1:green
+			 * 2:red
+			 * 3:orange
+			 * 4:blue
+			 */
+			String choicesStateSql = "if(replace(choices,'1','')='', if(softerConfirm, 1, 4), if((select count(ptb.state)>0 from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'), 2, 3))";
 			List<String> li = dao.findBySql("select concat(time,'=',"+choicesStateSql+")"
 					+ " from report_tb rtb where unit=?", new Object[]{unit});
-			System.out.println(Arrays.toString(li.toArray()));
+			System.out.println("===>" + Arrays.toString(li.toArray()));
 			return li;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -356,7 +375,7 @@ public class ServiceImpl implements IService {
 		date = date.substring(0, 10);
 		try {
 			//String choicesStateSql = "(locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0)";
-			String choicesStateSql = "if((locate('0', choices)>0 or locate('2', choices)>0 or locate('3', choices)>0 or locate('4', choices)>0 or locate('5', choices)>0 or locate('6', choices)>0),if((select (count(ptb.state)>0) from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'),1,2),0)";
+			String choicesStateSql = "if(replace(choices,'1','')='', if(softerConfirm, 1, 4), if((select count(ptb.state)>0 from problem_tb ptb where ptb.ref=rtb.sid and ptb.state!='finished'), 2, 3))";
 			List<Object[]> li;
 			if (unitName == null) {
 				li = dao.findBySql("select type, "+choicesStateSql+" from report_tb rtb where time=?"
@@ -398,7 +417,8 @@ public class ServiceImpl implements IService {
 	@Override
 	public Task loadLatestTask() {
 		try {
-			return dao.findOneByHql("from Task order by sid desc");
+			return dao.findOneByHql("from Task where locate(?, targetIds)>0 order by sid desc"
+					, new Object[]{user.getUserId()});
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -408,7 +428,13 @@ public class ServiceImpl implements IService {
 	@Override
 	public List<Task> loadTasks(int from_id, int len) {
 		try {
-			return dao.findByHql("from Task order by sid desc", from_id, len);
+			List<Task> li = dao.findByHql("from Task where locate(?, targetIds)>0 order by sid desc"
+					, new Object[]{user.getUserId()}, from_id, len);
+			RelativeHelper rh = new RelativeHelper(dao, this);
+			for (Task t : li) {
+				t.setTargetNames(rh.getUserNamesByUserIds(t.getTargetIds()));
+			}
+			return li;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -559,6 +585,17 @@ public class ServiceImpl implements IService {
 			return null;
 		}
 	}
+	
+	@Override
+	public List<Problem> loadMyFinishedProblemList() {
+		try {
+			return dao.findByHql("from Problem where (userId=? or locate(?, targetIds)>0) and state='finished' order by sid desc"
+					, new Object[]{user.getUserId(), user.getUserId()});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	@Override
 	public int saveGoods(String userId, Goods goods) {
@@ -574,13 +611,115 @@ public class ServiceImpl implements IService {
 	}
 
 	@Override
-	public List<Goods> loadGoodsList(int from_id, int len) {
+	public List<Goods> loadGoodsList(String unit, int from_id, int len) {
 		try {
-			return dao.findByHql("from Goods order by sid desc", from_id, len);
+			return dao.findByHql("from Goods where unit=? order by sid desc"
+					, new Object[]{unit}, from_id, len);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+	@Override
+	public Goods loadGoodsById(int sid) {
+		try {
+			RelativeHelper rh = new RelativeHelper(dao, this);
+			Goods g = dao.findOneByHql("from Goods where sid=?", new Object[]{sid});
+			g.setConfirmNames1(rh.getUserNamesByUserIds(g.getConfirms1()));
+			g.setConfirmNames2(rh.getUserNamesByUserIds(g.getConfirms2()));
+			g.setConfirmNames3(rh.getUserNamesByUserIds(g.getConfirms3()));
+			if (g.getConfirmNames1()!=null)
+				g.setConfirmNames1(g.getConfirmNames1().replaceAll(",", " "));
+			if (g.getConfirmNames2()!=null)
+				g.setConfirmNames2(g.getConfirmNames2().replaceAll(",", " "));
+			if (g.getConfirmNames3()!=null)
+				g.setConfirmNames3(g.getConfirmNames3().replaceAll(",", " "));
+			return g;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Override
+	public List<User> loadTaskTargetsUsers() {
+		RelativeHelper rh = new RelativeHelper(dao, this);
+		try {
+			String userids = rh.getTaskChooseUsers(user.getUnit());
+			return dao.findByHql("from User where rank<=? and locate(userId, '"+userids+"')>0"
+						, new Object[]{user.getRank()});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateProblemReform(int sid, String reform) {
+		try {
+			dao.updateBySql("update problem_tb set reform=? where sid=?"
+						, new Object[]{reform, sid});
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean confirmGoods(String userId, int sid, int type) {
+		Goods goods = loadGoodsById(sid);
+		switch (type) {
+		case 1:
+			goods.setConfirms1(goods.getConfirms1() + " " + userId);
+			
+			break;
+		case 2:
+			goods.setConfirms2(goods.getConfirms2() + " " + userId);
+			
+			break;
+		case 3:
+			goods.setConfirms3(goods.getConfirms3() + " " + userId);
+			
+			break;
+		}
+		
+		try {
+			dao.updateEntity(goods);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean softerConfirm(String userId, int sid) {
+		try {
+			dao.updateBySql("update report_tb set softerConfirm=1 where sid=?", new Object[]{sid});
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public List<String> loadLoopCtrlUnitList(String unit, int rank) {
+		try {
+			List<String> li = null;
+			if (rank == 2) {
+				li = dao.findBySql("select unit from user_tb where rank=1 and parentUnit=? group by unit"
+						, new Object[]{unit});
+			} else if (rank == 3 || rank == 4) {
+				li = dao.findBySql("select unit from user_tb where rank=1 group by unit");
+			}
+			return li;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }

@@ -16,16 +16,20 @@
 		<link rel="stylesheet" type="text/css" href="../css/feedback.css" />
 		
 		<script type="text/javascript" src="js/ext.js"></script>
+		<script type="text/javascript">
+		android.setStatusBarTransparent();
+		</script>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
+		<header class="mui-bar mui-bar-nav" style="margin-top: 1.2rem" >
 			<a class="mui-icon mui-icon-left-nav "
 				href="javascript:android.closeActivity()"></a>
 			<button id="submit" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right"
 				onclick="publish()">发布</button>
 			<h1 class="mui-title">任务发布</h1>
 		</header>
+		<div style="margin-top: 0.8rem"></div>
 		<div class="mui-content">
 			<div class="mui-content-padded">
 				<%-- <a class="mui-pull-right mui-inline" href="#popover">
@@ -49,7 +53,6 @@
 							</ul>
 						</div>
 					</div>
-
 				</div> -->
 			</div>
 			<div class="mui-inline">任务标题</div>

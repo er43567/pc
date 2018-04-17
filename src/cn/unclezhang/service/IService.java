@@ -16,6 +16,7 @@ public interface IService extends ISessionUserReceivable {
 	boolean updateUserFiled(String userId, String field, String value);
 
 	List<User> loadAllUsers(boolean optimized);
+	List<User> loadTaskTargetsUsers();
 	
 	int saveReport(String userId, String type, String targets, 
 			String[] items, String choices, String rem, String time, String scope, String imgs);
@@ -87,9 +88,19 @@ public interface IService extends ISessionUserReceivable {
 	Problem loadProblem(int sid);
 	
 	List<Problem> loadMyProblemList();
+	List<Problem> loadMyFinishedProblemList();
 
 	int saveGoods(String userId, Goods goods);
 
-	List<Goods> loadGoodsList(int from_id, int len);
+	List<Goods> loadGoodsList(String unit, int from_id, int len);
 
+	Goods loadGoodsById(int sid);
+
+	boolean updateProblemReform(int sid, String unescape);
+	
+	boolean confirmGoods(String userId, int sid, int confirmType);
+
+	boolean softerConfirm(String sessionUserId, int sid);
+
+	List<String> loadLoopCtrlUnitList(String unit, int rank);
 }

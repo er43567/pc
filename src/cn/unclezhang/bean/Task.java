@@ -3,8 +3,7 @@ package cn.unclezhang.bean;
 public class Task {
 	int sid, impt;
 	String userId, targetIds, targetNames, title, content, time, scope;
-	String userName,position;
-	
+	String userName, position;
 	public int getSid() {
 		return sid;
 	}

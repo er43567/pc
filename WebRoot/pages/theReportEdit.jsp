@@ -59,7 +59,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="aui-text-right">
                 	<label id="info${st.index+1}" class="aui-text-info">
-                	<!-- rem -->
+                	${request.report.items[st.index]}
                 	</label>
                 	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}"> 是</label>
                		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}" onclick="openDialog(this)"> 否</label>

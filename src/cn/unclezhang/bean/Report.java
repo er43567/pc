@@ -9,7 +9,7 @@ public class Report {
 	public static final String report_消防 = "FirefightingReport";
 	public static final String report_旅馆 = "HotalReport";
 	
-	int sid, state;
+	int sid, state, softerConfirm;
 	String type, userId, unit, scope, targets, choices, rem, time, imgs;
 	String choices0;
 	String item1,item2,item3,item4,item5,
@@ -322,6 +322,13 @@ public class Report {
 	public void setChoices0(String choices0) {
 		this.choices0 = choices0;
 	}
+	public int getSofterConfirm() {
+		return softerConfirm;
+	}
+	public void setSofterConfirm(int softerConfirm) {
+		this.softerConfirm = softerConfirm;
+	}
+	
 	
 	@Override
 	public String toString() {
@@ -401,6 +408,5 @@ public class Report {
 	public void setReportItems(List<String> reportItems) {
 		this.reportItems = reportItems;
 	}
-	
 	
 }

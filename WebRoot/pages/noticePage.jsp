@@ -59,7 +59,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	</header>
 	<div class="header-bottom"></div>-->
-	<section id="pullrefresh" class="aui-content">
 		<div id="timeline" class="aui-timeline">
 			<!-- <div class="aui-timeline-item-header">2017年1月8日</div>
 			<div class="aui-timeline-item">
@@ -111,6 +110,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div> -->
 		</div>
+		<div id="ifNoData" style="display: none;">
+		  	<iframe id="ifNoDataFrame" src="" style="width: 100%;height: 100%;position: absolute;left: 0px;top: 0px;border: none;">
+		  	</iframe>
+		</div>
 		<div id="loadMoreBtn" class="loadMoreBtn" onclick="loadMore()">加载更多</div>
 	</section>
 </body>
@@ -159,6 +162,13 @@ function loadMore() {
 				loadMoreBtn.innerText = "加载更多";
 			} else {
 				loadMoreBtn.innerText = "没有更多数据了";
+				if(nextPage == 1) {
+					//如果一个数据也没有
+					ifNoDataFrame.setAttribute("src", "empty.html");
+					ifNoData.style.display = "block";
+					loadMoreBtn.style.display = "none";
+					timeline.style.display = "none";
+				}
 			}
 		}
 	}, {"page":nextPage});

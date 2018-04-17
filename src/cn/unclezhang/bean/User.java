@@ -7,7 +7,7 @@ import cn.lrxzl.ssh_base.support.MyActionSupport.Loginable;
 public class User implements Loginable {
 	public static boolean OPTIMIZED_TRUE = true;
 	public static boolean OPTIMIZED_FALSE = true;
-	String userId, psw, name, position, headImg, phone, scope, time, unit;
+	String userId, psw, name, position, headImg, phone, scope, time, unit, parentUnit;
 	int rank;
 	
 	public String getUserId() {
@@ -94,6 +94,13 @@ public class User implements Loginable {
 	@Override
 	public String getId() {
 		return userId;
+	}
+
+	public String getParentUnit() {
+		return parentUnit;
+	}
+	public void setParentUnit(String parentUnit) {
+		this.parentUnit = parentUnit;
 	}
 
 }

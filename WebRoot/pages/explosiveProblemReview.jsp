@@ -17,10 +17,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </style>
     <script type="text/javascript">
     function showDetails() {
-        android.showListDialog([
-                                "A：由民爆单位安全负责人、法人代表确认整改到位后验收。"
-                                ,"B：由辖区派出所监管民警、分管副大队长、所长确认整改到位后验收。"
-                                ,"C：由分局监管民警、分管副大队长、大队长、局领导确认整改到位后验收。"]
+    	android.showListDialog(["D：由民爆单位安全负责人、法人代表确认整改到位后验收。"
+                                ,"C：由辖区派出所监管民警、分管副大队长、所长确认整改到位后验收。"
+                                ,"B：由分局监管民警、分管副大队长、大队长、局领导确认整改到位后验收。"
+                                ,"A：预留"]
         , "onChoose");
     }
     function onChoose(n) {
@@ -50,7 +50,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         	等级风险
                     </div>
                     <div id="riskLevel" class="aui-list-item-input" style="padding-left: 1rem;" >
-                    ${request.problem.risk}
+                    ${4-request.problem.risk+1}
                     </div>
                     <script type="text/javascript">
                     var colors = ["gray","gray","orange","red"];
@@ -95,6 +95,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
             </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        	整改结果
+                    </div>
+                    <div id="reformResult" class="aui-list-item-input">
+                    	${request.problem.reform}
+                    </div>
+                    <s:if test="#session.user.userId==#request.problem.functionary && #request.problem.state!='finished'">
+                    	<div class="aui-btn aui-btn-sm" onclick="updateProblemReform(this)" style="margin: 3px">填写</div>
+                	</s:if>
+                </div>
+            </li>
             
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
@@ -135,6 +148,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </s:if>
                 </div>
             </li>
+            
             <s:if test="#request.problem.targetIds.contains(#session.user.userId)">
             	<s:if test="#request.problem.acceptedIds==null || #request.problem.acceptedIds.contains(#session.user.userId) == false">
 		            <li class="aui-list-item">
@@ -163,7 +177,6 @@ function addResult() {
 	dialog.prompt({
 		title : "添加批示",
 		text : '',
-		type : 'number',
 		buttons : [ '取消', '确定' ]
 	}, function(ret) {
 		if (ret.buttonIndex == 2) {
@@ -213,6 +226,35 @@ function confirmProblem() {
 		}
 	}, {
 		"problem.sid":sid
+	});
+}
+
+function updateProblemReform(btn) {
+	var dialog = new auiDialog();
+	dialog.prompt({
+		title : "整改结果",
+		text : '',
+		buttons : [ '取消', '确定' ]
+	}, function(ret) {
+		if (ret.buttonIndex == 2) {
+			if(ret.text == "") {
+				android.show("不能为空");
+				return;
+			} else {
+				ajaxPostWithEval("AjaxAction!updateProblemReform", function(res, result) {
+					if("success" == result) {
+						reformResult.innerText = ret.text;
+						btn.style.display = "none";
+						android.show("成功");
+					} else {
+						android.show("出错了");
+					}
+				}, {
+					"problem.sid":'${request.problem.sid}',
+					"problem.reform":escape(ret.text)
+				});
+			}
+		}
 	});
 }
 </script>

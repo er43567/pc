@@ -6,6 +6,57 @@ public class Goods {
 	//type 类型：炸药，雷管
 	String type, unit, userId, targetIds, acceptedIds, time;
 	
+	/**
+	 * confirm1, confirm2, confirm3 :
+	 * todayGained今日领取，todayUse今日使用，todayStock今日回库
+	 */
+	String confirms1, confirms2, confirms3;
+	String confirmNames1, confirmNames2, confirmNames3;
+	String acceptedNames;
+	public String getAcceptedNames() {
+		return acceptedNames;
+	}
+	public void setAcceptedNames(String acceptedNames) {
+		this.acceptedNames = acceptedNames;
+	}
+	public String getConfirms1() {
+		return confirms1;
+	}
+	public String getConfirms2() {
+		return confirms2;
+	}
+	public String getConfirms3() {
+		return confirms3;
+	}
+	public void setConfirms1(String confirms1) {
+		this.confirms1 = confirms1;
+	}
+	public void setConfirms2(String confirms2) {
+		this.confirms2 = confirms2;
+	}
+	public void setConfirms3(String confirms3) {
+		this.confirms3 = confirms3;
+	}
+	public String getConfirmNames1() {
+		return confirmNames1;
+	}
+	public String getConfirmNames2() {
+		return confirmNames2;
+	}
+	public String getConfirmNames3() {
+		return confirmNames3;
+	}
+	public void setConfirmNames1(String confirmNames1) {
+		this.confirmNames1 = confirmNames1;
+	}
+	public void setConfirmNames2(String confirmNames2) {
+		this.confirmNames2 = confirmNames2;
+	}
+	public void setConfirmNames3(String confirmNames3) {
+		this.confirmNames3 = confirmNames3;
+	}
+	
+	
 	public int getSid() {
 		return sid;
 	}

@@ -10,6 +10,8 @@ public class Problem {
 	String acceptingUserName, acceptedUserName, functionaryName;
 	String reportType;
 	String text;
+	
+	String reform;//整改结果
 	public String getAcceptingUserName() {
 		return acceptingUserName;
 	}
@@ -34,6 +36,13 @@ public class Problem {
 	public void setReportType(String reportType) {
 		this.reportType = reportType;
 	}*/
+	
+	public String getReform() {
+		return reform;
+	}
+	public void setReform(String reform) {
+		this.reform = reform;
+	}
 	
 	public int getSid() {
 		return sid;

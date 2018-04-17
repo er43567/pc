@@ -30,13 +30,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        <li class="aui-list-header">
        	<div>民爆行业质检表单 - ${request.report.time}</div>
        	<s:if test="#session.user.userId==#request.report.userId">
-	       	<div style="background-color: #03a9f4;padding:2px;color: white;"
-	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div>
+	       	<%-- <div style="background-color: #03a9f4;padding:2px;color: white;"
+	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div> --%>
        	</s:if>
        	<s:else>
-       		<a href="javascript:android.callUp('${request.report.phone}')"
-       			 style="background-color: #03a9f4;padding:2px;color: white;"
-       			 >联系${request.report.userName}</a>
+       		<div class="aui-label aui-label-info" onclick="android.callUp('${request.report.phone}')">
+       			联系${request.report.userName}
+       			</div>
        	</s:else>
        </li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
@@ -44,11 +44,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	           <li class="aui-list-item">
 	               <div class="aui-list-item-inner">
 	                   <div class="aui-list-item-text">
-	                   	${item}
+	                   	 <div style="color: blue">${item}</div>
 	                </div>
 	                <div class="aui-text-right">
 	                	<label id="info${st.index+1}" class="aui-text-info">
-	                	<!-- rem -->
+	                	${request.report.items[st.index]}
 	                	</label>
 	                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}"> 是</label>
 	               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}" onclick="openDialog(this)"> 否</label>
@@ -65,18 +65,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          	</li>
 	         </s:if>
 	         
-         	<li class="aui-list-item">
+	        <li class="aui-list-item">
           		<div class="aui-list-item-inner">
                   	<div class="aui-list-item-input">
                       	<div class="aui-list-item-text" style="font-size: 16px">
-                      	备注：${request.report.rem}
+                      		
                 		</div>
                		</div>
              	</div>
           	</li>
           	
-          	<s:if test="#request.reports.size()>1">
-          		${request.reports.size()}
+          	<s:if test="#session.user.position=='安全员'">
+	         	<li class="aui-list-item" id="softerConfirmLi">
+	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+	                    <div id="softerConfirmBtn" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+	                    	onclick="softerConfirm();">安全员确认</div>
+	                </div>
+	            </li>
           	</s:if>
           	
           	<s:if test="#request.report.choices.replaceAll('1','')!=''">
@@ -136,6 +141,15 @@ setInterval(function(){
 </script> --%>
 <script type="text/javascript" src="../script/api.js" ></script>
 <script type="text/javascript" src="../script/aui-dialog.js" ></script>
+<script type="text/javascript">
+function softerConfirm() {
+	ajaxPost("AjaxAction!softerConfirm", function(res, result){
+		if("success"==result) {
+			softerConfirmLi.style.display = "none";
+		}
+	}, null);
+}
+</script>
 <script type="text/javascript">
 	var itemArray = [];
 	var tmpId = 0;

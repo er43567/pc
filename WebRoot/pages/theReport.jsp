@@ -15,9 +15,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" href="css/ext.css" />
     
     <script type="text/javascript" src="js/ext.js" ></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
     window.onload = function() {
     	datetime.innerText = getNowFormatDate();
+    	
+    	var dateBtn = document.getElementsByClassName("aui-btn-blue")[0];
+    	dateBtn.addEventListener("keyup", function (){
+    		alert(this);
+    	}, false);
     }
     </script>
     <style>
@@ -39,14 +45,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
                    <div class="aui-list-item-text">
-                   	${item}
-                </div>
+                   	  <div style="color: blue">${item}</div>
+                   </div>
                 <div class="aui-text-right">
                 	<label id="info${st.index+1}" class="aui-text-info">
                 	<!-- rem -->
                 	</label>
-                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}"> 是</label>
-               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}" onclick="openDialog(this)"> 否</label>
+                	<label><input class="aui-radio" type="radio"> 是</label>
+               		<label><input class="aui-radio" type="radio"onclick="openDialog(this)"> 否</label>
                 </div>
                </div>
            </li>
@@ -57,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div style="width: 100%;">
 						<input id="file_input" accept="image/gif,image/jpeg,image/png,image/*" 
 							style="width: 100%;height:2.2rem;position: absolute;opacity:0;z-index: 1" type="file"/>
-						<div class="aui-btn aui-btn-block" style="z-index: 0">选择图片</div>
+						<div class="aui-btn aui-btn-block" style="z-index: 0">添加图片</div>
 					</div>
                   	<div id="file_input_div" class="file_input_div"></div>
              	</div>
@@ -332,7 +338,7 @@ function beginProcessControl() {
 <link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
 <script id="dtjs1" src="../js/mui.min.js"></script>
 <script id="dtjs2" src="../js/mui.picker.min.js"></script>
-<script id="dtjs3" src="js/loadDateTimePicker.js"></script>
+<script id="dtjs3" src="js/loadDateTimePicker.js?v=1231"></script>
 <%-- <script type="text/javascript">
 function loadDateTimePickerLib() {
 	var js1 = "../js/mui.min.js";
@@ -389,7 +395,8 @@ document.getElementById('file_input').addEventListener('change', function () {
 	    img.src = rst.base64;
 	    
 	    addImg(rst.base64);
-	    img.onclick = function(){reviewImg(ans);};
+	    var nn = ans;
+	    img.onclick = function(){reviewImg(nn);};
 	    ans++;
 	    
 	    return rst;
@@ -402,5 +409,9 @@ function addImg(imgbase64) {
 function reviewImg(currentPos) {
 	android.reviewImages(imgList, currentPos);
 }
+</script>
+
+<script type="text/javascript">
+
 </script>
 </html>

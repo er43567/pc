@@ -1,9 +1,7 @@
 package cn.unclezhang.relatives;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -116,6 +114,10 @@ public class RelativeHelper {
 		
 		relativeUnits.put("安源公安分局", new String[]{"跃进煤矿","潘家冲煤矿","五陂煤矿"
 				,"久安公司","神威公司","安源派出所","五陂派出所","城郊派出所","青山派出所","安源公安分局"});
+		
+		relativeUnits.put("萍乡公安局", new String[]{"跃进煤矿","潘家冲煤矿","五陂煤矿"
+				,"久安公司","神威公司","安源派出所","五陂派出所","城郊派出所","青山派出所","安源公安分局"});
+		
 	}
 	public static String[] getRelativeUnits(String unitName) {
 		return relativeUnits.get(unitName);
@@ -130,11 +132,65 @@ public class RelativeHelper {
 		return sb.toString();
 	}
 	
+	/**
+	 * 拿到任务的选择对象
+	 * @param unitName
+	 * @return
+	 */
+	public String getTaskChooseUsers(String unitName) {
+		return getUserIdsByUnitNames(-1, relativeUnits.get(unitName));
+	}
+	
+	/**
+	 * 表单推送人群
+	 * @param unitName
+	 * @return
+	 */
 	public String getReportNoticeUserIds(String unitName) {
 		return getUserIdsByUnitNames(-1, relativeUnits.get(unitName));
 	}
 	
+	/**
+	 * 问题推送人群
+	 * @param risk
+	 * @param unitName
+	 * @return
+	 * @throws Exception
+	 */
 	public String getProblemTargetIdsByRisk(int risk, String unitName) throws Exception {
+		List<String> li = null;
+		String s = "";
+		String userIds = getUserIdsByUnitNames(risk, relativeUnits.get(unitName));
+		
+		System.out.println("unitname:" + unitName);
+		String sqlUnitSet = getSQLRelativeUnitSet(unitName);
+		System.out.println("sqlUnitSet:" + sqlUnitSet);
+		
+		switch (risk) {
+		case 1:
+			li = dao.findBySql("select userId from user_tb where rank=1 and unit in "+sqlUnitSet+" and (position=? or position=?)"
+					, new Object[]{"安全负责人", "法人代表"});
+			break;
+		case 2:
+			li = dao.findBySql("select userId from user_tb where rank=2 and unit in "+sqlUnitSet+" and (position=? or position=? or position=?)"
+					, new Object[]{"监管民警", "分管副所长", "所长"});
+			break;
+		case 3:
+			li = dao.findBySql("select userId from user_tb where rank=3 and unit in "+sqlUnitSet+" and (position=? or position=? or position=? or position=?)"
+					, new Object[]{"监管民警", "分管副所长","大队长","局领导"});
+			break;
+		case 4:
+			break;
+		}
+		
+		for (int i = 0; li!=null && i < li.size(); i++) {
+			if (userIds!=null&&userIds.contains(li.get(i))) {
+				s += "," + li.get(i);
+			}
+		}
+		return s;
+	}
+	/*public String getProblemTargetIdsByRisk(int risk, String unitName) throws Exception {
 		List<String> li;
 		String s = "";
 		String userIds = getUserIdsByUnitNames(-1, relativeUnits.get(unitName));
@@ -145,7 +201,7 @@ public class RelativeHelper {
 		
 		switch (risk) {
 		case 1:
-			li = dao.findBySql("select userId from user_tb where unit in "+sqlUnitSet+" and (position=? or position=?)"
+			li = dao.findBySql("select userId from user_tb where rank=1 and unit in "+sqlUnitSet+" and (position=? or position=?)"
 					, new Object[]{"安全负责人", "法人代表"});
 			for (int i = 0; li!=null && i < li.size(); i++) {
 				if (userIds!=null&&userIds.contains(li.get(i))) {
@@ -154,7 +210,7 @@ public class RelativeHelper {
 			}
 			break;
 		case 2:
-			li = dao.findBySql("select userId from user_tb where unit in "+sqlUnitSet+" and (position=? or position=? or position=?)"
+			li = dao.findBySql("select userId from user_tb where rank=2 and unit in "+sqlUnitSet+" and (position=? or position=? or position=?)"
 					, new Object[]{"监管民警", "分管副所长", "所长"});
 			for (int i = 0; li!=null && i < li.size(); i++) {
 				if (userIds!=null&&userIds.contains(li.get(i))) {
@@ -163,7 +219,7 @@ public class RelativeHelper {
 			}
 			break;
 		case 3:
-			li = dao.findBySql("select userId from user_tb where unit in "+sqlUnitSet+" and (position=? or position=? or position=? or position=?)"
+			li = dao.findBySql("select userId from user_tb where rank=3 and unit in "+sqlUnitSet+" and (position=? or position=? or position=? or position=?)"
 					, new Object[]{"监管民警", "分管副所长","大队长","局领导"});
 			for (int i = 0; li!=null && i < li.size(); i++) {
 				if (userIds!=null&&userIds.contains(li.get(i))) {
@@ -176,7 +232,7 @@ public class RelativeHelper {
 			break;
 		}
 		return s;
-	}
+	}*/
 	
 	public String getReportCheckableUserIds(String unitName) {
 		return getUserIdsByUnitNames(-1, relativeUnits.get(unitName));

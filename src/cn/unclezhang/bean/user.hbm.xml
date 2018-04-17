@@ -16,6 +16,7 @@
 		<property name="rank"></property>
 		<property name="time"></property>
 		<property name="unit"></property>
+		<property name="parentUnit"></property>
 	</class>
 	
 </hibernate-mapping>

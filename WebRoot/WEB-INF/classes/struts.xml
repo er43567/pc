@@ -52,7 +52,8 @@
 			<result name="theReportHistory">/pages/theReportHistory.jsp</result>
 			<result name="theReportReceive">/pages/theReportReceive.jsp</result>
 			
-			<result name="goodsList">/pages/goodsList.jsp</result>
+			<result name="loopCtrlList">/pages/loopCtrlList.jsp</result>
+			<result name="loopCtrlView">/pages/loopCtrlView.jsp</result>
 		</action>
 	</package>
 	

@@ -238,6 +238,23 @@ public class TestSpring extends TestCase {
 				//4级 
 				,"萍乡公安局","萍乡公安局"
 		};
+		String parentUnits[] = new String[]{
+				"安源派出所","安源派出所","安源派出所","安源派出所","安源派出所"
+				,"安源派出所","安源派出所","安源派出所","安源派出所","安源派出所"
+				,"五陂派出所","五陂派出所","五陂派出所","五陂派出所","五陂派出所"
+				,"城郊派出所","城郊派出所","城郊派出所","城郊派出所","城郊派出所"
+				,"青山派出所","青山派出所","青山派出所","青山派出所","青山派出所"
+				//2级 四个派出所
+				,"安源公安分局","安源公安分局","安源公安分局"
+				,"安源公安分局"/*,"安源派出所","安源派出所"*/
+				,"安源公安分局","安源公安分局","安源公安分局"
+				,"安源公安分局","安源公安分局","安源公安分局"
+				,"安源公安分局","安源公安分局","安源公安分局"
+				//3级 安源公安局
+				,"萍乡公安局","萍乡公安局","萍乡公安局","萍乡公安局"
+				//4级 
+				,"",""
+		};
 		int ranks[] = new int[] {
 				//1级 五个煤矿
 				1,1,1,1,1
@@ -267,6 +284,7 @@ public class TestSpring extends TestCase {
 			user.setUnit(units[i]);
 			user.setRank(ranks[i]);
 			user.setTime(Tool.time());
+			user.setParentUnit(parentUnits[i]);
 			//user.setHeadImg("img/heads/" + (i%39+4) + ".jpg");
 			user.setHeadImg("img/heads/common.jpg");
 			dao.saveEntity(user);

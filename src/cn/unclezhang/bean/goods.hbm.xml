@@ -20,6 +20,9 @@
 		<property name="targetIds"></property>
 		<property name="acceptedIds"></property>
 		<property name="time"></property>
+		<property name="confirms1"></property>
+		<property name="confirms2"></property>
+		<property name="confirms3"></property>
 	</class>
 	
 </hibernate-mapping>

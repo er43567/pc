@@ -12,109 +12,113 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <title>民爆物品领用闭环管理</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <script type="text/javascript" src="js/ext.js"></script>
+    <style type="text/css">
+    .aui-list-item-label{font-size: 15px}
+    .aui-list-item-input{padding:2px;margin: 3px;}
+    .aui-list-header span{color: gray;}
+    </style>
 </head>
 <body>
     <div class="aui-content aui-margin-b-15">
         <ul class="aui-list aui-form-list">
-            <li class="aui-list-header" id="type">
-	            <label><input class="aui-radio" type="radio" name="types" id='zy' checked="checked" value="炸药"> &nbsp;&nbsp;&nbsp;炸药</label>
-	        	<label><input class="aui-radio" type="radio" name="types" id='lg' value="雷管"> &nbsp;&nbsp;&nbsp;雷管</label>
+            <li class="aui-list-header">
+            	<span class="">${goods.type}</span>
+               	<span class="">${goods.userId}</span>
+               	<span class="">${goods.unit}</span>
+               	<span class="">${goods.time}</span>
             </li>
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
-                    <div class="aui-list-item-label">
-                	单位核定药量
-                    </div>
                     <div class="aui-list-item-input">
-                    	${goods.unitDefined}
-                        <input type="number" id="unitDefined" disabled="disabled">
+                	单位核定药量 ${goods.unitDefined}<font style='color: gray;' size='-1'>${goods.type=='雷管'?"发":"公斤"}</font>
                     </div>
                 </div>
             </li>
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
-                    <div class="aui-list-item-label">
-                                        昨日实际库存量
-                    </div>
                     <div class="aui-list-item-input">
-                    	${goods.yesterdayGained}
+                                        昨日实际库存量 ${goods.yesterdayGained}<font style='color: gray;' size='-1'>${goods.type=='雷管'?"发":"公斤"}</font>
                     </div>
                 </div>
             </li>
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
-                    <div class="aui-list-item-label">
-                                        今日领取
-                    </div>
                     <div class="aui-list-item-input">
-                    	${goods.todayGained}
+                       	今日领取 ${goods.todayGained}<font style='color: gray;' size='-1'>${goods.type=='雷管'?"发":"公斤"}</font>
+                    	<div id='confirmed1' style="color: gray;font-size: 11px">已确认：${goods.confirmNames1}</div>
                     </div>
+                    <s:if test="#request.goods.confirms1.contains(#session.user.userId)==false && '爆破员 安全员 库管员'.contains(#session.user.position)">
+	                    <div style="margin-right: 0.5rem;font-size: 10px;">
+	                    	<div class="aui-btn aui-btn-primary" onclick="confirmGoods(this, 1)">确认</div>
+	                    </div>
+                    </s:if>
                 </div>
             </li>
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
-                    <div class="aui-list-item-label">
-                	今日使用
-                    </div>
                     <div class="aui-list-item-input">
-                    	${goods.todayUse}
+                	今日使用 ${goods.todayUse}<font style='color: gray;' size='-1'>${goods.type=='雷管'?"发":"公斤"}</font>
+                    <div id='confirmed2' style="color: gray;font-size: 11px">已确认：${goods.confirmNames2}</div>
                     </div>
+                    <s:if test="#request.goods.confirms2.contains(#session.user.userId)==false && '爆破员 安全员 安全负责人'.contains(#session.user.position)">
+	                    <div style="margin-right: 0.5rem">
+	                    	<div class="aui-btn aui-btn-primary" onclick="confirmGoods(this, 2)">确认</div>
+	                    </div>
+                    </s:if>
                 </div>
             </li>
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
-                    <div class="aui-list-item-label">
-                                        今日回库
-                    </div>
                     <div class="aui-list-item-input">
-                    	${goods.todayReturn}
+                                                         今日回库 ${goods.todayReturn}<font style='color: gray;' size='-1'>${goods.type=='雷管'?"发":"公斤"}</font>
+                      <div id='confirmed3' style="color: gray;font-size: 11px">已确认：${goods.confirmNames3}</div>
                     </div>
+                    <s:if test="#request.goods.confirms3.contains(#session.user.userId)==false && '爆破员 安全员 库管员'.contains(#session.user.position)">
+	                    <div style="margin-right: 0.5rem">
+	                    	<div class="aui-btn aui-btn-primary" onclick="confirmGoods(this, 3)">确认</div>
+	                    </div>
+                    </s:if>
                 </div>
             </li>
             <li class="aui-list-item">
                 <div class="aui-list-item-inner">
-                    <div class="aui-list-item-label">
-                	今日库存量
-                    </div>
                     <div class="aui-list-item-input">
-                    	${goods.todayStock}
+                	今日库存量 ${goods.todayStock}<font style='color: gray;' size='-1'>${goods.type=='雷管'?"发":"公斤"}</font>
                     </div>
                 </div>
             </li>
             
-            <li class="aui-list-item" id="submitLi">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div
-                     	class="aui-btn aui-btn-info aui-margin-r-5"
-                    	onclick="submit();">提交</div>
-                   <!--  <div class="aui-btn aui-btn-danger aui-margin-l-5">取消</div> -->
-                </div>
-            </li>
         </ul>
     </div>
 </body>
 <script type="text/javascript">
-function submit() {
-	var type = "炸药";
-	if(lg.checked) {
-		type = "雷管";
-	}
-	ajaxPost("AjaxAction!saveGoods", function(r) {
-		var res = eval("("+r+")");
-    	var result = res['result'];
-		if("success"==result) {
-			//submitLi.style.display = "none";
-			location.replace("PageAction!loadGoodsList");
+function confirmGoods(o, confirmType) {
+	ajaxPostWithEval("AjaxAction!confirmGoods", function(res, result) {
+		if(result == "success") {
+			responsConfirm(o, confirmType);
 		}
 	}, {
-		"goods.type":type,
-		"goods.unitDefined":unitDefined.value,
-		"goods.yesterdayGained":yesterdayGained.value,
-		"goods.todayGained":todayGained.value,
-		"goods.todayUse":todayUse.value,
-		"goods.todayReturn":todayReturn.value,
-		"goods.todayStock":todayStock.value
+		'goods.sid': ${goods.sid},
+		'confirmType':confirmType
 	});
+}
+
+function responsConfirm(o, confirmType) {
+	switch(confirmType) {
+	case 1:
+		confirmed1.innerText = '已确认：' + ('${goods.confirmNames1}'==''?'${session.user.name}':'${goods.confirmNames1} ' 
+				+ '${session.user.name}');
+		break;
+	case 2:
+		confirmed2.innerText = '已确认：' + ('${goods.confirmNames2}'==''?'${session.user.name}':'${goods.confirmNames2} ' 
+				+ '${session.user.name}');
+		break;
+	case 3:
+		confirmed3.innerText = '已确认：' + ('${goods.confirmNames3}'==''?'${session.user.name}':'${goods.confirmNames3} ' 
+				+ '${session.user.name}');
+		break;
+	}
+	o.parentNode.removeChild(o);
 }
 </script>
 </html>

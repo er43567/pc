@@ -16,10 +16,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </style>
     <script type="text/javascript">
     function showDetails() {
-        android.showListDialog(["A：由民爆单位安全负责人、法人代表确认整改到位后验收。"
-                                ,"B：由辖区派出所监管民警、分管副大队长、所长确认整改到位后验收。"
-                                ,"C：由分局监管民警、分管副大队长、大队长、局领导确认整改到位后验收。"
-                                ,"D：预留"]
+        android.showListDialog(["D：由民爆单位安全负责人、法人代表确认整改到位后验收。"
+                                ,"C：由辖区派出所监管民警、分管副大队长、所长确认整改到位后验收。"
+                                ,"B：由分局监管民警、分管副大队长、大队长、局领导确认整改到位后验收。"
+                                ,"A：预留"]
         , "onChoose");
     }
     function onChoose(n) {
@@ -39,10 +39,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         	风险等级
                     </div>
                     <div class="aui-list-item-input" style="">
-                        <label><input id="risk1" class="aui-radio" type="radio" name="risk" checked onclick="riskChecked(1)"> A</label>
-                        <label><input id="risk2" class="aui-radio" type="radio" name="risk" onclick="riskChecked(2)"> B</label>
-                        <label><input id="risk3" class="aui-radio" type="radio" name="risk" onclick="riskChecked(3)"> C</label>
-                        <label><input id="risk4" class="aui-radio" type="radio" name="risk" disabled="disabled" onclick="riskChecked(4)"> D</label>
+                        <label><input id="risk1" class="aui-radio" type="radio" name="risk" checked onclick="riskChecked(1)"> D</label>
+                        <label><input id="risk2" class="aui-radio" type="radio" name="risk" onclick="riskChecked(2)"> C</label>
+                        <label><input id="risk3" class="aui-radio" type="radio" name="risk" onclick="riskChecked(3)"> B</label>
+                        <label><input id="risk4" class="aui-radio" type="radio" name="risk" disabled="disabled" onclick="riskChecked(4)"> A</label>
                     </div>
                     <!-- <div onclick="showDetails()" class="aui-btn-info" 
                     	style="padding-left:3px;margin: 3px;width: 3rem">详细</div> -->

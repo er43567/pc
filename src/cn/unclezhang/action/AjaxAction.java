@@ -34,6 +34,13 @@ public class AjaxAction extends MyActionSupport {
 		this.page = page;
 		from_id = (page-1)*10;
 	}
+	List<String> list;
+	public List<String> getList() {
+		return list;
+	}
+	public void setList(List<String> list) {
+		this.list = list;
+	}
 	User user;
 	@JSON(serialize=false)
 	public User getUser() {
@@ -103,7 +110,10 @@ public class AjaxAction extends MyActionSupport {
 		setResult(jo.toString());
 		return aa;
 	}
-	
+	public String loadSessionUser() {
+		user = getSessionUser();
+		return aa;
+	}
 	/*===========用户设置页面===========*/
 	public String updateHeadImg() {
 		boolean bo = service.updateUserFiled(getSessionUserId(), "headImg", user.getHeadImg());
@@ -188,8 +198,7 @@ public class AjaxAction extends MyActionSupport {
 		String upload_path = request.getServletContext().getRealPath("/pages/upload");
 		String files[] = report.getFiles();
 		if (files != null) {
-			System.out.println("files len " + files.length);
-			System.out.println(Arrays.toString(files));
+			
 		} else {
 			System.out.println("files null");
 		}
@@ -215,7 +224,6 @@ public class AjaxAction extends MyActionSupport {
 			items = items.substring(1);
 		}
 		service.createProblems(sid, report.getChoices(), Tool.unescape(items+"").split(","));
-		
 		setResult(sid + "");
 		return aa;
 	}
@@ -232,6 +240,13 @@ public class AjaxAction extends MyActionSupport {
 		return aa;
 	}
 	
+	public String updateProblemReform() {
+		boolean bo = service.updateProblemReform(problem.getSid(), Tool.unescape(problem.getReform()));
+		if(!bo) {
+			setResult("fail");
+		}
+		return aa;
+	}
 	/**
 	 * ============Notice===========
 	 */
@@ -438,7 +453,7 @@ public class AjaxAction extends MyActionSupport {
 			return aa;
 		}
 		int taskSid = service.saveTask(Tool.unescape(task.getTitle()), Tool.unescape(task.getContent())
-				, Tool.unescape(task.getTargetIds()), task.getImpt());
+				, Tool.unescape(task.getTargetIds() + "," + getSessionUserId()), task.getImpt());
 		if (taskSid == -1) {
 			setResult("fail");
 		} else {
@@ -540,15 +555,14 @@ public class AjaxAction extends MyActionSupport {
 	public void setGoods(Goods goods) {
 		this.goods = goods;
 	}
-	
 	public String saveGoods() {
+		goods.setType(Tool.unescape(goods.getType()));//unEscape
 		int n = service.saveGoods(getSessionUser().getUserId(), goods);
 		if (n == -1) {
 			setResult("fail");
 		}
 		return aa;
 	}
-	
 	List<Goods> goodsList;
 	public List<Goods> getGoodsList() {
 		return goodsList;
@@ -557,9 +571,41 @@ public class AjaxAction extends MyActionSupport {
 		this.goodsList = goodsList;
 	}
 	public String loadGoodsList() {
-		goodsList = service.loadGoodsList(from_id, count_per_page);
-		System.out.println();
-		return "goodsList";
+		System.out.println(Tool.unescape(goods.getUnit()));
+		goodsList = service.loadGoodsList(Tool.unescape(goods.getUnit())
+				, from_id, count_per_page);
+		System.out.println(goodsList.size());
+		return aa;
+	}
+	
+	int confirmType;
+	public void setConfirmType(int confirmType) {
+		this.confirmType = confirmType;
+	}
+	public String confirmGoods() {
+		boolean bo = service.confirmGoods(getSessionUserId(), goods.getSid(), confirmType);
+		if (!bo) {
+			setResult("fail");
+		}
+		return aa;
+	}
+	
+	public String softerConfirm() {
+		if (!getSessionUser().getPosition().equals("安全员")) {
+			//如果不是安全员
+			setResult("fail");
+			return aa;
+		}
+		boolean bo = service.softerConfirm(getSessionUserId(), report.getSid());
+		if (!bo) {
+			setResult("fail");
+		}
+		return aa;
+	}
+	
+	public String loadLoopCtrlUnitList() {
+		list = service.loadLoopCtrlUnitList(getSessionUser().getUnit(), getSessionUser().getRank());
+		return aa;
 	}
 	
 	public String getResult() {

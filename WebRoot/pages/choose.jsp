@@ -19,7 +19,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="aui-content aui-margin-b-1-5">
         <ul id="items" class="aui-list aui-list-in">
             <li class="aui-list-header" style="position:fixed;left: 0px;top: 0px;width: 100%;z-index: 99">
-            	<h4 class="aui-text-white"><input type="checkbox" class="aui-checkbox" onclick="reverseAll(this)"> 反选</h4>
+            	<h4 class="aui-text-white">
+            		<label><input type="checkbox" class="aui-checkbox" onclick="chooseAll(this)"> 全选</label>
+            		<label><input type="checkbox" class="aui-checkbox" onclick="reverseAll(this)"> 反选</label>
+            	</h4>
             	<div class="aui-btn aui-btn-info aui-text-white" onclick="finished()">确定</div>
             </li>
             <div style="height:50px"></div>
@@ -28,7 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="aui-list-item-inner">
                     <div id="${item.userId}" class="aui-list-item-title">${item.unit} ${item.name}</div>
                     <div class="aui-list-item-right">
-                        <input id="ckbox${st.index}" type="checkbox" class="aui-checkbox" onclick="clicked('${st.index}')">
+                        <input id="ckbox${st.index}" type="checkbox" class="aui-checkbox ckbox" onclick="clicked('${st.index}')">
                     </div>
                 </div>
             </li>
@@ -107,6 +110,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 	}
 	
+	function chooseAll(obj) {
+		var ckboxes = document.getElementsByClassName("ckbox");
+		for (var i=0;i<ckboxes.length;i++) {
+			ckboxes[i].checked = obj.checked;
+			clicked(i);
+		}
+	}
 	
 </script>
 

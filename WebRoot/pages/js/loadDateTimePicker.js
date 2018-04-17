@@ -12,8 +12,12 @@
 					_self.picker = null;
 				});
 			} else {
-				var optionsJson = this.getAttribute('data-options') || '{}';
-				var options = JSON.parse(optionsJson);
+				//var optionsJson = this.getAttribute('data-options') || '{}';
+				var options = {
+					"type":"date",
+					"beginDate":new Date(2017, 01, 01),
+					"endDate":new Date()
+				};//JSON.parse(optionsJson);
 				var id = this.getAttribute('id');
 				_self.picker = new $.DtPicker(options);
 				_self.picker.show(function(rs) {

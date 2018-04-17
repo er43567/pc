@@ -90,7 +90,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				for(var i=0;i<tasks.length;i++) {
 					var item = tasks[i];
 					taskList.innerHTML += getItem(item.sid, item.title, item.content, item.time
-							, "", item.position, item.userName, item.impt);
+							, "", item.position, item.userName, item.impt, item.targetNames);
 					hasNext = true;
 				}
 				if(hasNext) {
@@ -98,6 +98,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					loadMoreBtn.innerText = "加载更多";
 				} else {
 					loadMoreBtn.innerText = "没有更多数据了";
+					if(page == 1) {
+						//一个数据也没有的时候
+						
+					}
 				}
 			};
 		}, {"page":nextPage});
@@ -113,19 +117,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}, 500);
 	</script>
 	<script type="text/javascript">
-	function getItem(sid, title, content, time, scope, position, userName, impt) {
+	function getItem(sid, title, content, time, scope, position, userName, impt, targetUserNames) {
 		var stars = ["⭐","⭐⭐","⭐⭐⭐"];
 		var star = stars[impt];
 		var itemHtml = 
 			"<div id='"+sid+"' class='aui-card-list'>"
 			+"        <div class='aui-card-list-header'>"
-			+"    	"+title+"<div style='color: gray'>"+star+"</div>"
+			+"    	<font size=+1>"+title+"</font><div style='color: gray'>"+star+"</div>"
 			+"</div>"
 			+"<div class='aui-card-list-content-padded'>"
-			+"    	"+content
+			+"    	"+content + "<br/><font color='gray' size=-1>(可见人员："+targetUserNames.substring(1)+")</font>"
 			+"</div>"
 			+"<div class='aui-card-list-footer'>"
-			+"    <div>"+scope + position + userName+"发布</div>"+time
+			+"    <div>"+scope + position + userName+"&nbsp;发布</div>"+time
 			+"</div>"
 			+"</div>";
 		return itemHtml;

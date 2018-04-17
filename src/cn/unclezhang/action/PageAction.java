@@ -12,6 +12,7 @@ import cn.unclezhang.bean.Problem;
 import cn.unclezhang.bean.Report;
 import cn.unclezhang.bean.User;
 import cn.unclezhang.conf.Conf;
+import cn.unclezhang.relatives.RelativeHelper;
 
 public class PageAction extends MyActionSupport {
 	User user;
@@ -30,7 +31,7 @@ public class PageAction extends MyActionSupport {
 	}
 	/*===========用户选择列表 页面===========*/
 	public String loadUserChoosePage() {
-		users = service.loadAllUsers(User.OPTIMIZED_TRUE);
+		users = service.loadTaskTargetsUsers();
 		return "choose";
 	}
 	
@@ -208,8 +209,35 @@ public class PageAction extends MyActionSupport {
 		return "explosiveProblemList";
 	}
 	
+	public String loadMyFinishedProblemList() {
+		problems = service.loadMyFinishedProblemList();
+		for (int i=0; problems!=null && i<problems.size();i++) {
+			Problem tmpProblem = problems.get(i);
+			Report tmpReport = service.findReportById(tmpProblem.getRef());
+			User u = service.findUserById(tmpReport.getUserId());
+			tmpProblem.setText("["+tmpReport.getChineseType()+ " " + tmpProblem.getTime() + "]<br/>" 
+					+ Conf.getExplosive(u.getRank(), tmpProblem.getWhichItem()));
+		}
+		//去掉标题
+		report.setType("");
+		return "explosiveProblemList";
+	}
+	
+	Goods goods;
+	public Goods getGoods() {
+		return goods;
+	}
+	public void setGoods(Goods goods) {
+		this.goods = goods;
+	}
+	public String loadGoodsPage() {
+		goods = service.loadGoodsById(goods.getSid());
+		return "loopCtrlView";
+	}
+	
 	@Override
 	public String getResult() {
 		return result;
 	}
+	
 }
