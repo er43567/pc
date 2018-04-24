@@ -72,31 +72,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </section>
     <section class="aui-content">
         <ul class="aui-list aui-list-in aui-margin-b-15">
+        	<li class="aui-list-item" onclick="startUrl('explosiveAllProblemList.jsp')">
+                <div class="aui-list-item-label-icon">
+                    <img alt="" src="img/结束.png" style="width: 20px;">
+                </div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    <div class="aui-list-item-title">所有问题</div>
+                    <div class="aui-badge" style="position: static; display: none;"></div>
+                </div>
+            </li>
+            
         	<li class="aui-list-item" onclick="startUrl('PageAction!loadMyProblemList')">
                 <div class="aui-list-item-label-icon">
                     <img alt="" src="img/正在执行.png" style="width: 20px;">
                 </div>
                 <div class="aui-list-item-inner aui-list-item-arrow">
                     <div class="aui-list-item-title">我待解决</div>
-                    <div id=' ' class="aui-badge" style="position: static;display: none;"></div>
+                    <div class="aui-badge" style="position: static;display: none;"></div>
                 </div>
             </li>
-            <li class="aui-list-item" onclick="startUrl('PageAction!loadMyFinishedProblemList')">
-                <div class="aui-list-item-label-icon">
-                    <img alt="" src="img/结束.png" style="width: 20px;">
-                </div>
-                <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">我已解决</div>
-                    <div id=' ' class="aui-badge" style="position: static;display: none;"></div>
-                </div>
-            </li>
+            
         	<li class="aui-list-item" onclick="historyReportClicked()">
                 <div class="aui-list-item-label-icon">
                     <!-- <i class="aui-iconfont aui-icon-location aui-text-info"></i> -->
                     <img alt="" src="img/历史.png" style="width: 20px;">
                 </div>
                 <div class="aui-list-item-inner aui-list-item-arrow">
-                    <span class="aui-list-item-title">三查情况</span>
+                    <span class="aui-list-item-title">历史三查情况</span>
                     <div id='reportCount' class="aui-badge" style="position: static;display: none;">99+</div>
                 </div>
             </li>
@@ -114,7 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <img alt="" src="img/管理.png" style="width: 20px;">
                 </div>
                 <div class="aui-list-item-inner aui-list-item-arrow">
-                    <div class="aui-list-item-title">闭环管理</div>
+                    <div class="aui-list-item-title">物品领用闭环管理</div>
                     <div id='' class="aui-badge" 
                     	style="position: static;display: none;">99+</div>
                 </div>
@@ -137,20 +139,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="aui-info-item aui-padded-10">
                         <div style="max-height:2.2rem;overflow: hidden;">
                         <img id="taskHeadImg" src="img/defaultHead.png" style="width:2.2rem;"/></div>
-                        <span id="taskUserName" class="aui-margin-l-10 aui-margin-r-10">某某某 </span>发布任务
+                        <span id="taskUserName" class="aui-margin-l-10 aui-margin-r-10">某某某 </span>发布公告
                         <!-- <i class="aui-iconfont aui-icon-laud aui-text-info "></i> -->
                     </div>
                     <div id="taskTime" class="aui-info-item aui-padded-5">2018-03-24</div>
                 </div>
             </div>
             <div id="taskContent" class="aui-margin-l-10" style="margin-top: -10px">
-                	任务详情
+                	公告详情
             </div>
             <div class="aui-card-list-footer aui-border-t">
-                <div><!-- <i class="aui-iconfont aui-icon-note"></i>  -->任务指数⭐</div>
+                <div><!-- <i class="aui-iconfont aui-icon-note"></i>  -->公告指数⭐</div>
                 <div><!-- <i class="aui-iconfont aui-icon-laud"></i> 888 --></div>
                 <div class="aui-btn aui-btn-outlined" style="padding: 2px" onclick="startUrl('historyTasks.jsp')">
-               		<i class="aui-iconfont aui-icon-menu" style="font-size: 14px;margin-left: 2px"> 任务列表</i>
+               		<i class="aui-iconfont aui-icon-menu" style="font-size: 14px;margin-left: 2px"> 公告列表</i>
                	</div>
                 <!-- <i class="aui-iconfont aui-icon-menu" style="font-size: 14px"> 打开任务列表</i> --></div>
            </div>

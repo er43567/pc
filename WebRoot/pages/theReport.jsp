@@ -36,11 +36,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        <ul class="aui-list aui-select-list">
        <li class="aui-list-header">民爆库房三查表单 
        	<div id='datetime' data-options='{"type":"date"}'
-        	style="background-color: #03a9f4;padding:2px;color: white;"
-       		 onclick="loadDateTimePickerLib();"></div>
+        	style="background-color: #03a9f4;padding:1px;color: white;border-radius:1px"
+       		onclick="loadDateTimePickerLib();"></div>
        </li>
-       	<!--<font color="gray"><b>检查项目</b></font>-->
-       	
+       <!--<font color="gray"><b>检查项目</b></font>-->
+       <s:if test="#session.user.rank>=2">
+	       <li class="aui-list-item">
+	            <div class="aui-list-item-inner" style="text-align: center;">
+	             	<select class="aui-btn" style="background-color:#f1f1f1" id="checkedUnit">
+	             		<option value="">选择检查单位</option>
+	             		<s:iterator id="item" value="#request.list">
+	             			<option value="${item}">${item}</option> 
+	             		</s:iterator>
+	             	</select>
+	            </div>
+	        </li>
+        </s:if>
+        
        	<s:iterator id="item" value="#request.report.reportItems" status="st">
            <li class="aui-list-item">
                <div class="aui-list-item-inner">
@@ -178,18 +190,12 @@ for(var i=0;i<lists.length;i++) {
 
 var saving = false;
 function saveReport() {
-
 	var the_choices = getChoices();
 	var notChoosed = the_choices.indexOf("0");
 	if(notChoosed>=0) {
 		android.show("第" + (notChoosed+1) + "项未选择");
 		return;
 	}
-	//防止一直点
-	if(saving){android.show("正在努力创建中，请君稍候...");return;}
-	saving = true;
-	saveButton.innerText = "创建表单中...";
-	
 	
 	var save_mode = true;
 	var url0 = "AjaxAction!saveReport";
@@ -221,17 +227,39 @@ function saveReport() {
 	for(var i=0;i<imgs.length;i++) {
 		datas['report.file'+i] = imgs[i].src;
 	}
+	if(imgs.length==0) {
+		//解决再次提交出现之前的图片
+		datas['noPic'] = true;
+	}
+	
+	if('${session.user.rank>=2}'=='true') {
+		if(checkedUnit.value == "") {
+			android.show("请选择单位");
+			location.href = "#checkedUnit";
+			return;
+		} else {
+			datas['report.checkedUnit'] = escape(checkedUnit.value);
+		}
+	} else {
+		datas['report.checkedUnit'] = "";
+	}
+	
+	//防止一直点
+	if(saving){android.show("正在努力创建中，请君稍候...");return;}
+	saving = true;
+	saveButton.innerText = "创建表单中...";
 	
 	$.ajax({
 		type: "post",
 		url: url0,
 		dataType: "json",
+		cache:false,
 		data: datas,
 		success:function(r) {
 			saving = false;
 			saveButton.innerText = "创建表单";
 			
-			if(r['result'] == 'success' || !isNaN(r['result'])) {
+			if(r['result'] == 'success' || !isNaN(r['result']) || Number(r['result']>0)) {
 				if(save_mode) {
 					thisReport.value = r['result'];
 				}
@@ -244,7 +272,7 @@ function saveReport() {
 					beginProcessControl(thisReport.value, the_choices);
 				};
 				saveButton.className = saveButton.className.replace("aui-btn-primary","aui-btn-info");
-				alert("创建成功\n已将表单推送给相关人员");
+				android.show("创建成功\n已将表单推送给相关人员");
 				//showAfterSaved.style.display = "block";
 			} else if('reported'==r['result']) {
 				alert(datetime.innerText + '日已发布此类型表单，请更换日期');
@@ -338,7 +366,7 @@ function beginProcessControl() {
 <link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
 <script id="dtjs1" src="../js/mui.min.js"></script>
 <script id="dtjs2" src="../js/mui.picker.min.js"></script>
-<script id="dtjs3" src="js/loadDateTimePicker.js?v=1231"></script>
+<script id="dtjs3" src="js/loadDateTimePicker.js"></script>
 <%-- <script type="text/javascript">
 function loadDateTimePickerLib() {
 	var js1 = "../js/mui.min.js";
@@ -379,10 +407,11 @@ function loadJs() {
 <script type="text/javascript">
 var ans = 0;
 document.getElementById('file_input').addEventListener('change', function () {
-	if(file_input_div.getElementsByTagName("img").length>=8) {
+	if(file_input_div.getElementsByTagName("img").length>=9) {
 		alert('上传最多9张图片');
 		return;
 	}
+	android.showProgressDialog("处理图片中...");
 	var that = this;
  	lrz(that.files[0], {
 	    width: 600
@@ -398,15 +427,24 @@ document.getElementById('file_input').addEventListener('change', function () {
 	    var nn = ans;
 	    img.onclick = function(){reviewImg(nn);};
 	    ans++;
-	    
+	    android.cancelProgressDialog();
 	    return rst;
 	});
 });
 var imgList = "";
+var imgListArr = [];
 function addImg(imgbase64) {
-	imgList += imgbase64 + "##";
+	if(ans<3)
+		imgList += imgbase64 + "##";
+	else
+		imgList = "";
+	imgListArr.push(imgbase64);
 }
 function reviewImg(currentPos) {
+	if(ans>=3) {
+		android.reviewImages(imgListArr[currentPos], 0);
+		return;
+	}
 	android.reviewImages(imgList, currentPos);
 }
 </script>

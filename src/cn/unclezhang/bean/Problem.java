@@ -11,7 +11,15 @@ public class Problem {
 	String reportType;
 	String text;
 	
+	String unit;
+	
 	String reform;//整改结果
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
 	public String getAcceptingUserName() {
 		return acceptingUserName;
 	}

@@ -23,6 +23,7 @@
 		<property name="time"></property>
 		<property name="rem"></property>
 		<property name="reform"></property>
+		<property name="unit" formula="(select tb.unit from user_tb tb where tb.userId=userId)"></property>
 		<!-- <property name="reportType" formula="(select rtb.type from report_tb rtb where rtb.sid=ref)"></property> -->
 	</class>
 </hibernate-mapping>

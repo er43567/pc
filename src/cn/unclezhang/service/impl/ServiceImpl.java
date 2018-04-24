@@ -88,7 +88,8 @@ public class ServiceImpl implements IService {
 
 	@Override
 	public int saveReport(String userId, String type, String targets
-			, String[] items, String choices, String rem, String time, String scope, String imgs) {
+			, String[] items, String choices, String rem, String time
+			, String scope, String imgs, String checkedUnit) {
 		try {
 			Report r = new Report();
 			r.setUserId(userId);
@@ -96,8 +97,8 @@ public class ServiceImpl implements IService {
 			r.setUnit(user.getUnit());
 			r.setChoices(choices);
 			r.setItems(items);
-			
 			r.setImgs(imgs);
+			r.setCheckedUnit(checkedUnit);
 			
 			RelativeHelper rh = new RelativeHelper(dao, this);
 			targets = rh.getReportNoticeUserIds(user.getUnit());
@@ -110,7 +111,7 @@ public class ServiceImpl implements IService {
 			int sid = (Integer) dao.saveEntity(r);
 			
 			/**
-			 * 推送 
+			 * 推送
 			 */
 			if(targets!=null) {
 				//去掉自己
@@ -482,7 +483,12 @@ public class ServiceImpl implements IService {
 		RelativeHelper rh = new RelativeHelper(dao, this);
 		//rh.getProblemNoticeUserIds(user.getRank(), user.getUnit())
 		try {
-			p.setTargetIds(rh.getProblemTargetIdsByRisk(risk, user.getUnit()));
+			Report report = dao.findOneByHql("from Report where sid=?", new Object[]{p.getRef()});
+			String checkedUnit = report.getCheckedUnit();
+			if (risk == 1) {
+				checkedUnit = null;
+			}
+			p.setTargetIds(rh.getProblemTargetIdsByRisk(risk, report.getUnit(), checkedUnit, report.getUserId()));
 			dao.updateEntity(p);
 			//推送
 			saveNotice(user.getUserId(), p.getRef(), Notice.TYPE_PROBLEM
@@ -519,6 +525,20 @@ public class ServiceImpl implements IService {
 			p.setAcceptingUserName(rh.getUserNamesByUserIds(p.getTargetIds()));
 			p.setFunctionaryName(rh.getUserNamesByUserIds(p.getFunctionary()));
 			
+			if (p.getAcceptedUserName()==null) {
+				p.setAcceptedUserName("");
+			}
+			if (p.getAcceptingUserName()==null) {
+				p.setAcceptingUserName("");
+			}
+			if (p.getFunctionaryName()==null) {
+				p.setFunctionaryName("");
+			}
+			
+			p.setAcceptedUserName(p.getAcceptedUserName().replaceAll(",", " ").trim());
+			p.setAcceptingUserName(p.getAcceptingUserName().replaceAll(",", " ").trim());
+			p.setFunctionaryName(p.getFunctionaryName().replaceAll(",", " ").trim());
+			
 			return p;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -528,8 +548,11 @@ public class ServiceImpl implements IService {
 	@Override
 	public List<Problem> loadProblemsByRef(int ref, String userId) {
 		try {
-			List<Problem> li = dao.findByHql("from Problem where ref=? and userId=? order by sid desc"
-					, new Object[]{ref, userId});
+			//edit 2018/4/20 11.56
+			/*List<Problem> li = dao.findByHql("from Problem where ref=? and userId=? order by sid desc"
+					, new Object[]{ref, userId});*/
+			List<Problem> li = dao.findByHql("from Problem where ref=? order by sid desc"
+					, new Object[]{ref});
 			return li;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -601,6 +624,13 @@ public class ServiceImpl implements IService {
 	public int saveGoods(String userId, Goods goods) {
 		goods.setUnit(user.getUnit());
 		goods.setTime(Tool.time());
+		if (goods.getConfirms1() == null) {
+			goods.setConfirms1("");
+		}if (goods.getConfirms2() == null) {
+			goods.setConfirms2("");
+		}if (goods.getConfirms3() == null) {
+			goods.setConfirms3("");
+		}
 		try {
 			int n = (Integer) dao.saveEntity(goods);
 			return n;
@@ -626,15 +656,18 @@ public class ServiceImpl implements IService {
 		try {
 			RelativeHelper rh = new RelativeHelper(dao, this);
 			Goods g = dao.findOneByHql("from Goods where sid=?", new Object[]{sid});
+			
 			g.setConfirmNames1(rh.getUserNamesByUserIds(g.getConfirms1()));
 			g.setConfirmNames2(rh.getUserNamesByUserIds(g.getConfirms2()));
 			g.setConfirmNames3(rh.getUserNamesByUserIds(g.getConfirms3()));
+			
 			if (g.getConfirmNames1()!=null)
 				g.setConfirmNames1(g.getConfirmNames1().replaceAll(",", " "));
 			if (g.getConfirmNames2()!=null)
 				g.setConfirmNames2(g.getConfirmNames2().replaceAll(",", " "));
 			if (g.getConfirmNames3()!=null)
 				g.setConfirmNames3(g.getConfirmNames3().replaceAll(",", " "));
+			
 			return g;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -720,6 +753,62 @@ public class ServiceImpl implements IService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public boolean updateGoods(int sid, int todayGained, int todayUse, int todayReturn) {
+		Goods g = loadGoodsById(sid);
+		
+		g.setTodayGained(todayGained);
+		g.setTodayUse(todayUse);
+		g.setTodayReturn(todayReturn);
+		
+		try {
+			dao.updateEntity(g);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public Report loadReportById(int sid) {
+		try {
+			return dao.findOneByHql("from Report where sid=?", new Object[]{sid});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Problem> loadMyRelativeUnitsProblemList(boolean wasFinished, String unit, int from_id, int len) {
+		/*RelativeHelper rh = new RelativeHelper(dao, this);
+		String uids = rh.getUserIdsByUnitNames(-1, relativeUnits);*/
+		String relativeUnits[] = RelativeHelper.getRelativeUnits(unit);
+		List<Problem> li;
+		try {
+			/*if (wasFinished) {
+				li = dao.findByHql("from Problem where locate(userId, ?)>0 and state='finished' order by sid desc"
+						, new Object[]{uids}, from_id, len);
+				
+			} else {
+				li = dao.findByHql("from Problem where locate(userId, ?)>0 and state!='finished' order by sid desc"
+						, new Object[]{uids}, from_id, len);
+			}*/
+			if (wasFinished) {
+				li = dao.findByHql("from Problem where locate(unit, ?)>0 and state='finished' order by sid desc"
+						, new Object[]{Arrays.toString(relativeUnits)}, from_id, len);
+			} else {
+				li = dao.findByHql("from Problem where locate(unit, ?)>0 and state!='finished' order by sid desc"
+						, new Object[]{Arrays.toString(relativeUnits)}, from_id, len);
+			}
+			return li;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

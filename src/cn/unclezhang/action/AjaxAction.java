@@ -15,6 +15,7 @@ import org.apache.struts2.json.annotations.JSON;
 
 
 
+
 import cn.lrxzl.file.FileUtil;
 import cn.lrxzl.lib.java.tool.Tool;
 import cn.lrxzl.ssh_base.support.MyActionSupport;
@@ -168,6 +169,10 @@ public class AjaxAction extends MyActionSupport {
 	public void setReport(Report report) {
 		this.report = report;
 	}
+	boolean noPic = false;
+	public void setNoPic(boolean noPic) {
+		this.noPic = noPic;
+	}
 	public String saveReport() {
 		if (notLogin()) {
 			setResult("未登录");
@@ -180,8 +185,12 @@ public class AjaxAction extends MyActionSupport {
 		List<Report> tmprs = null;
 		if((tmprs = service.loadUnitDateReports(report.getType(), report.getTime(), getSessionUser().getUnit())) != null) {
 			if (tmprs.size() != 0) {
-				setResult("reported");
-				return aa;
+				//如果已经发布过改日期的表单
+				if (getSessionUser().getRank()==1) {
+					//判断是否位1级
+					setResult("reported");
+					return aa;
+				}
 			}
 			//report = tmprs.get(0);
 		}
@@ -196,35 +205,43 @@ public class AjaxAction extends MyActionSupport {
 		 */
 		String tmp_htext = new String();
 		String upload_path = request.getServletContext().getRealPath("/pages/upload");
-		String files[] = report.getFiles();
-		if (files != null) {
-			
+		
+		System.out.println("noPic:" + noPic);
+		if (noPic == false) {
+			String files[] = report.getFiles();
+			if (files != null) {
+				
+			} else {
+				System.out.println("files null");
+			}
+			for(int i=0;i<files.length;i++) {
+				if(TextUtils.isEmpty(files[i]))continue;
+				//files[i] = Tool.(files[i]);
+				System.out.println(files[i]);
+				String NewFileName = new Date().getTime()+""+((char)((Math.random()*26)+97))+((char)((Math.random()*26)+97));
+				System.out.println(files[i].substring(0,100));
+				String Ext = FileUtil.getImageExtFromBase64(files[i]);
+				FileUtil.generateImage(files[i],upload_path,NewFileName,Ext);
+				tmp_htext += NewFileName+"."+Ext+(i<files.length-1?";":"");
+			}
+			report.setImgs(tmp_htext);
 		} else {
-			System.out.println("files null");
-		}
-		for(int i=0;i<files.length;i++) {
-			if(TextUtils.isEmpty(files[i]))continue;
-			//files[i] = Tool.(files[i]);
-			System.out.println(files[i]);
-			String NewFileName = new Date().getTime()+""+((char)((Math.random()*26)+97))+((char)((Math.random()*26)+97));
-			System.out.println(files[i].substring(0,100));
-			String Ext = FileUtil.getImageExtFromBase64(files[i]);
-			FileUtil.generateImage(files[i],upload_path,NewFileName,Ext);
-			tmp_htext += NewFileName+"."+Ext+(i<files.length-1?";":"");
+			report.setImgs("");
 		}
 		
-		report.setImgs(tmp_htext);
 		int sid = service.saveReport(getSessionUserId(), Tool.unescape(report.getType()+"")
 				, Tool.unescape(report.getTargets()+""), Tool.unescape(items+"").split(",")
 				, report.getChoices(), Tool.unescape(report.getRem()+""), report.getTime()
-				, getSessionUser().getScope(), report.getImgs());
+				, getSessionUser().getScope(), report.getImgs(), Tool.unescape(report.getCheckedUnit()));
 		
 		//创建所有问题
 		if (items.startsWith(",")) {
 			items = items.substring(1);
 		}
+		
 		service.createProblems(sid, report.getChoices(), Tool.unescape(items+"").split(","));
 		setResult(sid + "");
+		
 		return aa;
 	}
 	
@@ -493,7 +510,15 @@ public class AjaxAction extends MyActionSupport {
 	public void setProblem(Problem problem) {
 		this.problem = problem;
 	}
+	String selectedUnit;
+	public void setSelectedUnit(String selectedUnit) {
+		this.selectedUnit = selectedUnit;
+	}
 	public String firstUpdateAndNoticeProblem() {
+		/*RelativeHelper rh = new RelativeHelper(null, service);
+		problem.setTargetIds(rh.getUserIdsByUnitNames(-1, selectedUnit));
+		System.out.println(problem.getTargetIds());*/
+		
 		boolean bo = service.firstUpdateAndNoticeProblem(problem.getSid()
 				, problem.getRisk()
 				, Tool.unescape(problem.getMeasure())
@@ -543,6 +568,43 @@ public class AjaxAction extends MyActionSupport {
 		}
 		return aa;
 	}
+	List<Problem> problems;
+	public List<Problem> getProblems() {
+		return problems;
+	}
+	public void setProblems(List<Problem> problems) {
+		this.problems = problems;
+	}
+	
+	public String loadMyRelUnitsProblemList() {
+		if (page == 1) {
+			problems = service.loadMyRelativeUnitsProblemList(false, getSessionUser().getUnit(), from_id, count_per_page);
+			if (problems == null) {
+				problems = new ArrayList<Problem>();
+			}
+			List<Problem> finishedProblems = service.loadMyRelativeUnitsProblemList(true, getSessionUser().getUnit(), from_id, count_per_page);
+			if (finishedProblems != null) {
+				problems.addAll(finishedProblems);
+			}
+		} else {
+			problems = service.loadMyRelativeUnitsProblemList(true, getSessionUser().getUnit(), from_id, count_per_page);
+		}
+		
+		for (int i=0; problems!=null && i<problems.size(); i++) {
+			Problem tmpProblem = problems.get(i);
+			Report tmpReport = service.findReportById(tmpProblem.getRef());
+			User u = service.findUserById(tmpReport.getUserId());
+			/*String beCheckedUnitText = " ";
+			if (!TextUtils.isEmpty(tmpReport.getCheckedUnit())) {
+				beCheckedUnitText = "检查" + tmpReport.getCheckedUnit() + " ";
+			}*/
+			tmpProblem.setText("[" + tmpReport.getUnit() + " " + tmpProblem.getTime().substring(0, 16) + "]<br/>" 
+					+ Conf.getExplosive(u.getRank(), tmpProblem.getWhichItem()));
+		}
+		//去掉标题
+		report.setType("");
+		return "explosiveProblemList";
+	}
 	
 	/**
 	 * 闭环管理
@@ -559,6 +621,13 @@ public class AjaxAction extends MyActionSupport {
 		goods.setType(Tool.unescape(goods.getType()));//unEscape
 		int n = service.saveGoods(getSessionUser().getUserId(), goods);
 		if (n == -1) {
+			setResult("fail");
+		}
+		return aa;
+	}
+	public String updateGoods() {
+		boolean bo = service.updateGoods(goods.getSid(), goods.getTodayGained(), goods.getTodayUse(), goods.getTodayReturn());
+		if (!bo) {
 			setResult("fail");
 		}
 		return aa;
@@ -590,7 +659,8 @@ public class AjaxAction extends MyActionSupport {
 		return aa;
 	}
 	
-	public String softerConfirm() {
+	
+	public String softerConfirmReport() {
 		if (!getSessionUser().getPosition().equals("安全员")) {
 			//如果不是安全员
 			setResult("fail");

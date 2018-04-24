@@ -11,23 +11,23 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<title>任务发布</title>
+		<title>发布公告</title>
 		<link rel="stylesheet" type="text/css" href="../css/mui.min.css" />
 		<link rel="stylesheet" type="text/css" href="../css/feedback.css" />
 		
 		<script type="text/javascript" src="js/ext.js"></script>
 		<script type="text/javascript">
-		android.setStatusBarTransparent();
+		//android.setStatusBarTransparent();
 		</script>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav" style="margin-top: 1.2rem" >
+		<header class="mui-bar mui-bar-nav">
 			<a class="mui-icon mui-icon-left-nav "
 				href="javascript:android.closeActivity()"></a>
 			<button id="submit" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right"
 				onclick="publish()">发布</button>
-			<h1 class="mui-title">任务发布</h1>
+			<h1 class="mui-title">公告发布</h1>
 		</header>
 		<div style="margin-top: 0.8rem"></div>
 		<div class="mui-content">
@@ -55,11 +55,11 @@
 					</div>
 				</div> -->
 			</div>
-			<div class="mui-inline">任务标题</div>
+			<div class="mui-inline">公告标题</div>
 			<div class="mui-input-row">
 				<input id='title' type="text" class="mui-input-clear contact" placeholder="填写任务标题" />
 			</div>
-			<div class="mui-inline">任务内容</div>
+			<div class="mui-inline">公告内容</div>
 			<div class="row mui-input-row">
 				<textarea id='content' class="mui-input-clear question" placeholder="填写任务内容"></textarea>
 			</div>
@@ -69,19 +69,19 @@
 					onclick="startUrl('PageAction!loadUserChoosePage', ['notitle','nogesture','norefresh'], userChoosed)">+</div>
 				<div id='resultDiv' style="position: absolute;left:40px;top:10px;color: gray;"></div>
 			</div>
-			<div class="mui-inline" style="margin-top: 10px">任务重要度</div>
+			<div class="mui-inline" style="margin-top: 10px">公告重要度</div>
 			<div class="row mui-input-row mui-radio">
 			<div class="mui-input-group">
 					<div class="mui-input-row mui-radio">
-						<label style="color: gray;">普通任务</label>
+						<label style="color: gray;">普通</label>
 						<input name="impt" type="radio" checked="" onclick="imptClicked(0)" value="main-move">
 					</div>
 					<div class="mui-input-row mui-radio">
-						<label style="color: gray;">重要任务</label>
+						<label style="color: gray;">重要</label>
 						<input name="impt" type="radio" onclick="imptClicked(1)" value="menu-move">
 					</div>
 					<div class="mui-input-row mui-radio" id="move-togger">
-						<label style="color: gray;">紧急任务</label>
+						<label style="color: gray;">紧急</label>
 						<input name="impt" type="radio" onclick="imptClicked(2)" value="all-move">
 					</div>
 				</div>

@@ -12,6 +12,8 @@ public class Report {
 	int sid, state, softerConfirm;
 	String type, userId, unit, scope, targets, choices, rem, time, imgs;
 	String choices0;
+	String checkedUnit;
+	int rank;
 	String item1,item2,item3,item4,item5,
 		item6,item7,item8,item9,item10,
 		item11,item12,item13,item14,item15,
@@ -31,6 +33,7 @@ public class Report {
 		};
 	}
 	public void setItems(String items[]) throws Exception {
+		if (items == null) return;
 		System.out.println("item len:" + items.length);
 		if (items.length>=2) item1 = items[1];
 		if (items.length>=3) item2 = items[2];
@@ -328,6 +331,12 @@ public class Report {
 	public void setSofterConfirm(int softerConfirm) {
 		this.softerConfirm = softerConfirm;
 	}
+	public String getCheckedUnit() {
+		return checkedUnit;
+	}
+	public void setCheckedUnit(String checkedUnit) {
+		this.checkedUnit = checkedUnit;
+	}
 	
 	
 	@Override
@@ -380,6 +389,12 @@ public class Report {
 	public void setImgs(String imgs) {
 		this.imgs = imgs;
 	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
 	
 	public static String toChineseTypeName(String type) {
 		if (type==null) {
@@ -408,5 +423,6 @@ public class Report {
 	public void setReportItems(List<String> reportItems) {
 		this.reportItems = reportItems;
 	}
+	
 	
 }

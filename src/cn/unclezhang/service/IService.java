@@ -19,7 +19,8 @@ public interface IService extends ISessionUserReceivable {
 	List<User> loadTaskTargetsUsers();
 	
 	int saveReport(String userId, String type, String targets, 
-			String[] items, String choices, String rem, String time, String scope, String imgs);
+			String[] items, String choices, String rem, String time, String scope, String imgs
+			, String checkedUnit);
 
 	Report findTypeReportByDate(String type, String date);
 
@@ -103,4 +104,10 @@ public interface IService extends ISessionUserReceivable {
 	boolean softerConfirm(String sessionUserId, int sid);
 
 	List<String> loadLoopCtrlUnitList(String unit, int rank);
+
+	boolean updateGoods(int sid, int todayGained, int todayUse, int todayReturn);
+
+	Report loadReportById(int sid);
+
+	List<Problem> loadMyRelativeUnitsProblemList(boolean wasFinished, String unit, int from_id, int len);
 }

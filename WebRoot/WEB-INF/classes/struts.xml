@@ -19,6 +19,8 @@
 		
 		<action name="PageAction" class="PageActionBean">
 			<result name="choose">/pages/choose.jsp</result>
+			<result name="contact">/pages/contact.jsp</result>
+			
 			<result name="historyReports">/pages/historyReports.jsp</result>
 			
 			<result name="ExplosiveReport">/pages/reportExplosive.jsp</result>
@@ -54,6 +56,7 @@
 			
 			<result name="loopCtrlList">/pages/loopCtrlList.jsp</result>
 			<result name="loopCtrlView">/pages/loopCtrlView.jsp</result>
+			<result name="loopCtrlEdit">/pages/loopCtrlEdit.jsp</result>
 		</action>
 	</package>
 	

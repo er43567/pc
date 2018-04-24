@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter;
 
 public class TheDoor extends StrutsPrepareAndExecuteFilter {
+	
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
@@ -20,11 +21,6 @@ public class TheDoor extends StrutsPrepareAndExecuteFilter {
 			System.out.println(url);
 		}
 		
-		/*if (request.getSession().getAttribute("user") == null) {
-			if (!url.contains("login.jsp") && !url.contains("AjaxAction!login")) {
-				return;
-			}
-		}*/
 		super.doFilter(req, res, chain);
 	}
 	

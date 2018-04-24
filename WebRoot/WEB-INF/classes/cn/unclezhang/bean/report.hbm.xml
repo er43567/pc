@@ -16,6 +16,7 @@
 		<property name="choices"></property>
 		<property name="choices0"></property>
 		<property name="softerConfirm"></property>
+		<property name="checkedUnit"></property>
 		<property name="rem"></property>
 		<property name="time"></property>
 		<property name="imgs"></property>
@@ -48,7 +49,7 @@
 		<!-- <property name="targets" formula="(select tb.targetIds from notice_tb tb where tb.ref=sid and tb.type=type limit 1)"></property> -->
 		<property name="userName" formula="(select tb.name from user_tb tb where tb.userId=userId)"></property>
 		<property name="wholeName" formula="(select concat(tb.scope,tb.position,tb.name) from user_tb tb where tb.userId=userId)"></property>
-		
+		<property name="rank" formula="(select tb.rank from user_tb tb where tb.userId=userId)"></property>
 	</class>
 	
 </hibernate-mapping>

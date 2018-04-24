@@ -13,6 +13,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <script type="text/javascript" src="js/ext.js"></script>
     <style type="text/css">
+    .float-img {background-color:white;position: fixed;top: 78%;left: 78%;z-index: 999;border-radius: 25px;box-shadow:5px 2px 6px #000;}
+	.float-img:ACTIVE {box-shadow:2px 1px 3px #000;top: 78.1%;left: 78.1%;}
+	
     .aui-list-item-label{font-size: 15px}
     .aui-list-item-input{padding:2px;margin: 3px;}
     .aui-list-header span{color: gray;}
@@ -87,10 +90,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
             </li>
-            
         </ul>
+        
+        <img id="float-btn" class="float-img" src="images/edit.png" width="50" height="50" onclick="startUrl('PageAction!loadGoodsEditPage?goods.sid=${goods.sid}')"/>
     </div>
 </body>
+<script type="text/javascript">
+function onActivityResult(result) {
+	if(result=='refresh') {
+		location.reload();
+	}
+}
+</script>
 <script type="text/javascript">
 function confirmGoods(o, confirmType) {
 	ajaxPostWithEval("AjaxAction!confirmGoods", function(res, result) {

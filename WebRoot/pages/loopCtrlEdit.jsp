@@ -30,7 +30,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	单位核定药量
                     </div>
                     <div class="aui-list-item-input">
-                        <input type="number" id="unitDefined">
+                        <%-- <input type="number" id="unitDefined" value="${goods.unitDefined}"> --%>
+                        <div style="margin-left: 6px">${goods.unitDefined}</div>
                     </div>
                 </div>
             </li>
@@ -40,7 +41,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                         昨日实际库存量
                     </div>
                     <div class="aui-list-item-input">
-                        <input type="number" id="yesterdayGained">
+                    	<div style="margin-left: 6px">${goods.yesterdayGained}</div>
                     </div>
                 </div>
             </li>
@@ -50,7 +51,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                         今日领取
                     </div>
                     <div class="aui-list-item-input">
-                        <input type="number" id="todayGained" >
+                    	<s:if test="#request.goods.confirms1.contains('aqy') && #request.goods.confirms1.contains('bpy') && #request.goods.confirms1.contains('kgy')">
+                        	<div style="margin-left: 6px">${goods.todayGained}</div>
+                        </s:if>
+                        <s:else>
+                       		<input type="number" id="todayGained" value="${goods.todayGained}">
+                        </s:else>
                     </div>
                 </div>
             </li>
@@ -60,7 +66,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	今日使用
                     </div>
                     <div class="aui-list-item-input">
-                        <input type="number" id="todayUse" >
+                    	<s:if test="#request.goods.confirms2.contains('aqy') && #request.goods.confirms2.contains('bpy') && #request.goods.confirms2.contains('aqfzr')">
+                        	<div style="margin-left: 6px">${goods.todayUse}</div>
+                        </s:if>
+                        <s:else>
+                        	<input type="number" id="todayUse" value="${goods.todayUse}">
+                        </s:else>
                     </div>
                 </div>
             </li>
@@ -70,7 +81,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                         今日回库
                     </div>
                     <div class="aui-list-item-input">
-                        <input type="number" id="todayReturn">
+                    	<s:if test="#request.goods.confirms3.contains('aqy') && #request.goods.confirms3.contains('bpy') && #request.goods.confirms3.contains('kgy')">
+                    		<div style="margin-left: 6px">${goods.todayReturn}</div>
+                    	</s:if>
+                    	<s:else>
+                    		<input type="number" id="todayReturn" value="${goods.todayReturn}">
+                    	</s:else>
                     </div>
                 </div>
             </li>
@@ -80,7 +96,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	今日库存量
                     </div>
                     <div class="aui-list-item-input">
-                        <input type="number" id="todayStock">
+                        <%-- <input type="number" id="todayStock" value="${goods.todayStock}"> --%>
+                        <div style="margin-left: 6px">${goods.todayStock}</div>
                     </div>
                 </div>
             </li>
@@ -88,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <li class="aui-list-item" id="submitLi">
                 <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
                     <div id='submitBtn' class="aui-btn aui-btn-info aui-btn-block"
-                    	onclick="submit();">提交</div>
+                    	onclick="submit();">提交更改</div>
                 </div>
             </li>
         </ul>
@@ -99,6 +116,17 @@ var type = "炸药";
 function radioChecked(s) {
 	type = s;
 }
+var c1 = document.getElementById("todayGained");
+var c2 = document.getElementById("todayUse");
+var c3 = document.getElementById("todayReturn");
+
+if(c1==null) 
+	c1 = {'value':'${goods.todayGained}'};
+if(c2==null) 
+	c2 = {'value':'${goods.todayUse}'};
+if(c3==null) 
+	c3 = {'value':'${goods.todayReturn}'};
+
 var submited = false;
 function submit() {
 	if(submited) {
@@ -106,7 +134,7 @@ function submit() {
 		return;
 	}
 	submitBtn.innerText = "提交中...";
-	ajaxPost("AjaxAction!saveGoods", function(r) {
+	ajaxPost("AjaxAction!updateGoods", function(r) {
 		var res = eval("("+r+")");
     	var result = res['result'];
 		if("success"==result) {
@@ -116,13 +144,10 @@ function submit() {
 			submited = true;
 		}
 	}, {
-		"goods.type":escape(type),
-		"goods.unitDefined":unitDefined.value,
-		"goods.yesterdayGained":yesterdayGained.value,
-		"goods.todayGained":todayGained.value,
-		"goods.todayUse":todayUse.value,
-		"goods.todayReturn":todayReturn.value,
-		"goods.todayStock":todayStock.value,
+		"goods.sid":${goods.sid},
+		"goods.todayGained":c1.value,
+		"goods.todayUse":c2.value,
+		"goods.todayReturn":c3.value
 	});
 }
 </script>

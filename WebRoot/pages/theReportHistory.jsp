@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>民爆库房三查表单</title>
+    <title>对${report.checkedUnit}的检查</title>
     
     <link rel="stylesheet" type="text/css" href="../css/aui.css" />
     <link rel="stylesheet" href="css/ext.css" />
@@ -28,7 +28,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <div class="aui-content aui-margin-b-15">
        <ul class="aui-list aui-select-list">
        <li class="aui-list-header">
-       	<div>民爆行业质检表单 - ${request.report.time}</div>
+       	<div>三查表单 - ${request.report.time}</div>
        	<s:if test="#session.user.userId==#request.report.userId">
 	       	<%-- <div style="background-color: #03a9f4;padding:2px;color: white;"
 	       		onclick="startUrlWithoutResult('PageAction!loadReportEditPage?report.sid=${request.report.sid}')">修改表单</div> --%>
@@ -40,89 +40,104 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        	</s:else>
        </li>
        	<!--<font color="gray"><b>检查项目</b></font>-->
-	        <s:iterator id="item" value="#request.report.reportItems" status="st">
-	           <li class="aui-list-item">
-	               <div class="aui-list-item-inner">
-	                   <div class="aui-list-item-text">
-	                   	 <div style="color: blue">${item}</div>
-	                </div>
-	                <div class="aui-text-right">
-	                	<label id="info${st.index+1}" class="aui-text-info">
-	                	${request.report.items[st.index]}
-	                	</label>
-	                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}"> 是</label>
-	               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}" onclick="openDialog(this)"> 否</label>
-	                </div>
-	               </div>
-	           </li>
-	         </s:iterator>
-	         
-	         <s:if test="#request.report.imgs!=''">
-	            <li class="aui-list-item">
-	          		<div class="aui-list-item-inner">
-	          		<%@include file="imageviewer.jsp" %>
-	             	</div>
-	          	</li>
-	         </s:if>
-	         
-	        <li class="aui-list-item">
-          		<div class="aui-list-item-inner">
-                  	<div class="aui-list-item-input">
-                      	<div class="aui-list-item-text" style="font-size: 16px">
-                      		
-                		</div>
-               		</div>
-             	</div>
-          	</li>
-          	
-          	<s:if test="#session.user.position=='安全员'">
-	         	<li class="aui-list-item" id="softerConfirmLi">
-	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-	                    <div id="softerConfirmBtn" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
-	                    	onclick="softerConfirm();">安全员确认</div>
+       	<s:if test="#request.reports.size()>1">
+       		<s:iterator id="item" value="#request.reports">
+	       		<li class="aui-list-item" onclick="startUrlWithoutResult('PageAction!loadUnitDateReport?report.sid=${item.sid}', null, null)">
+	                <div class="aui-list-item-inner">
+	                    <div class="aui-list-item-title">对${item.checkedUnit}的检查 
+		                    <s:if test="#item.choices.replaceAll('1','')==''">
+		                    	<font color='green'>◉</font>
+		                    </s:if>
+		                    <s:else>
+		                    	<font color='red'>◉</font>
+		                    </s:else>
+	                    </div>
 	                </div>
 	            </li>
-          	</s:if>
-          	
-          	<s:if test="#request.report.choices.replaceAll('1','')!=''">
-	          	<li class="aui-list-item">
+       		</s:iterator>
+       	</s:if>
+       	<s:else>
+	       	<s:iterator id="item" value="#request.report.reportItems" status="st">
+		           <li class="aui-list-item">
+		               <div class="aui-list-item-inner">
+		                   <div class="aui-list-item-text">
+		                   	 <div style="color: blue">${item}</div>
+		                </div>
+		                <div class="aui-text-right">
+		                	<label id="info${st.index+1}" class="aui-text-info">
+		                	${request.report.items[st.index]}
+		                	</label>
+		                	<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}"> 是</label>
+		               		<label><input class="aui-radio" type="radio" value="${request.report.choices.substring(st.index, st.index+1)}" onclick="openDialog(this)"> 否</label>
+		                </div>
+		               </div>
+		           </li>
+		         </s:iterator>
+		         
+		         <s:if test="#request.report.imgs!=''">
+		            <li class="aui-list-item">
+		          		<div class="aui-list-item-inner">
+		          		<%@include file="imageviewer.jsp" %>
+		             	</div>
+		          	</li>
+		         </s:if>
+		         
+	          	<s:if test="#session.user.position=='安全员' && #request.report.choices.replaceAll('1','')==''">
+	          		<s:if test="#request.report.softerConfirm==0">
+	          			<li class="aui-list-item" id="softerConfirmLi">
+			                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+			                    <div id="softerConfirmBtn" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+			                    	onclick="softerConfirm();">安全员确认</div>
+			                </div>
+			            </li>
+	          		</s:if>
+	          		<s:else>
+	          			<li class="aui-list-item" id="softerConfirmLi" style="padding: 0px">
+		          			<div style="width: auto;margin: auto;color: gray;">值班安全人员已确认</div>
+			            </li>
+	          		</s:else>
+	          	</s:if>
+	          	
+	          	<s:if test="#request.report.choices.replaceAll('1','')!=''">
+		          	<li class="aui-list-item">
+		                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+		                    <div id="processCtrlBtn" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+		                    	onclick="beginProcessControl()">流程管控</div>
+		                </div>
+		            </li>
+	            </s:if>
+	            <%-- <li class="aui-list-item">
 	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-	                    <div id="processCtrlBtn" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
-	                    	onclick="beginProcessControl()">流程管控</div>
+	                    <div id="chooseUserBtn" class="aui-btn" style="overflow: scroll;text-align: center;width: 100%;">
+	                    	目标人员 ${request.report.targets.split("##")[0]}
+					    </div>
+					    <select id="sel" multiple="multiple" class="hiddenSel" onchange="onActivityResult(this)">
+						   	<s:iterator value="#request.users" id='item' status="st">
+						   		<option value="${item.userId}">${item.name}</option>
+						   	</s:iterator>
+					    </select>
+					    <style type="text/css">
+					    .hiddenSel{width:100%;height:100%;position:absolute;
+					    border:1px solid;left:-8px;top:-1px;opacity:0;}
+					    </style>
 	                </div>
-	            </li>
-            </s:if>
-            <%-- <li class="aui-list-item">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="chooseUserBtn" class="aui-btn" style="overflow: scroll;text-align: center;width: 100%;">
-                    	目标人员 ${request.report.targets.split("##")[0]}
-				    </div>
-				    <select id="sel" multiple="multiple" class="hiddenSel" onchange="onActivityResult(this)">
-					   	<s:iterator value="#request.users" id='item' status="st">
-					   		<option value="${item.userId}">${item.name}</option>
-					   	</s:iterator>
-				    </select>
-				    <style type="text/css">
-				    .hiddenSel{width:100%;height:100%;position:absolute;
-				    border:1px solid;left:-8px;top:-1px;opacity:0;}
-				    </style>
-                </div>
-            </li> --%>
-            <!-- <li class="aui-list-item">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
-                    	onclick="noticeView()">通知目标人员查看</div>
-                </div>
-            </li> -->
-             <%-- <li class="aui-list-item">
-                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
-                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
-                    	onclick="reply('${request.report.sid}','${request.report.userId}')">展开回复</div>
-                </div>
-             </li> --%>
-		</ul>
-		<%@include file="reply.jsp"%>
-		<input type="hidden" id="thisReport" value="${request.report.sid}"/>
+	            </li> --%>
+	            <!-- <li class="aui-list-item">
+	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+	                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+	                    	onclick="noticeView()">通知目标人员查看</div>
+	                </div>
+	            </li> -->
+	             <%-- <li class="aui-list-item">
+	                <div class="aui-list-item-inner aui-list-item-center aui-list-item-btn">
+	                    <div id="pushButton" class="aui-btn aui-btn-info aui-btn-block aui-btn-height-50px"
+	                    	onclick="reply('${request.report.sid}','${request.report.userId}')">展开回复</div>
+	                </div>
+	             </li> --%>
+			</ul>
+			<%@include file="reply.jsp"%>
+			<input type="hidden" id="thisReport" value="${request.report.sid}"/>
+       	</s:else>
 </body>
 <%-- <script type="text/javascript">
 var interceptStete = true;
@@ -143,11 +158,13 @@ setInterval(function(){
 <script type="text/javascript" src="../script/aui-dialog.js" ></script>
 <script type="text/javascript">
 function softerConfirm() {
-	ajaxPost("AjaxAction!softerConfirm", function(res, result){
+	ajaxPostWithEval("AjaxAction!softerConfirmReport", function(res, result) {
 		if("success"==result) {
-			softerConfirmLi.style.display = "none";
+			softerConfirmLi.innerHTML = "<div style=\"width: auto;margin: auto;color: gray;\">值班安全人员已确认</div>";
 		}
-	}, null);
+	}, {
+		"report.sid" : ${request.report.sid}
+	});
 }
 </script>
 <script type="text/javascript">

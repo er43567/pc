@@ -91,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         	整改负责人
                     </div>
                     <div class="aui-list-item-input">
-                    ${request.problem.functionaryName==null?"":request.problem.functionaryName.substring(1)}
+                    ${request.problem.functionaryName}
                     </div>
                 </div>
             </li>
@@ -139,13 +139,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div id="resultContent" class="aui-list-item-input">
                     ${request.problem.results}
                     </div>
-                    <s:if test="#request.problem.targetIds.contains(#session.user.userId)">
-                    <s:if test="#request.problem.state=='dealing'">
-                    	<%-- <s:if test="#request.problem.acceptedIds==null || #request.problem.acceptedIds.contains(#session.user.userId) == false"> --%>
+                    <s:if test="#session.user.rank>1">
                     	<div class="aui-btn aui-btn-sm" onclick="addResult()" style="margin: 3px">添加</div>
-                    	<%-- </s:if> --%>
                     </s:if>
+                    <%-- <s:if test="#request.problem.targetIds.contains(#session.user.userId)">
+                    <s:if test="#request.problem.state=='dealing'">
+                    	<div class="aui-btn aui-btn-sm" onclick="addResult()" style="margin: 3px">添加</div>
                     </s:if>
+                    </s:if> --%>
                 </div>
             </li>
             

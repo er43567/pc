@@ -194,7 +194,7 @@
 					  item.userId,
 					  item.userId=='${session.user.userId}'
 					  , item.headImg
-					  , item.userName, item.scope, item.position, item.content, item.time);
+					  , item.userName, "", item.position, item.content, item.time);
 		  }
 		  callback();
 	  }, {

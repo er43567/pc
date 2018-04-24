@@ -2,6 +2,7 @@ package cn.unclezhang.action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.lrxzl.lib.java.tool.Tool;
@@ -17,6 +18,13 @@ import cn.unclezhang.relatives.RelativeHelper;
 public class PageAction extends MyActionSupport {
 	User user;
 	List<User> users;
+	List<String> list;
+	public List<String> getList() {
+		return list;
+	}
+	public void setList(List<String> list) {
+		this.list = list;
+	}
 	public List<User> getUsers() {
 		return users;
 	}
@@ -35,6 +43,12 @@ public class PageAction extends MyActionSupport {
 		return "choose";
 	}
 	
+	/*=============通讯录页面================*/
+	public String loadContactList() {
+		users = service.loadAllUsers(false);
+		return "contact";
+	}
+	
 	/*===========表单 页面===========*/
 	Report report;
 	public Report getReport() {
@@ -46,6 +60,11 @@ public class PageAction extends MyActionSupport {
 	public String loadReportCreatePage() {
 		report = new Report();
 		report.setReportItems(Arrays.asList(Conf.getExplosives(getSessionUser().getRank())));
+		//获取单位列表
+		RelativeHelper rh = new RelativeHelper(null, service);
+		String units[] = rh.getRelativeUnits(getSessionUser().getUnit());
+		if(units!=null) list = Arrays.asList(units);
+		
 		System.out.println(report);
 		return "theReport";
 	}
@@ -114,6 +133,13 @@ public class PageAction extends MyActionSupport {
 		return /*report.getType() + */"theReportHistory";
 	}
 	
+	public String loadUnitDateReport() {
+		report = service.loadReportById(report.getSid());
+		User u = service.findUserById(report.getUserId());
+		report.setReportItems(Arrays.asList(Conf.getExplosives(u.getRank())));
+		//users = service.loadAllUsers();
+		return /*report.getType() + */"theReportHistory";
+	}
 	/**
 	 * 流程管控
 	 */
@@ -135,15 +161,14 @@ public class PageAction extends MyActionSupport {
 		System.out.println(problem.getRef());
 		report = service.findReportById(problem.getRef());
 		
-		problems = service.loadProblemsByRef(report.getSid(), report.getUserId());
+		problems = service.loadProblemsByRef(report.getSid(), null/*report.getUserId()*/);
 		System.out.println(problem.getRef() + "," + problem.getChoices());
 		System.out.println("size:" + problems.size());
 		/*if (problems == null || problems.size() == 0) {
 			//创建所有问题
 			problems = service.createProblems(problem.getRef(), problem.getChoices());
 		}
-		System.out.println("size:" + problems.size());
-		*/
+		System.out.println("size:" + problems.size());*/
 		User u = service.findUserById(report.getUserId());
 		System.out.println(Arrays.toString(report.getItems()));
 		for (int i=0;i<problems.size();i++) {
@@ -160,7 +185,6 @@ public class PageAction extends MyActionSupport {
 	
 	public String loadProblemPage() {
 		problem = service.loadProblem(problem.getSid());
-		
 		/*report = service.findReportById(tmp.getRef());
 		tmp.setRem(report.getItems()[tmp.getWhichItem()]);*/
 		
@@ -234,7 +258,10 @@ public class PageAction extends MyActionSupport {
 		goods = service.loadGoodsById(goods.getSid());
 		return "loopCtrlView";
 	}
-	
+	public String loadGoodsEditPage() {
+		goods = service.loadGoodsById(goods.getSid());
+		return "loopCtrlEdit";
+	}
 	@Override
 	public String getResult() {
 		return result;

@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <select id="functionary" class="aui-btn aui-btn-outlined"
                         	 style="text-align:center;">
                         	 <s:iterator value="#request.users" id='item' status="st">
-                        	 	<option value="${item.userId}">${item.name}</option>
+                        	 	<option value="${item.userId}">${item.position} ${item.name}</option>
                         	 </s:iterator>
                         </select>
                     </div>
@@ -106,8 +106,28 @@ function riskChecked(n) {
 	if(n!=4)
 		risk = n;
 }
-
+var units = [];
+/* "跃进煤矿","潘家冲煤矿","五陂煤矿"
+,"久安公司","神威公司","安源派出所"
+,"五陂派出所","城郊派出所","青山派出所"
+,"安源公安分局"*/
 function updateAndNoticeProblem() {
+	if(units.length>0) {
+		android.showListDialog(units, "submit");
+		return;
+	}
+	ajaxPostWithEval("AjaxAction!loadMyRelativesUnits", function(res, result) {
+		if(result == "success") {
+			var ss = res['units'];
+			for(var i=0;i<ss.length;i++) {
+				units.push(ss[i]);
+			}
+			android.showListDialog(units, "submit");
+		}
+	}, null);
+}
+function updateAndNoticeProblem() {
+	//var selectedUnit = units[n];
 	android.showProgressDialog("请稍候...");
 	ajaxPostWithEval("AjaxAction!firstUpdateAndNoticeProblem", function(res, result) {
 		if(result!='fail') {

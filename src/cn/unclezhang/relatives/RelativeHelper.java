@@ -1,9 +1,12 @@
 package cn.unclezhang.relatives;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.http.util.TextUtils;
 
 import cn.unclezhang.bean.User;
 import cn.unclezhang.dao.IDao;
@@ -36,7 +39,7 @@ public class RelativeHelper {
 		//root = build(dao, service);
 	}
 	
-	private String getUserIdsByUnitNames(int rank, String...unitNames) {
+	public String getUserIdsByUnitNames(int rank, String...unitNames) {
 		StringBuilder sql = new StringBuilder("select userId from user_tb where unit=?");
 		if (rank > 0) {
 			sql.append(" and rank=" + rank);
@@ -62,7 +65,7 @@ public class RelativeHelper {
 		if (userIds.contains("##")) {
 			userIds = userIds.split("##")[1];
 		}
-		String ids[] = userIds.split(",");
+		String ids[] = userIds.split("[, ]");
 		StringBuilder sql = new StringBuilder("select name from user_tb");
 		if (ids.length>0) {
 			sql.append(" where userId=?");
@@ -118,12 +121,20 @@ public class RelativeHelper {
 		relativeUnits.put("萍乡公安局", new String[]{"跃进煤矿","潘家冲煤矿","五陂煤矿"
 				,"久安公司","神威公司","安源派出所","五陂派出所","城郊派出所","青山派出所","安源公安分局"});
 		
+		/*relativeUnits.put("units_rank1", new String[]{"跃进煤矿","潘家冲煤矿","五陂煤矿","久安公司","神威公司"});
+		relativeUnits.put("units_rank2", new String[]{"安源派出所","五陂派出所","城郊派出所","青山派出所"});
+		relativeUnits.put("units_rank3", new String[]{"安源公安分局"});*/
+		
+		relativeUnits.put("unitLine_跃进煤矿", new String[]{"跃进煤矿","安源派出所","安源公安分局"});
+		relativeUnits.put("unitLine_潘家冲煤矿", new String[]{"潘家冲煤矿","安源派出所","安源公安分局"});
+		relativeUnits.put("unitLine_五陂煤矿", new String[]{"五陂煤矿","五陂派出所","安源公安分局"});
+		relativeUnits.put("unitLine_久安公司", new String[]{"久安公司","城郊派出所","安源公安分局"});
+		relativeUnits.put("unitLine_神威公司", new String[]{"神威公司","青山派出所","安源公安分局"});
 	}
 	public static String[] getRelativeUnits(String unitName) {
 		return relativeUnits.get(unitName);
 	}
-	public static String getSQLRelativeUnitSet(String unitName) {
-		String units[] = relativeUnits.get(unitName);
+	public static String getSQLRelativeUnitSet(String units[], String unitName) {
 		StringBuilder sb = new StringBuilder("('" + units[0] + "'");
 		for (int i = 1; i < units.length; i++) {
 			sb.append(",'" + units[i] + "'");
@@ -157,13 +168,67 @@ public class RelativeHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String getProblemTargetIdsByRisk(int risk, String unitName) throws Exception {
+	public String getProblemTargetIdsByRisk(int risk, String unitName, String checkedUnitName, String userId) throws Exception {
+		List<String> li = null;
+		String unit = "";
+		System.out.println("unit:" + unitName);
+		/*BigInteger rankOfUnit = dao.findOneBySql("select rank from user_tb where unit=?", new Object[]{unitName});
+		if (rankOfUnit.intValue() == 1) {
+			unit = unitName;
+		} else {
+			unit = checkedUnitName;
+		}*/
+		if (checkedUnitName == null) {
+			unit = unitName;
+		} else {
+			unit = checkedUnitName;
+		}
+		switch (risk) {
+		case 1:
+			li = dao.findBySql("select userId from user_tb where unit=? and (position=? or position=?)"
+					, new Object[]{unit, "安全负责人", "法人代表"});
+			break;
+		case 2:
+			String parentUnit = dao.findOneBySql("select parentUnit from user_tb where userId=?"
+					, new Object[]{userId});
+			if (TextUtils.isEmpty(parentUnit)) {
+				System.out.println("ParentUnit Is NULL");
+				break;
+			}
+			li = dao.findBySql("select userId from user_tb where unit=? and (position=? or position=? or position=?)"
+					, new Object[]{parentUnit, "监管民警", "分管副所长", "所长"});
+			break;
+		case 3:
+			String parent_unit_ = dao.findOneBySql("select parentUnit from user_tb where userId=?"
+					, new Object[]{userId});
+			if (TextUtils.isEmpty(parent_unit_)) {
+				System.out.println("ParentUnit Is NULL");
+				break;
+			}
+			String parent_parent_unit = dao.findOneBySql("select parentUnit from user_tb where unit=?", new Object[]{parent_unit_});
+			li = dao.findBySql("select userId from user_tb where unit=? and (position=? or position=? or position=?)"
+					, new Object[]{parent_parent_unit, "监管民警", "分管副所长", "大队长", "局领导"});
+			break;
+		case 4:
+			break;
+		}
+		String s = "";
+		for (int i = 0; li!=null && i < li.size(); i++) {
+			s += " " + li.get(i);
+		}
+		return s;
+	}
+	/*public String getProblemTargetIdsByRisk(int risk, String unitName, String unitSet[]) throws Exception {
 		List<String> li = null;
 		String s = "";
-		String userIds = getUserIdsByUnitNames(risk, relativeUnits.get(unitName));
+		if(unitSet == null) {
+			unitSet = relativeUnits.get(unitName);
+		}
+		
+		String userIds = getUserIdsByUnitNames(risk, unitSet);
 		
 		System.out.println("unitname:" + unitName);
-		String sqlUnitSet = getSQLRelativeUnitSet(unitName);
+		String sqlUnitSet = getSQLRelativeUnitSet(unitSet, unitName);
 		System.out.println("sqlUnitSet:" + sqlUnitSet);
 		
 		switch (risk) {
@@ -189,7 +254,7 @@ public class RelativeHelper {
 			}
 		}
 		return s;
-	}
+	}*/
 	/*public String getProblemTargetIdsByRisk(int risk, String unitName) throws Exception {
 		List<String> li;
 		String s = "";

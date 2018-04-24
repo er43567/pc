@@ -117,12 +117,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   function getItem(sid, title, time, confirms1, confirms2, confirms3) {
 	  var state = "处理中";
 	  var labelStyle = "aui-label-warning";
-	  if("爆破员 安全员 库管员".indexOf(confirms1)>=0
-			  && "爆破员 安全员 安全负责人".indexOf(confirms2)>=0
-			  && "爆破员 安全员 库管员".indexOf(confirms3)>=0) {
+	  /**
+	  *如果有必要，要将下面的判断换成职位（position）判断
+	  */
+	  if((confirms1!=null && confirms2!=null && confirms3!=null)
+			  && confirms1.indexOf("bpy")>=0
+			  && confirms1.indexOf("aqy")>=0
+			  && confirms1.indexOf("kgy")>=0
+			  && confirms2.indexOf("bpy")>=0
+			  && confirms2.indexOf("aqy")>=0
+			  && confirms2.indexOf("aqfzr")>=0
+			  && confirms3.indexOf("bpy")>=0
+			  && confirms3.indexOf("aqy")>=0
+			  && confirms3.indexOf("kgy")>=0) {
 		  state = "完成";
 		  labelStyle = "aui-label-success";
 	  }
+		  
 	  var stateDiv = "<div class='aui-label "+labelStyle+"'>"+state+"</div>";
 	  var itemHtml = 
 		  "<li class='aui-list-item aui-list-item-middle' onclick='itemClicked("+sid+")'>"
@@ -131,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  +"			<div class='aui-list-item-text'>"
 		  +"				<div class='aui-list-item-title aui-font-size-14'>"+title+"</div>"
 		  +"				<div class='aui-list-item-right'>"+time+"</div>"
-		  + stateDiv
+		  + stateDiv 
 		  +"			</div>"
 		  +"		</div>"
 		  +"	</div>"

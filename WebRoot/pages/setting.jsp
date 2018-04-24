@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 <head>
 <meta charset="utf-8">
-<title>用户设置</title>
+<title>用户信息</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -257,10 +257,15 @@ html,body {
 							onclick="openDialog('password')"><a>修改密码<span
 								class="mui-pull-right"></span></a></li>
 					</ul>
-					<ul class="mui-table-view" onclick="openDialog('clear')">
+					<%-- <ul class="mui-table-view" onclick="openDialog('clear')">
 						<li class="mui-table-view-cell" tapmode ><a href="javascript:android.cleanAppCache();">清除应用缓存<span
 							class="mui-pull-right"></span></a></li>
+					</ul> --%>
+					
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" onclick="startUrl('PageAction!loadContactList')">通讯录</li>
 					</ul>
+					
 					<ul class="mui-table-view" onclick="openDialog('logout')">
 						<li class="mui-table-view-cell" style="text-align: center;">
 							<a href="javascript:void(0)">注销登录</a>

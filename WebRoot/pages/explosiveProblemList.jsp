@@ -40,8 +40,8 @@
 		<%@include file="empty.html" %>
 	</s:if>
 	<div class="aui-content aui-margin-b-15">
-		<s:iterator id="item" value="#request.problems">
-	 		<ul class="aui-list aui-media-list">
+		<ul class="aui-list aui-media-list">
+			<s:iterator id="item" value="#request.problems">
                   <li class="aui-list-item aui-list-item-middle" onclick="itemClicked('${item.sid}');">
                         <div class="aui-list-item-inner">
                             <div class="aui-list-item-text">
@@ -63,9 +63,8 @@
                             </div>
                         </div>
                   </li>
-			</ul>
-		</s:iterator>
-		
+			</s:iterator>
+		</ul>
 		<%-- <ul class="aui-list">
 			<s:iterator id="item" value="#request.problems">
 				<li class="aui-list-item" onclick="itemClicked('${item.sid}');">
